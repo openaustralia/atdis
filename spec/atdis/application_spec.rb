@@ -2,8 +2,8 @@ require File.expand_path(File.dirname(__FILE__) + '/../spec_helper')
 
 describe ATDIS::Application do
   describe "#dat_id" do
-    it "should correctly interpret a json snippet in the correct format" do
-      application = ATDIS::Application.parse <<-EOF
+    before :each do
+      @application = ATDIS::Application.parse <<-EOF
 {
   "info": {
     "dat_id": "DA2013-0381",
@@ -28,7 +28,12 @@ describe ATDIS::Application do
   }
 }
       EOF
-      application.dat_id.should == "DA2013-0381"
     end
+
+    it { @application.dat_id.should == "DA2013-0381" }
+    it { @application.description.should == "New pool plus deck" }
+    it { @application.authority.should == "Example Council Shire Council" }
+    it { @application.status.should == "OPEN" }
+    it { @application.more_info_url.should == "http://www.examplecouncil.nsw.gov.au/atdis/1.0/applications/DA2013-0381" }
   end
 end
