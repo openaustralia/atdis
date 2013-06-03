@@ -2,6 +2,8 @@
 
 A ruby interface to the application tracking data interchange specification (ATDIS) API
 
+This is **highly alpha** software that probably doesn't yet do what it says on the tin. It is very much a work in progress.
+
 ## Installation
 
 Add this line to your application's Gemfile:
