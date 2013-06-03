@@ -1,6 +1,6 @@
 # Atdis
 
-TODO: Write a gem description
+A ruby interface to the application tracking data interchange specification (ATDIS) API
 
 ## Installation
 
