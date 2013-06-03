@@ -5,7 +5,7 @@ describe ATDIS::Application do
     it "should correctly interpret a json snippet in the correct format" do
       application = ATDIS::Application.parse <<-EOF
 {
-  “info”: {
+  "info": {
     "dat_id": "DA2013-0381",
     "description": "New pool plus deck",
     "authority": "Example Council Shire Council",
@@ -25,7 +25,7 @@ describe ATDIS::Application do
       "section": "ABC",
       "dpsp_id": "DP2013-0381"
     }
-  },
+  }
 }
       EOF
       application.dat_id.should == "DA2013-0381"

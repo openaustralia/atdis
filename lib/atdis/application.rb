@@ -1,11 +1,14 @@
+require 'multi_json'
+
 module ATDIS
   class Application
-    def self.parse(text)
-      Application.new
-    end
+    attr_accessor :dat_id
 
-    def dat_id
-      "DA2013-0381"
+    def self.parse(text)
+      data = MultiJson.load(text, :symbolize_keys => true)
+      a = Application.new
+      a.dat_id = data[:info][:dat_id]
+      a
     end
   end
 end
