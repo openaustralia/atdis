@@ -1,17 +1,5 @@
 require File.expand_path(File.dirname(__FILE__) + '/../spec_helper')
 
-module ATDIS
-  class Application
-    def self.parse(text)
-      Application.new
-    end
-
-    def dat_id
-      "DA2013-0381"
-    end
-  end
-end
-
 describe ATDIS::Application do
   describe "#dat_id" do
     it "should correctly interpret a json snippet in the correct format" do
