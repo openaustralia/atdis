@@ -13,9 +13,7 @@ module ATDIS
     end
 
     def all
-      r = RestClient.get(base_url + "atdis/1.0/applications.json")
-      json_data = MultiJson.load(r.to_str, :symbolize_keys => true)
-      ApplicationsResults.new(json_data[:response].map {|a| Application.interpret(a[:application]) })
+      ApplicationsResults.new(base_url + "atdis/1.0/applications.json")
     end
   end
 end
