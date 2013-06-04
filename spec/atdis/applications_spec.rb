@@ -47,7 +47,9 @@ describe ATDIS::Applications do
       ATDIS::Application.should_receive(:interpret).with(:description => "application1").and_return(application1)
       ATDIS::Application.should_receive(:interpret).with(:description => "application2").and_return(application2)
 
-      applications.all.results.should == [application1, application2]
+      a = applications.all
+      a.results.should == [application1, application2]
+      a.next.should be_nil
     end
   end
 end

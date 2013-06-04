@@ -5,5 +5,8 @@ module ATDIS
     def initialize(results)
       @results = results
     end
+
+    def next
+    end
   end
 end
