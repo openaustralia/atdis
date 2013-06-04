@@ -1,0 +1,2 @@
+class ATDIS::Location
+end

@@ -4,7 +4,7 @@ module ATDIS
   class Application
     attr_accessor :dat_id, :description, :authority,
       :lodgement_date, :determination_date, :notification_start_date, :notification_end_date,
-      :status, :more_info_url
+      :status, :more_info_url, :location
 
     def self.parse(text)
       interpret(MultiJson.load(text, :symbolize_keys => true))
@@ -21,6 +21,7 @@ module ATDIS
       a.notification_end_date = DateTime.parse(data[:info][:notification_end_date])
       a.status = data[:info][:status]
       a.more_info_url = data[:reference][:more_info_url]
+      a.location = Location.interpret(data[:location])
       a
     end
   end

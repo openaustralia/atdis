@@ -3,6 +3,13 @@ require File.expand_path(File.dirname(__FILE__) + '/../spec_helper')
 describe ATDIS::Application do
   describe "#dat_id" do
     before :each do
+      ATDIS::Location.should_receive(:interpret).with(
+        :address => "123 Fourfivesix Street Neutral Bay NSW 2089",
+        :land_title_ref => {
+          :lot => "10",
+          :section => "ABC",
+          :dpsp_id => "DP2013-0381"
+        }).and_return(mock("Location", :address => "123 Fourfivesix Street Neutral Bay NSW 2089", :lot => "10", :section => "ABC", :dpsp_id => "DP2013-0381"))
       @application = ATDIS::Application.interpret(
         :info => {
           :dat_id => "DA2013-0381",
@@ -37,5 +44,13 @@ describe ATDIS::Application do
     it { @application.notification_end_date.should == DateTime.new(2013,5,20,2,1,7) }
     it { @application.status.should == "OPEN" }
     it { @application.more_info_url.should == "http://www.examplecouncil.nsw.gov.au/atdis/1.0/applications/DA2013-0381" }
+
+    it "should return the location" do
+      l = @application.location
+      l.address.should == "123 Fourfivesix Street Neutral Bay NSW 2089"
+      l.lot.should == "10"
+      l.section.should == "ABC"
+      l.dpsp_id.should == "DP2013-0381"
+    end
   end
 end
