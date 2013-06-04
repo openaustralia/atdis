@@ -1,10 +1,10 @@
 require File.expand_path(File.dirname(__FILE__) + '/../spec_helper')
 
 describe ATDIS::ApplicationsResults do
-  context "paging not supported by vendor" do
-    let(:applications_results) { ATDIS::ApplicationsResults.new("http://www.council.nsw.gov.au/atdis/1.0/applications.json") }
+  let(:applications_results) { ATDIS::ApplicationsResults.new("http://www.council.nsw.gov.au/atdis/1.0/applications.json") }
 
-    it "should grab all the applications using json" do
+  context "paging not supported by vendor" do
+    it ".results" do
       # Mock network response
       RestClient.should_receive(:get).with("http://www.council.nsw.gov.au/atdis/1.0/applications.json").and_return(mock(:to_str => <<-EOF
 {
@@ -29,6 +29,9 @@ describe ATDIS::ApplicationsResults do
       ATDIS::Application.should_receive(:interpret).with(:description => "application2").and_return(application2)
 
       applications_results.results.should == [application1, application2]
+    end
+
+    it ".next" do
       applications_results.next.should be_nil
     end
   end
