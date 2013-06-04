@@ -37,21 +37,9 @@ describe ATDIS::ApplicationsResults do
   end
 
   context "paging supported by vendor" do
-    it "should use the page number to create the feed url" do
+    it ".full_url" do
       applications_results = ATDIS::ApplicationsResults.new("http://www.council.nsw.gov.au/atdis/1.0/applications.json", :page => 2)
-      RestClient.should_receive(:get).with("http://www.council.nsw.gov.au/atdis/1.0/applications.json?page=2").and_return(mock(:to_str => <<-EOF
-{
-  "response": [
-    {
-      "application": {
-      }      
-    }
-  ]
-}
-      EOF
-      ))
-      ATDIS::Application.stub(:interpret).with({})
-      applications_results.results
+      applications_results.full_url.should == "http://www.council.nsw.gov.au/atdis/1.0/applications.json?page=2"
     end
   end
 end

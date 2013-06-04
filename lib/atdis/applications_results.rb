@@ -4,15 +4,18 @@ module ATDIS
       @url, @url_params = url, url_params
     end
 
-    def results
+    def full_url
       # TODO Correctly encode url_params
       query = @url_params.map{|k,v| "#{k}=#{v}"}.join("&")
       if @url_params.empty?
-        url = @url
+        @url
       else
-        url = @url + "?" + query
+        @url + "?" + query
       end
-      r = RestClient.get(url)
+    end
+
+    def results
+      r = RestClient.get(full_url)
       json_data = MultiJson.load(r.to_str, :symbolize_keys => true)
       json_data[:response].map {|a| Application.interpret(a[:application]) }
     end
