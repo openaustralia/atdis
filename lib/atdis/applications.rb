@@ -1,14 +1,6 @@
 require "rest-client"
 
 module ATDIS
-  class ApplicationsResults
-    attr_reader :results
-
-    def initialize(results)
-      @results = results
-    end
-  end
-
   class Applications
     attr_reader :base_url
 
