@@ -2,6 +2,8 @@ module ATDIS
   class ApplicationsResults
     def initialize(url, url_params = {})
       @url, @url_params = url, url_params
+      r = RestClient.get(full_url)
+      @json_data = MultiJson.load(r.to_str, :symbolize_keys => true)
     end
 
     def full_url
@@ -15,9 +17,7 @@ module ATDIS
     end
 
     def results
-      r = RestClient.get(full_url)
-      json_data = MultiJson.load(r.to_str, :symbolize_keys => true)
-      json_data[:response].map {|a| Application.interpret(a[:application]) }
+      @json_data[:response].map {|a| Application.interpret(a[:application]) }
     end
 
     def next
