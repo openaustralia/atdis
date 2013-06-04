@@ -33,6 +33,10 @@ describe ATDIS::Application do
     it { @application.dat_id.should == "DA2013-0381" }
     it { @application.description.should == "New pool plus deck" }
     it { @application.authority.should == "Example Council Shire Council" }
+    it { @application.lodgement_date.should == DateTime.new(2013,4,20,2,1,7) }
+    it { @application.determination_date.should == DateTime.new(2013,6,20,2,1,7) }
+    it { @application.notification_start_date.should == DateTime.new(2013,4,20,2,1,7) }
+    it { @application.notification_end_date.should == DateTime.new(2013,5,20,2,1,7) }
     it { @application.status.should == "OPEN" }
     it { @application.more_info_url.should == "http://www.examplecouncil.nsw.gov.au/atdis/1.0/applications/DA2013-0381" }
   end
