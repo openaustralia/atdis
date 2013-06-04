@@ -7,7 +7,10 @@ module ATDIS
       :status, :more_info_url
 
     def self.parse(text)
-      data = MultiJson.load(text, :symbolize_keys => true)
+      interpret(MultiJson.load(text, :symbolize_keys => true))
+    end
+
+    def self.interpret(data)
       a = Application.new
       a.dat_id = data[:info][:dat_id]
       a.description = data[:info][:description]
