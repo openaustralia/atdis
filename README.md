@@ -1,6 +1,6 @@
 # Atdis
 
-[![Build Status](https://travis-ci.org/openaustralia/atdis.png?branch=master)](https://travis-ci.org/openaustralia/atdis)
+[![Build Status](https://travis-ci.org/openaustralia/atdis.png?branch=master)](https://travis-ci.org/openaustralia/atdis) [![Coverage Status](https://coveralls.io/repos/openaustralia/atdis/badge.png?branch=master)](https://coveralls.io/r/openaustralia/atdis?branch=master)
 
 A ruby interface to the application tracking data interchange specification (ATDIS) API
 
