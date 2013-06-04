@@ -13,11 +13,8 @@ module ATDIS
     end
 
     def all
-      # TODO: Use URL to do the concatenation
-      url = base_url + "/" + "atdis/1.0/applications.json"
-      r = RestClient.get(url)
-      json_string = r.to_str
-      json_data = MultiJson.load(json_string, :symbolize_keys => true)
+      r = RestClient.get(base_url + "atdis/1.0/applications.json")
+      json_data = MultiJson.load(r.to_str, :symbolize_keys => true)
       ApplicationsResults.new(json_data[:response].map {|a| Application.interpret(a[:application]) })
     end
   end
