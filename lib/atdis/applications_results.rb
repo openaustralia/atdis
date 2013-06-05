@@ -21,6 +21,11 @@ module ATDIS
     end
 
     def next
+      ApplicationsResults.new(@url, @url_params.merge(:page => next_page_no)) if next_page_no
+    end
+
+    def next_page_no
+      @json_data[:pagination][:next] if @json_data[:pagination]
     end
   end
 end
