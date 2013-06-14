@@ -4,12 +4,19 @@ module ATDIS
 
     def initialize(url, url_params = {})
       @url, @url_params = url, url_params
+      url_params.each_key do |k|
+        url_params[k] = url_params[k].to_s
+      end
     end
 
     def self.parse(full_url)
       uri = URI.parse(full_url)
       url = "#{uri.scheme}://#{uri.host}#{uri.path}"
-      url_params = Hash[*CGI::parse(uri.query).map{|k,v| [k.to_sym,v.first]}.flatten]
+      if uri.query
+        url_params = Hash[*CGI::parse(uri.query).map{|k,v| [k.to_sym,v.first]}.flatten]
+      else
+        url_params = {}
+      end
       SeparatedURL.new(url, url_params)
     end
 
