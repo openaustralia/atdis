@@ -4,12 +4,17 @@ module ATDIS
       :total_no_results, :total_no_pages, :results
 
     def self.read(url, url_params = {})
+      r = RestClient.get(full_url(url, url_params))
+      json_data = MultiJson.load(r.to_str, :symbolize_keys => true)
+
+      interpret(url, url_params, json_data)
+    end
+
+    def self.interpret(url, url_params, json_data)
       results = ApplicationsResults.new
 
       results.url = url
       results.url_params = url_params
-      r = RestClient.get(results.full_url)
-      json_data = MultiJson.load(r.to_str, :symbolize_keys => true)
 
       results.results = json_data[:response].map {|a| Application.interpret(a[:application]) }
       if json_data[:pagination]
@@ -21,16 +26,16 @@ module ATDIS
         results.total_no_pages = json_data[:pagination][:pages]
       end
 
-      results
+      results      
     end
 
-    def full_url
+    def self.full_url(url, url_params)
       # TODO Correctly encode url_params
-      query = @url_params.map{|k,v| "#{k}=#{v}"}.join("&")
-      if @url_params.empty?
-        @url
+      query = url_params.map{|k,v| "#{k}=#{v}"}.join("&")
+      if url_params.empty?
+        url
       else
-        @url + "?" + query
+        url + "?" + query
       end
     end
 
