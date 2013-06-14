@@ -8,7 +8,8 @@ module ATDIS
 
     def full_url
       # TODO Correctly encode url_params
-      query = url_params.map{|k,v| "#{k}=#{v}"}.join("&")
+      # Doing this jiggery pokery to ensure the params are sorted alphabetically (even on Ruby 1.8)
+      query = url_params.map{|k,v| [k.to_s, v]}.sort.map{|k,v| "#{k}=#{v}"}.join("&")
       if url_params.empty?
         url
       else
