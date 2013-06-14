@@ -13,7 +13,7 @@ module ATDIS
     end
 
     def all
-      ApplicationsResults.new(base_url + "atdis/1.0/applications.json")
+      ApplicationsResults.read(base_url + "atdis/1.0/applications.json")
     end
   end
 end

@@ -3,7 +3,7 @@ module ATDIS
     attr_reader :previous_page_no, :next_page_no, :current_page_no, :no_results_per_page,
       :total_no_results, :total_no_pages, :results
 
-    def initialize(url, url_params = {})
+    def initialize(url, url_params)
       @url, @url_params = url, url_params
       r = RestClient.get(full_url)
       json_data = MultiJson.load(r.to_str, :symbolize_keys => true)
@@ -19,6 +19,10 @@ module ATDIS
       end
     end
 
+    def self.read(url, url_params = {})
+      ApplicationsResults.new(url, url_params)
+    end
+
     def full_url
       # TODO Correctly encode url_params
       query = @url_params.map{|k,v| "#{k}=#{v}"}.join("&")
@@ -30,7 +34,7 @@ module ATDIS
     end
 
     def next
-      ApplicationsResults.new(@url, @url_params.merge(:page => next_page_no)) if next_page_no
+      ApplicationsResults.read(@url, @url_params.merge(:page => next_page_no)) if next_page_no
     end
   end
 end

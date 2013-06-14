@@ -23,7 +23,7 @@ describe ATDIS::ApplicationsResults do
       ))
     end
 
-    let(:applications_results) { ATDIS::ApplicationsResults.new("http://www.council.nsw.gov.au/atdis/1.0/applications.json") }
+    let(:applications_results) { ATDIS::ApplicationsResults.read("http://www.council.nsw.gov.au/atdis/1.0/applications.json") }
 
     it ".results" do
       application1 = mock("Application")
