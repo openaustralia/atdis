@@ -2,8 +2,8 @@ module ATDIS
   class SeparatedURL
     attr_accessor :full_url
 
-    def initialize(url, url_params)
-      @full_url = SeparatedURL.full_url(url, url_params)
+    def initialize(full_url)
+      @full_url = full_url
     end
 
     def url
@@ -29,7 +29,7 @@ module ATDIS
     end
 
     def self.parse(full_url)
-      SeparatedURL.new(parse_url(full_url), parse_url_params(full_url))
+      SeparatedURL.new(full_url)
     end
 
     def self.full_url(url, url_params)
@@ -44,7 +44,7 @@ module ATDIS
     end
 
     def merge(params)
-      SeparatedURL.new(url, url_params.merge(params))
+      SeparatedURL.new(SeparatedURL.full_url(url, url_params.merge(params)))
     end
 
     def ==(other)

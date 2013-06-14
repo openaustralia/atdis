@@ -23,7 +23,7 @@ describe ATDIS::SeparatedURL do
   end
 
   describe ".full_url" do
-    it { url.full_url.should == "http://foo.com/bar?bar=12&foo=twenty" }
+    it { url.full_url.should == "http://foo.com/bar?foo=twenty&bar=12" }
   end
 
   describe ".merge" do
