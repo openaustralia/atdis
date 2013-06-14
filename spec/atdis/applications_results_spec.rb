@@ -93,7 +93,7 @@ describe ATDIS::ApplicationsResults do
       ))
     end
 
-    let(:applications_results) { ATDIS::ApplicationsResults.new("http://www.council.nsw.gov.au/atdis/1.0/applications.json", :page => 2) }
+    let(:applications_results) { ATDIS::ApplicationsResults.read("http://www.council.nsw.gov.au/atdis/1.0/applications.json", :page => 2) }
 
     it ".previous_page_no" do
       applications_results.previous_page_no.should == 1
@@ -122,7 +122,7 @@ describe ATDIS::ApplicationsResults do
     it ".next" do
       n = mock("ApplicationsResults")
       applications_results
-      ATDIS::ApplicationsResults.should_receive(:new).with("http://www.council.nsw.gov.au/atdis/1.0/applications.json", :page => 3).and_return(n)
+      ATDIS::ApplicationsResults.should_receive(:read).with("http://www.council.nsw.gov.au/atdis/1.0/applications.json", :page => 3).and_return(n)
       applications_results.next.should == n
     end
   end
