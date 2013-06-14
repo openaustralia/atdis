@@ -7,8 +7,12 @@ module ATDIS
     end
 
     def merge(params)
-      url, url_params = SeparatedURL.split(full_url)
-      SeparatedURL.new(SeparatedURL.combine(url, url_params.merge(params)))
+      SeparatedURL.new(SeparatedURL.merge(full_url, params))
+    end
+
+    def self.merge(full_url, params)
+      url, url_params = split(full_url)
+      combine(url, url_params.merge(params))
     end
 
     def ==(other)
