@@ -6,7 +6,18 @@ module ATDIS
       @full_url = full_url
     end
 
-    def self.full_url(url, url_params)
+    def merge(params)
+      url, url_params = SeparatedURL.split(full_url)
+      SeparatedURL.new(SeparatedURL.combine(url, url_params.merge(params)))
+    end
+
+    def ==(other)
+      full_url == other.full_url 
+    end
+
+    private
+    
+    def self.combine(url, url_params)
       # Doing this jiggery pokery to ensure the params are sorted alphabetically (even on Ruby 1.8)
       query = url_params.map{|k,v| [k.to_s, v]}.sort.map{|k,v| "#{CGI.escape(k)}=#{CGI.escape(v.to_s)}"}.join("&")
       if url_params.empty?
@@ -16,7 +27,7 @@ module ATDIS
       end
     end
 
-    def merge(params)
+    def self.split(full_url)
       uri = URI.parse(full_url)
       url = "#{uri.scheme}://#{uri.host}#{uri.path}"
       if uri.query
@@ -24,11 +35,8 @@ module ATDIS
       else
         url_params = {}
       end
-      SeparatedURL.new(SeparatedURL.full_url(url, url_params.merge(params)))
+      [url, url_params]
     end
 
-    def ==(other)
-      full_url == other.full_url 
-    end
   end
 end
