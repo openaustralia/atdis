@@ -6,6 +6,13 @@ module ATDIS
       @url, @url_params = url, url_params
     end
 
+    def self.parse(full_url)
+      uri = URI.parse(full_url)
+      url = "#{uri.scheme}://#{uri.host}#{uri.path}"
+      url_params = Hash[*CGI::parse(uri.query).map{|k,v| [k.to_sym,v.first]}.flatten]
+      SeparatedURL.new(url, url_params)
+    end
+
     def full_url
       # TODO Correctly encode url_params
       # Doing this jiggery pokery to ensure the params are sorted alphabetically (even on Ruby 1.8)
