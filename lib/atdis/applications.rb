@@ -13,7 +13,7 @@ module ATDIS
     end
 
     def all
-      ApplicationsResults.read(ATDIS::SeparatedURL.parse((base_url + "atdis/1.0/applications.json").to_s))
+      ApplicationsResults.read(ATDIS::SeparatedURL.new((base_url + "atdis/1.0/applications.json").to_s))
     end
   end
 end

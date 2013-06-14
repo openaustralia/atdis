@@ -1,26 +1,7 @@
 require File.expand_path(File.dirname(__FILE__) + '/../spec_helper')
 
 describe ATDIS::SeparatedURL do
-  let(:url) { ATDIS::SeparatedURL.parse("http://foo.com/bar?foo=twenty&bar=12") }
-
-  describe ".url" do
-    it { url.url.should == "http://foo.com/bar" }
-  end
-
-  it ".url_params" do
-    url.url_params.count.should == 2
-    url.url_params[:foo].should == "twenty"
-    url.url_params[:bar].should == "12"
-  end
-
-  describe "#parse" do
-    it { ATDIS::SeparatedURL.parse(url.full_url).should == url }
-    it do
-      u = ATDIS::SeparatedURL.parse("http://www.council.nsw.gov.au/atdis/1.0/applications.json")
-      u.url.should == "http://www.council.nsw.gov.au/atdis/1.0/applications.json"
-      u.url_params.should == {}
-    end
-  end
+  let(:url) { ATDIS::SeparatedURL.new("http://foo.com/bar?foo=twenty&bar=12") }
 
   describe ".full_url" do
     it { url.full_url.should == "http://foo.com/bar?foo=twenty&bar=12" }
