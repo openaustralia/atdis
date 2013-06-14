@@ -38,8 +38,28 @@ describe ATDIS::ApplicationsResults do
       applications_results.next.should be_nil
     end
 
+    it ".previous_page_no" do
+      applications_results.previous_page_no.should be_nil
+    end
+
     it ".next_page_no" do
       applications_results.next_page_no.should be_nil
+    end
+
+    it ".current_page_no" do
+      applications_results.current_page_no.should be_nil
+    end
+
+    it ".no_results_per_page" do
+      applications_results.no_results_per_page.should be_nil
+    end
+
+    it ".total_no_results" do
+      applications_results.total_no_results.should be_nil
+    end
+
+    it ".total_no_pages" do
+      applications_results.total_no_pages.should be_nil
     end
   end
 
@@ -75,8 +95,28 @@ describe ATDIS::ApplicationsResults do
 
     let(:applications_results) { ATDIS::ApplicationsResults.new("http://www.council.nsw.gov.au/atdis/1.0/applications.json", :page => 2) }
 
+    it ".previous_page_no" do
+      applications_results.previous_page_no.should == 1
+    end
+
     it ".next_page_no" do
       applications_results.next_page_no.should == 3
+    end
+
+    it ".current_page_no" do
+      applications_results.current_page_no.should == 2
+    end
+
+    it ".no_results_per_page" do
+      applications_results.no_results_per_page.should == 2
+    end
+
+    it ".total_no_results" do
+      applications_results.total_no_results.should == 50
+    end
+
+    it ".total_no_pages" do
+      applications_results.total_no_pages.should == 25
     end
 
     it ".next" do

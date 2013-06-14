@@ -24,8 +24,28 @@ module ATDIS
       ApplicationsResults.new(@url, @url_params.merge(:page => next_page_no)) if next_page_no
     end
 
+    def previous_page_no
+      @json_data[:pagination][:previous] if @json_data[:pagination]
+    end
+
     def next_page_no
       @json_data[:pagination][:next] if @json_data[:pagination]
+    end
+
+    def current_page_no
+      @json_data[:pagination][:current] if @json_data[:pagination]
+    end
+
+    def no_results_per_page
+      @json_data[:pagination][:per_page] if @json_data[:pagination]
+    end
+
+    def total_no_results
+      @json_data[:pagination][:count] if @json_data[:pagination]
+    end
+
+    def total_no_pages
+      @json_data[:pagination][:pages] if @json_data[:pagination]
     end
   end
 end
