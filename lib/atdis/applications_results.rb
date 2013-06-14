@@ -1,20 +1,21 @@
 module ATDIS
   class ApplicationsResults
     attr_reader :previous_page_no, :next_page_no, :current_page_no, :no_results_per_page,
-      :total_no_results, :total_no_pages
+      :total_no_results, :total_no_pages, :results
 
     def initialize(url, url_params = {})
       @url, @url_params = url, url_params
       r = RestClient.get(full_url)
-      @json_data = MultiJson.load(r.to_str, :symbolize_keys => true)
+      json_data = MultiJson.load(r.to_str, :symbolize_keys => true)
 
-      if @json_data[:pagination]
-        @previous_page_no = @json_data[:pagination][:previous]
-        @next_page_no = @json_data[:pagination][:next]
-        @current_page_no = @json_data[:pagination][:current]
-        @no_results_per_page = @json_data[:pagination][:per_page]
-        @total_no_results = @json_data[:pagination][:count]
-        @total_no_pages = @json_data[:pagination][:pages]
+      @results = json_data[:response].map {|a| Application.interpret(a[:application]) }
+      if json_data[:pagination]
+        @previous_page_no = json_data[:pagination][:previous]
+        @next_page_no = json_data[:pagination][:next]
+        @current_page_no = json_data[:pagination][:current]
+        @no_results_per_page = json_data[:pagination][:per_page]
+        @total_no_results = json_data[:pagination][:count]
+        @total_no_pages = json_data[:pagination][:pages]
       end
     end
 
@@ -26,10 +27,6 @@ module ATDIS
       else
         @url + "?" + query
       end
-    end
-
-    def results
-      @json_data[:response].map {|a| Application.interpret(a[:application]) }
     end
 
     def next
