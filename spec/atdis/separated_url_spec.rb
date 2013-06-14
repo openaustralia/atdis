@@ -15,5 +15,9 @@ describe ATDIS::SeparatedURL do
     it "should overwrite an existing one" do
       url.merge(:bar => 24).full_url.should == "http://foo.com/bar?bar=24&foo=twenty"
     end
+
+    it "should encode spaces for example" do
+      url.merge(:bar => "hello sir").full_url.should == "http://foo.com/bar?bar=hello+sir&foo=twenty"
+    end
   end
 end

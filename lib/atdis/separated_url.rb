@@ -7,9 +7,8 @@ module ATDIS
     end
 
     def self.full_url(url, url_params)
-      # TODO Correctly encode url_params
       # Doing this jiggery pokery to ensure the params are sorted alphabetically (even on Ruby 1.8)
-      query = url_params.map{|k,v| [k.to_s, v]}.sort.map{|k,v| "#{k}=#{v}"}.join("&")
+      query = url_params.map{|k,v| [k.to_s, v]}.sort.map{|k,v| "#{CGI.escape(k)}=#{CGI.escape(v.to_s)}"}.join("&")
       if url_params.empty?
         url
       else
