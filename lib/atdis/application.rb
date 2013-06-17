@@ -5,7 +5,7 @@ module ATDIS
   class Application
     attr_accessor :dat_id, :last_modified_date, :description, :authority,
       :lodgement_date, :determination_date, :status, :notification_start_date, :notification_end_date,
-      :officer, :estimated_cost, :more_info_url, :location
+      :officer, :estimated_cost, :more_info_url, :comments_url, :location
 
     def self.parse(text)
       interpret(MultiJson.load(text, :symbolize_keys => true))
@@ -27,7 +27,10 @@ module ATDIS
         a.officer = data[:info][:officer]
         a.estimated_cost = data[:info][:estimated_cost]
       end
-      a.more_info_url = data[:reference][:more_info_url] if data[:reference]
+      if data[:reference]
+        a.more_info_url = URI.parse(data[:reference][:more_info_url]) if data[:reference][:more_info_url]
+        a.comments_url = URI.parse(data[:reference][:comments_url]) if data[:reference][:comments_url]
+      end
       a.location = Location.interpret(data[:location]) if data[:location]
       a
     end

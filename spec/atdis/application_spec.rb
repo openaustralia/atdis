@@ -27,7 +27,8 @@ describe ATDIS::Application do
         :estimated_cost => "50,000"
       },
       :reference => {
-        :more_info_url => "http://www.examplecouncil.nsw.gov.au/atdis/1.0/applications/DA2013-0381"
+        :more_info_url => "http://www.examplecouncil.nsw.gov.au/atdis/1.0/applications/DA2013-0381",
+        :comments_url => "http://www.examplecouncil.nsw.gov.au/atdis/1.0/applications/DA2013-0381/comment"
       },
       :location => {
         :address => "123 Fourfivesix Street Neutral Bay NSW 2089",
@@ -51,6 +52,7 @@ describe ATDIS::Application do
   it { @application.officer.should == "Ms Smith" }
   it { @application.estimated_cost.should == "50,000"}
   it { @application.status.should == "OPEN" }
-  it { @application.more_info_url.should == "http://www.examplecouncil.nsw.gov.au/atdis/1.0/applications/DA2013-0381" }
+  it { @application.more_info_url.should == URI.parse("http://www.examplecouncil.nsw.gov.au/atdis/1.0/applications/DA2013-0381") }
+  it { @application.comments_url.should == URI.parse("http://www.examplecouncil.nsw.gov.au/atdis/1.0/applications/DA2013-0381/comment") }
   it { @application.location.should == @location }
 end
