@@ -1,16 +1,10 @@
 module ATDIS
-  class Location
-    attr_accessor :address, :lot, :section, :dpsp_id
-
+  Location = Struct.new(:address, :lot, :section, :dpsp_id) do
     def self.interpret(data)
-      l = Location.new
-      l.address = data[:address]
-      if data[:land_title_ref]
-        l.lot = data[:land_title_ref][:lot]
-        l.section = data[:land_title_ref][:section]
-        l.dpsp_id = data[:land_title_ref][:dpsp_id]
-      end
-      l
+      values = {:address => data[:address]}
+      values = values.merge(data[:land_title_ref]) if data[:land_title_ref]
+
+      Location.new(*members.map{|m| values[m.to_sym]})
     end
   end
 end
