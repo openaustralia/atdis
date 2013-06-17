@@ -16,5 +16,14 @@ describe ATDIS::Location do
       l.section.should == "ABC"
       l.dpsp_id.should == "DP2013-0381"
     end
+
+    it "should gracefully handle the land_title_ref block being missing" do
+      l = ATDIS::Location.interpret(:address => "123 Fourfivesix Street Neutral Bay NSW 2089")
+      
+      l.address.should == "123 Fourfivesix Street Neutral Bay NSW 2089"
+      l.lot.should be_nil
+      l.section.should be_nil
+      l.dpsp_id.should be_nil
+    end
   end
 end

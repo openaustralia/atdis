@@ -5,9 +5,11 @@ module ATDIS
     def self.interpret(data)
       l = Location.new
       l.address = data[:address]
-      l.lot = data[:land_title_ref][:lot]
-      l.section = data[:land_title_ref][:section]
-      l.dpsp_id = data[:land_title_ref][:dpsp_id]
+      if data[:land_title_ref]
+        l.lot = data[:land_title_ref][:lot]
+        l.section = data[:land_title_ref][:section]
+        l.dpsp_id = data[:land_title_ref][:dpsp_id]
+      end
       l
     end
   end
