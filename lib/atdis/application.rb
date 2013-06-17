@@ -6,14 +6,6 @@ module ATDIS
       :lodgement_date, :determination_date, :status, :notification_start_date, :notification_end_date,
       :officer, :estimated_cost, :more_info_url, :comments_url, :location) do
 
-    def self.create(params)
-      new(*members.map{|m| params[m.to_sym]})
-    end
-
-    def self.parse(text)
-      interpret(MultiJson.load(text, :symbolize_keys => true))
-    end
-
     def self.interpret(data)
       values = {}
       # Map json structure to our values
@@ -31,7 +23,7 @@ module ATDIS
       values[:comments_url] = URI.parse(values[:comments_url]) if values[:comments_url]
       values[:location] = Location.interpret(values[:location]) if values[:location]
 
-      Application.create(values)
+      Application.new(*members.map{|m| values[m.to_sym]})
     end
   end
 end
