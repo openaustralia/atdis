@@ -1,3 +1,5 @@
+require "rgeo/geo_json"
+
 module ATDIS
   Location = Struct.new(:address, :lot, :section, :dpsp_id, :geometry) do
     def self.interpret(data)
@@ -6,9 +8,24 @@ module ATDIS
       values[:geometry] = data[:geometry]
 
       # Convert values
-      values[:geometry] = Geometry.interpret(values[:geometry]) if values[:geometry]
+      values[:geometry] = RGeo::GeoJSON.decode(hash_symbols_to_string(values[:geometry])) if values[:geometry]
 
       Location.new(*members.map{|m| values[m.to_sym]})
+    end
+
+    private
+
+    # Converts {:foo => {:bar => "yes"}} to {"foo" => {"bar" => "yes"}}
+    def self.hash_symbols_to_string(hash)
+      if hash.respond_to?(:each_pair)
+        result = {}
+        hash.each_pair do |key, value|
+          result[key.to_s] = hash_symbols_to_string(value)
+        end
+        result
+      else
+        hash
+      end
     end
   end
 end

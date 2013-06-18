@@ -27,8 +27,6 @@ describe ATDIS::Location do
     end
 
     it "should pass on the responsibility for parsing the geometry section" do
-      geometry = mock
-      ATDIS::Geometry.should_receive(:interpret).with(:type => "Point", :coordinates => [100.0, 0.0]).and_return(geometry)
       # TODO Not 100% clear from section 4.3.3 of ATDIS-1.0.3 if this is the correct indentation
       l = ATDIS::Location.interpret(
         :geometry => {
@@ -36,7 +34,9 @@ describe ATDIS::Location do
           :coordinates => [100.0, 0.0]
         }
       )
-      l.geometry.should == geometry
+      # TODO Check that the returned geometry is a point
+      l.geometry.x.should == 100
+      l.geometry.y.should == 0
     end
   end
 end
