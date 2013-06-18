@@ -75,4 +75,41 @@ describe ATDIS::Application do
       application.events.should == [event1, event2]
     end
   end
+
+  it ".documents" do
+    document1 = mock
+    document2 = mock
+    ATDIS::Document.should_receive(:interpret).with(:ref => "27B/6/a").and_return(document1)
+    ATDIS::Document.should_receive(:interpret).with(:ref => "27B/6/b").and_return(document2)
+    application = ATDIS::Application.interpret(
+      :documents => [
+        {
+          :ref => "27B/6/a"
+        },
+        {
+          :ref => "27B/6/b"
+        }
+      ]
+    )
+    application.documents.should == [document1, document2]
+  end
+
+  it ".people" do
+    tuttle = mock
+    buttle = mock
+    ATDIS::Person.should_receive(:interpret).with(:name => "Tuttle").and_return(tuttle)
+    ATDIS::Person.should_receive(:interpret).with(:name => "Buttle").and_return(buttle)
+
+    application = ATDIS::Application.interpret(
+      :people => [
+        {
+          :name => "Tuttle"
+        },
+        {
+          :name => "Buttle"
+        }
+      ]
+    )
+    application.people.should == [tuttle, buttle]
+  end
 end
