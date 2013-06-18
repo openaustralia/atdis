@@ -4,7 +4,7 @@ require 'date'
 module ATDIS
   Application = Struct.new(:dat_id, :last_modified_date, :description, :authority,
       :lodgement_date, :determination_date, :status, :notification_start_date, :notification_end_date,
-      :officer, :estimated_cost, :more_info_url, :comments_url, :location) do
+      :officer, :estimated_cost, :more_info_url, :comments_url, :location, :events) do
 
     def self.interpret(data)
       values = {}
@@ -12,6 +12,7 @@ module ATDIS
       values = values.merge(data[:info]) if data[:info]
       values = values.merge(data[:reference]) if data[:reference]
       values[:location] = data[:location]
+      values[:events] = data[:events]
 
       # Convert values (if required)
       values[:last_modified_date] = DateTime.parse(values[:last_modified_date]) if values[:last_modified_date]
@@ -22,6 +23,7 @@ module ATDIS
       values[:more_info_url] = URI.parse(values[:more_info_url]) if values[:more_info_url]
       values[:comments_url] = URI.parse(values[:comments_url]) if values[:comments_url]
       values[:location] = Location.interpret(values[:location]) if values[:location]
+      values[:events] = values[:events].map{|e| Event.interpret(e)} if values[:events]
 
       Application.new(*members.map{|m| values[m.to_sym]})
     end

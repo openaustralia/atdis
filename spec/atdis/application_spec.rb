@@ -55,4 +55,24 @@ describe ATDIS::Application do
   it { @application.more_info_url.should == URI.parse("http://www.examplecouncil.nsw.gov.au/atdis/1.0/applications/DA2013-0381") }
   it { @application.comments_url.should == URI.parse("http://www.examplecouncil.nsw.gov.au/atdis/1.0/applications/DA2013-0381/comment") }
   it { @application.location.should == @location }
+
+  describe "events" do
+    it "should pass responsibility for interpreting an event" do
+      event1 = mock
+      event2 = mock
+      ATDIS::Event.should_receive(:interpret).with(:id => "event1").and_return(event1)
+      ATDIS::Event.should_receive(:interpret).with(:id => "event2").and_return(event2)
+      application = ATDIS::Application.interpret(
+        :events => [
+          {
+            :id => "event1"
+          },
+          {
+            :id => "event2"
+          }
+        ]
+      )
+      application.events.should == [event1, event2]
+    end
+  end
 end
