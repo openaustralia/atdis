@@ -38,5 +38,31 @@ describe ATDIS::Location do
       l.geometry.x.should == 100
       l.geometry.y.should == 0
     end
+
+    it "should interpret a polygon in the geometry section" do
+      # TODO Not 100% clear from section 4.3.3 of ATDIS-1.0.3 if this is the correct indentation
+      l = ATDIS::Location.interpret(
+        :geometry => {
+          :type => "Polygon",
+          :coordinates => [
+            [ [100.0, 0.0], [101.0, 0.0], [101.0, 1.0],
+              [100.0, 1.0], [100.0, 0.0] ]
+          ]
+        }
+      )
+      # TODO Check that the returned geometry is a polygon
+      l.geometry.interior_rings.should be_empty
+      l.geometry.exterior_ring.points.count.should == 5
+      l.geometry.exterior_ring.points[0].x.should == 100
+      l.geometry.exterior_ring.points[0].y.should == 0
+      l.geometry.exterior_ring.points[1].x.should == 101
+      l.geometry.exterior_ring.points[1].y.should == 0
+      l.geometry.exterior_ring.points[2].x.should == 101
+      l.geometry.exterior_ring.points[2].y.should == 1
+      l.geometry.exterior_ring.points[3].x.should == 100
+      l.geometry.exterior_ring.points[3].y.should == 1
+      l.geometry.exterior_ring.points[4].x.should == 100
+      l.geometry.exterior_ring.points[4].y.should == 0
+    end
   end
 end
