@@ -1,10 +1,15 @@
 require 'multi_json'
 require 'date'
+require 'active_model'
 
 module ATDIS
   Application = Struct.new(:dat_id, :last_modified_date, :description, :authority,
       :lodgement_date, :determination_date, :status, :notification_start_date, :notification_end_date,
       :officer, :estimated_cost, :more_info_url, :comments_url, :location, :events, :documents, :people) do
+
+    include ActiveModel::Validations
+
+    validates_presence_of :dat_id
 
     def self.interpret(data)
       values = {}
@@ -30,10 +35,6 @@ module ATDIS
       values[:people] = values[:people].map{|p| Person.interpret(p)} if values[:people]
 
       Application.new(*members.map{|m| values[m.to_sym]})
-    end
-
-    def valid?
-      !dat_id.nil?
     end
   end
 end
