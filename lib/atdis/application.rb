@@ -3,13 +3,20 @@ require 'date'
 require 'active_model'
 
 module ATDIS
-  Application = Struct.new(:dat_id, :last_modified_date, :description, :authority,
-      :lodgement_date, :determination_date, :status, :notification_start_date, :notification_end_date,
-      :officer, :estimated_cost, :more_info_url, :comments_url, :location, :events, :documents, :people) do
-
+  class Application
     include ActiveModel::Validations
 
+    attr_accessor :dat_id, :last_modified_date, :description, :authority,
+      :lodgement_date, :determination_date, :status, :notification_start_date, :notification_end_date,
+      :officer, :estimated_cost, :more_info_url, :comments_url, :location, :events, :documents, :people
+
     validates_presence_of :dat_id
+
+    def initialize(params={})
+      params.each do |attr, value|
+        self.send("#{attr}=", value)
+      end if params
+    end
 
     def self.interpret(data)
       values = {}
@@ -34,7 +41,7 @@ module ATDIS
       values[:documents] = values[:documents].map{|d| Document.interpret(d)} if values[:documents]
       values[:people] = values[:people].map{|p| Person.interpret(p)} if values[:people]
 
-      Application.new(*members.map{|m| values[m.to_sym]})
+      Application.new(values)
     end
   end
 end
