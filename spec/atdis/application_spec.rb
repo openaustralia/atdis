@@ -2,8 +2,18 @@ require File.expand_path(File.dirname(__FILE__) + '/../spec_helper')
 
 describe ATDIS::Application do
 
-  it ".dat_id" do
-    ATDIS::Application.interpret(:info => {:dat_id => "DA2013-0381"}).dat_id.should == "DA2013-0381"
+  describe ".dat_id" do
+    context "valid" do
+      let(:a) { ATDIS::Application.interpret(:info => {:dat_id => "DA2013-0381"}) }
+      it { a.dat_id.should == "DA2013-0381" }
+      it { a.should be_valid }
+    end
+
+    context "not valid" do
+      let(:a) { ATDIS::Application.interpret({}) }
+      it { a.dat_id.should be_nil }
+      it { a.should_not be_valid }
+    end
   end
 
   it ".last_modified_date" do

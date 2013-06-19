@@ -31,5 +31,9 @@ module ATDIS
 
       Application.new(*members.map{|m| values[m.to_sym]})
     end
+
+    def valid?
+      !dat_id.nil?
+    end
   end
 end
