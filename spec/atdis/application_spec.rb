@@ -12,7 +12,10 @@ describe ATDIS::Application do
     context "not valid" do
       let(:a) { ATDIS::Application.interpret({}) }
       it { a.dat_id.should be_nil }
-      it { a.should_not be_valid }
+      it do
+        a.should_not be_valid
+        a.errors.messages.should == {:dat_id => ["can't be blank"]}
+      end
     end
   end
 
