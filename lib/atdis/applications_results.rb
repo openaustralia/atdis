@@ -10,7 +10,7 @@ module ATDIS
       interpret(u, json_data)      
     end
 
-    def self.interpret(u, json_data)
+    def self.convert(u, json_data)
       values = {
         :url => u,
         :results => json_data[:response].map {|a| Application.interpret(a[:application]) }
@@ -24,8 +24,7 @@ module ATDIS
         values[:total_no_results] = json_data[:pagination][:count]
         values[:total_no_pages] = json_data[:pagination][:pages]
       end
-
-      ApplicationsResults.new(values)    
+      values
     end
 
     def next

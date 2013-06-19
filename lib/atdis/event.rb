@@ -2,11 +2,10 @@ module ATDIS
   class Event < Model
     attr_accessor :id, :date, :description, :event_type, :status
 
-    def self.interpret(data)
+    def self.convert(data)
       # Convert values (if required)
       data[:date] = DateTime.parse(data[:date]) if data[:date]
-
-      Event.new(data)
+      data
     end
   end
 end

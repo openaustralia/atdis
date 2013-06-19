@@ -10,7 +10,7 @@ module ATDIS
 
     validates_presence_of :dat_id
 
-    def self.interpret(data)
+    def self.convert(data)
       values = {}
       # Map json structure to our values
       values = values.merge(data[:info]) if data[:info]
@@ -32,8 +32,7 @@ module ATDIS
       values[:events] = values[:events].map{|e| Event.interpret(e)} if values[:events]
       values[:documents] = values[:documents].map{|d| Document.interpret(d)} if values[:documents]
       values[:people] = values[:people].map{|p| Person.interpret(p)} if values[:people]
-
-      Application.new(values)
+      values
     end
   end
 end
