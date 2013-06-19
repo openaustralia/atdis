@@ -1,12 +1,12 @@
 module ATDIS
-  Event = Struct.new(:id, :date, :description, :event_type, :status) do
+  class Event < Model
+    attr_accessor :id, :date, :description, :event_type, :status
+
     def self.interpret(data)
-      values = data
-
       # Convert values (if required)
-      values[:date] = DateTime.parse(values[:date]) if values[:date]
+      data[:date] = DateTime.parse(data[:date]) if data[:date]
 
-      Event.new(*members.map{|m| values[m.to_sym]})
+      Event.new(data)
     end
   end
 end

@@ -1,7 +1,9 @@
 require "rgeo/geo_json"
 
 module ATDIS
-  Location = Struct.new(:address, :lot, :section, :dpsp_id, :geometry) do
+  class Location < Model
+    attr_accessor :address, :lot, :section, :dpsp_id, :geometry
+
     def self.interpret(data)
       values = {:address => data[:address]}
       values = values.merge(data[:land_title_ref]) if data[:land_title_ref]
@@ -10,7 +12,7 @@ module ATDIS
       # Convert values
       values[:geometry] = RGeo::GeoJSON.decode(hash_symbols_to_string(values[:geometry])) if values[:geometry]
 
-      Location.new(*members.map{|m| values[m.to_sym]})
+      Location.new(values)
     end
 
     private

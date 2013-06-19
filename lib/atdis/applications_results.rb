@@ -1,5 +1,5 @@
 module ATDIS
-  class ApplicationsResults
+  class ApplicationsResults < Model
     attr_accessor :url, :previous_page_no, :next_page_no, :current_page_no, :no_results_per_page,
       :total_no_results, :total_no_pages, :results
 
@@ -11,20 +11,21 @@ module ATDIS
     end
 
     def self.interpret(u, json_data)
-      results = ApplicationsResults.new
-      results.url = u
+      values = {
+        :url => u,
+        :results => json_data[:response].map {|a| Application.interpret(a[:application]) }
+      }
 
-      results.results = json_data[:response].map {|a| Application.interpret(a[:application]) }
       if json_data[:pagination]
-        results.previous_page_no = json_data[:pagination][:previous]
-        results.next_page_no = json_data[:pagination][:next]
-        results.current_page_no = json_data[:pagination][:current]
-        results.no_results_per_page = json_data[:pagination][:per_page]
-        results.total_no_results = json_data[:pagination][:count]
-        results.total_no_pages = json_data[:pagination][:pages]
+        values[:previous_page_no] = json_data[:pagination][:previous]
+        values[:next_page_no] = json_data[:pagination][:next]
+        values[:current_page_no] = json_data[:pagination][:current]
+        values[:no_results_per_page] = json_data[:pagination][:per_page]
+        values[:total_no_results] = json_data[:pagination][:count]
+        values[:total_no_pages] = json_data[:pagination][:pages]
       end
 
-      results      
+      ApplicationsResults.new(values)    
     end
 
     def next
