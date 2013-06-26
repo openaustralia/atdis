@@ -4,13 +4,13 @@ describe ATDIS::Application do
 
   describe ".dat_id" do
     context "valid" do
-      let(:a) { ATDIS::Application.interpret(:info => {:dat_id => "DA2013-0381"}) }
+      let(:a) { ATDIS::Application.interpret(:info => {:dat_id => "DA2013-0381", :last_modified_date => "2013-04-20T02:01:07Z"}) }
       it { a.dat_id.should == "DA2013-0381" }
       it { a.should be_valid }
     end
 
     context "not valid" do
-      let(:a) { ATDIS::Application.interpret({}) }
+      let(:a) { ATDIS::Application.interpret(:info => {:last_modified_date => "2013-04-20T02:01:07Z"}) }
       it { a.dat_id.should be_nil }
       it do
         a.should_not be_valid
@@ -19,8 +19,22 @@ describe ATDIS::Application do
     end
   end
 
-  it ".last_modified_date" do
-    ATDIS::Application.interpret(:info => {:last_modified_date => "2013-04-20T02:01:07Z"}).last_modified_date.should == DateTime.new(2013,4,20,2,1,7)
+  describe ".last_modified_date" do
+    context "valid" do
+      let(:a) { ATDIS::Application.interpret(:info => {:dat_id => "DA2013-0381", :last_modified_date => "2013-04-20T02:01:07Z"}) }
+      it { a.last_modified_date.should == DateTime.new(2013,4,20,2,1,7) }
+      it { a.should be_valid }
+    end
+
+    context "not valid" do
+      let(:a) { ATDIS::Application.interpret(:info => {:dat_id => "DA2013-0381"}) }
+      it { a.last_modified_date.should be_nil }
+      it do
+        a.should_not be_valid
+        a.errors.messages.should == {:last_modified_date => ["can't be blank"]}
+      end
+
+    end
   end
 
   it ".description" do

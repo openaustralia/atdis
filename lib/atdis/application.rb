@@ -8,7 +8,7 @@ module ATDIS
       :lodgement_date, :determination_date, :status, :notification_start_date, :notification_end_date,
       :officer, :estimated_cost, :more_info_url, :comments_url, :location, :events, :documents, :people
 
-    validates_presence_of :dat_id
+    validates_presence_of :dat_id, :last_modified_date
 
     def self.convert(data)
       values = {}
