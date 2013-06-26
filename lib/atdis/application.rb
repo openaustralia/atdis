@@ -15,10 +15,10 @@ module ATDIS
       # Map json structure to our values
       values = values.merge(data[:info]) if data[:info]
       values = values.merge(data[:reference]) if data[:reference]
-      values[:location] = data[:location]
-      values[:events] = data[:events]
-      values[:documents] = data[:documents]
-      values[:people] = data[:people]
+      values[:location] = data[:location] if data[:location]
+      values[:events] = data[:events] if data[:events]
+      values[:documents] = data[:documents] if data[:documents]
+      values[:people] = data[:people] if data[:people]
 
       # Convert values (if required)
       values[:last_modified_date] = DateTime.parse(values[:last_modified_date]) if values[:last_modified_date]
