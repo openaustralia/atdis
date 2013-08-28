@@ -4,7 +4,7 @@ describe ATDIS::ApplicationsResults do
   context "paging not supported by vendor" do
     before :each do
       # Mock network response
-      RestClient.should_receive(:get).with("http://www.council.nsw.gov.au/atdis/1.0/applications.json").and_return(mock(:to_str => <<-EOF
+      RestClient.should_receive(:get).with("http://www.council.nsw.gov.au/atdis/1.0/applications.json").and_return(double(:to_str => <<-EOF
 {
   "response": [
     {
@@ -26,8 +26,8 @@ describe ATDIS::ApplicationsResults do
     let(:applications_results) { ATDIS::ApplicationsResults.read(ATDIS::SeparatedURL.new("http://www.council.nsw.gov.au/atdis/1.0/applications.json")) }
 
     it ".results" do
-      application1 = mock("Application")
-      application2 = mock("Application")
+      application1 = double("Application")
+      application2 = double("Application")
       ATDIS::Application.should_receive(:interpret).with(:description => "application1").and_return(application1)
       ATDIS::Application.should_receive(:interpret).with(:description => "application2").and_return(application2)
 
@@ -65,7 +65,7 @@ describe ATDIS::ApplicationsResults do
 
   context "paging supported by vendor" do
     before :each do
-      RestClient.should_receive(:get).with("http://www.council.nsw.gov.au/atdis/1.0/applications.json?page=2").and_return(mock(:to_str => <<-EOF
+      RestClient.should_receive(:get).with("http://www.council.nsw.gov.au/atdis/1.0/applications.json?page=2").and_return(double(:to_str => <<-EOF
 {
   "response": [
     {
@@ -120,7 +120,7 @@ describe ATDIS::ApplicationsResults do
     end
 
     it ".next" do
-      n = mock("ApplicationsResults")
+      n = double("ApplicationsResults")
       applications_results
       ATDIS::ApplicationsResults.should_receive(:read).with(ATDIS::SeparatedURL.new("http://www.council.nsw.gov.au/atdis/1.0/applications.json?page=3")).and_return(n)
       applications_results.next.should == n

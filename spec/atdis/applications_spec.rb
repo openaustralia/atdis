@@ -13,7 +13,7 @@ describe ATDIS::Applications do
 
     describe "#all" do
       it do
-        applications_results = mock
+        applications_results = double
         ATDIS::ApplicationsResults.should_receive(:read).with(ATDIS::SeparatedURL.new("http://www.council.nsw.gov.au/atdis/1.0/applications.json")).and_return(applications_results)
         applications.all.should == applications_results
       end

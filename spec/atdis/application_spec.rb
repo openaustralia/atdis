@@ -4,7 +4,7 @@ describe ATDIS::Application do
 
   describe ".interpret" do
     it "should parse the json and create an application object" do
-      location, event1, event2, document1, document2, tuttle, buttle, application = mock, mock, mock, mock, mock, mock, mock, mock
+      location, event1, event2, document1, document2, tuttle, buttle, application = double, double, double, double, double, double, double, double
 
       ATDIS::Location.should_receive(:interpret).with(:address => "123 Fourfivesix Street").and_return(location)
       ATDIS::Event.should_receive(:interpret).with(:id => "event1").and_return(event1)
@@ -62,7 +62,7 @@ describe ATDIS::Application do
     end
 
     it "should create a nil valued application when there is no information in the json" do
-      application = mock
+      application = double
       ATDIS::Application.should_receive(:new).with({}).and_return(application)
 
       ATDIS::Application.interpret(:info => {}, :reference => {}).should == application
