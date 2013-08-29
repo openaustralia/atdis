@@ -182,6 +182,11 @@ describe ATDIS::Application do
         a.should_not be_valid
         a.errors.messages.should == {:more_info_url => ["can't be blank"]}
       end
+      it do
+        a.more_info_url = "This is not a valid url"
+        a.should_not be_valid
+        a.errors.messages.should == {:more_info_url => ["is not a valid URL"]}
+      end
     end
   end
 end

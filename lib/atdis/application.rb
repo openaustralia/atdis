@@ -7,6 +7,14 @@ class DateTimeValidator < ActiveModel::EachValidator
     end
   end
 end
+
+class UrlValidator < ActiveModel::EachValidator
+  def validate_each(record, attribute, value)
+    if value.present? && !value.kind_of?(URI)
+      record.errors.add(attribute, "is not a valid URL")
+    end
+  end
+end
  
 module ATDIS
   class Application < Model
@@ -17,6 +25,7 @@ module ATDIS
 
     validates :dat_id, :description, :authority, :status, :more_info_url, :presence => true
     validates :last_modified_date, :lodgement_date, :determination_date, :presence => true, :date_time => true
+    validates :more_info_url, :url => true
     # Optional
     validates :notification_start_date, :notification_end_date, :date_time => true
 
