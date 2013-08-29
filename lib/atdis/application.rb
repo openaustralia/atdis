@@ -15,7 +15,7 @@ module ATDIS
       :lodgement_date, :determination_date, :status, :notification_start_date, :notification_end_date,
       :officer, :estimated_cost, :more_info_url, :comments_url, :location, :events, :documents, :people
 
-    validates :dat_id, :description, :authority, :status, :presence => true
+    validates :dat_id, :description, :authority, :status, :more_info_url, :presence => true
     validates :last_modified_date, :lodgement_date, :determination_date, :presence => true, :date_time => true
     # Optional
     validates :notification_start_date, :notification_end_date, :date_time => true

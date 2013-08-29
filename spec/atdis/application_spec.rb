@@ -77,7 +77,8 @@ describe ATDIS::Application do
       :authority => "Example Council Shire Council",
       :lodgement_date => DateTime.new(2013,4,20,2,1,7),
       :determination_date => DateTime.new(2013,6,20),  
-      :status => "OPEN"
+      :status => "OPEN",
+      :more_info_url => URI.parse("http://foo.com/bar")
   ) }
 
     it { a.should be_valid }
@@ -172,6 +173,14 @@ describe ATDIS::Application do
         a.notification_end_date = "18 January 2013"
         a.should_not be_valid
         a.errors.messages.should == {:notification_end_date => ["is not a valid date"]}
+      end
+    end
+
+    describe ".more_info_url" do
+      it do
+        a.more_info_url = nil
+        a.should_not be_valid
+        a.errors.messages.should == {:more_info_url => ["can't be blank"]}
       end
     end
   end
