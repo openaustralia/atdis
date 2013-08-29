@@ -75,8 +75,10 @@ describe ATDIS::Application do
       :last_modified_date => DateTime.new(2013,4,20,2,1,7),
       :description => "New pool plus deck",
       :authority => "Example Council Shire Council",
-      :lodgement_date => DateTime.new(2013,4,20,2,1,7)
-    ) }
+      :lodgement_date => DateTime.new(2013,4,20,2,1,7),
+      :determination_date => DateTime.new(2013,6,20),  
+      :status => "OPEN"
+  ) }
 
     it { a.should be_valid }
 
@@ -125,6 +127,27 @@ describe ATDIS::Application do
         a.lodgement_date = "18 January 2013"
         a.should_not be_valid
         a.errors.messages.should == {:lodgement_date => ["is not a valid date"]}
+      end
+    end
+
+    describe ".determination_date" do
+      it do
+        a.determination_date = nil
+        a.should_not be_valid
+        a.errors.messages.should == {:determination_date => ["can't be blank"]}
+      end
+      it do
+        a.determination_date = "18 January 2013"
+        a.should_not be_valid
+        a.errors.messages.should == {:determination_date => ["is not a valid date"]}
+      end
+    end
+
+    describe ".status" do
+      it do
+        a.status = nil
+        a.should_not be_valid
+        a.errors.messages.should == {:status => ["can't be blank"]}
       end
     end
   end

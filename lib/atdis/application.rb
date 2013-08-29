@@ -15,8 +15,8 @@ module ATDIS
       :lodgement_date, :determination_date, :status, :notification_start_date, :notification_end_date,
       :officer, :estimated_cost, :more_info_url, :comments_url, :location, :events, :documents, :people
 
-    validates :dat_id, :description, :authority, :presence => true
-    validates :last_modified_date, :lodgement_date, :presence => true, :date_time => true
+    validates :dat_id, :description, :authority, :status, :presence => true
+    validates :last_modified_date, :lodgement_date, :determination_date, :presence => true, :date_time => true
 
     def self.convert(data)
       values = {}
