@@ -1,5 +1,4 @@
 require 'multi_json'
-require 'date'
 
 module ATDIS
   class Application < Model
@@ -21,11 +20,11 @@ module ATDIS
       values[:people] = data[:people] if data[:people]
 
       # Convert values (if required)
-      values[:last_modified_date] = DateTime.parse(values[:last_modified_date]) if values[:last_modified_date]
-      values[:lodgement_date] = DateTime.parse(values[:lodgement_date]) if values[:lodgement_date]
-      values[:determination_date] = DateTime.parse(values[:determination_date]) if values[:determination_date]
-      values[:notification_start_date] = DateTime.parse(values[:notification_start_date]) if values[:notification_start_date]
-      values[:notification_end_date] = DateTime.parse(values[:notification_end_date]) if values[:notification_end_date]
+      values[:last_modified_date] = iso8601(values[:last_modified_date]) if values[:last_modified_date]
+      values[:lodgement_date] = iso8601(values[:lodgement_date]) if values[:lodgement_date]
+      values[:determination_date] = iso8601(values[:determination_date]) if values[:determination_date]
+      values[:notification_start_date] = iso8601(values[:notification_start_date]) if values[:notification_start_date]
+      values[:notification_end_date] = iso8601(values[:notification_end_date]) if values[:notification_end_date]
       values[:more_info_url] = URI.parse(values[:more_info_url]) if values[:more_info_url]
       values[:comments_url] = URI.parse(values[:comments_url]) if values[:comments_url]
       values[:location] = Location.interpret(values[:location]) if values[:location]
@@ -34,5 +33,6 @@ module ATDIS
       values[:people] = values[:people].map{|p| Person.interpret(p)} if values[:people]
       values
     end
+
   end
 end
