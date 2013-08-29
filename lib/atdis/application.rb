@@ -17,6 +17,8 @@ module ATDIS
 
     validates :dat_id, :description, :authority, :status, :presence => true
     validates :last_modified_date, :lodgement_date, :determination_date, :presence => true, :date_time => true
+    # Optional
+    validates :notification_start_date, :notification_end_date, :date_time => true
 
     def self.convert(data)
       values = {}

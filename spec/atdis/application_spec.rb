@@ -150,5 +150,29 @@ describe ATDIS::Application do
         a.errors.messages.should == {:status => ["can't be blank"]}
       end
     end
+
+    describe ".notification_start_date" do
+      it do
+        a.notification_start_date = DateTime.new(2013,4,20,2,1,7)
+        a.should be_valid
+      end
+      it do
+        a.notification_start_date = "18 January 2013"
+        a.should_not be_valid
+        a.errors.messages.should == {:notification_start_date => ["is not a valid date"]}
+      end
+    end
+
+    describe ".notification_end_date" do
+      it do
+        a.notification_end_date = DateTime.new(2013,5,20,2,1,7)
+        a.should be_valid
+      end
+      it do
+        a.notification_end_date = "18 January 2013"
+        a.should_not be_valid
+        a.errors.messages.should == {:notification_end_date => ["is not a valid date"]}
+      end
+    end
   end
 end
