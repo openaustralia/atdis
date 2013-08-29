@@ -70,7 +70,7 @@ describe ATDIS::Application do
   end
 
   describe "validations" do
-    let(:a) { ATDIS::Application.new(:dat_id => "DA2013-0381", :last_modified_date => "2013-04-20T02:01:07Z") }
+    let(:a) { ATDIS::Application.new(:dat_id => "DA2013-0381", :last_modified_date => DateTime.new(2013,4,20,2,1,7)) }
 
     it { a.should be_valid }
 
@@ -80,11 +80,17 @@ describe ATDIS::Application do
       a.errors.messages.should == {:dat_id => ["can't be blank"]}
     end
 
-    it ".last_modified_date" do
-      a.last_modified_date = nil
-      a.should_not be_valid
-      a.errors.messages.should == {:last_modified_date => ["can't be blank"]}
+    describe ".last_modified_date" do
+      it do
+        a.last_modified_date = nil
+        a.should_not be_valid
+        a.errors.messages.should == {:last_modified_date => ["can't be blank"]}
+      end
+      it do
+        a.last_modified_date = "18 January 2013"
+        a.should_not be_valid
+        a.errors.messages.should == {:last_modified_date => ["is not a valid date"]}
+      end
     end
   end
-
 end

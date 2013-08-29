@@ -32,6 +32,10 @@ module ATDIS
       # are the two variants that are allowed.
       if text.match(/^\d\d\d\d-\d\d-\d\d(T\d\d:\d\d:\d\d(Z|(\+|-)\d\d:\d\d))?$/)
         DateTime.parse(text)
+      else
+        # When it's not a valid iso 8601 date return the original string. This is different than a nil
+        # value which represents that the value is missing
+        text
       end
     end
   end

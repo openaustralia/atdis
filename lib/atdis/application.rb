@@ -8,6 +8,13 @@ module ATDIS
       :officer, :estimated_cost, :more_info_url, :comments_url, :location, :events, :documents, :people
 
     validates_presence_of :dat_id, :last_modified_date
+    validate :last_modified_date_is_datetime
+
+    def last_modified_date_is_datetime
+      if last_modified_date.present? && !last_modified_date.kind_of?(DateTime)
+        errors.add(:last_modified_date, "is not a valid date")
+      end
+    end
 
     def self.convert(data)
       values = {}
