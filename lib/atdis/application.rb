@@ -1,5 +1,13 @@
 require 'multi_json'
 
+class DateTimeValidator < ActiveModel::EachValidator
+  def validate_each(record, attribute, value)
+    if value.present? && !value.kind_of?(DateTime)
+      record.errors.add(attribute, "is not a valid date")
+    end
+  end
+end
+ 
 module ATDIS
   class Application < Model
 
@@ -7,14 +15,8 @@ module ATDIS
       :lodgement_date, :determination_date, :status, :notification_start_date, :notification_end_date,
       :officer, :estimated_cost, :more_info_url, :comments_url, :location, :events, :documents, :people
 
-    validates :dat_id, :last_modified_date, :description, :presence => true
-    validate :last_modified_date_is_datetime
-
-    def last_modified_date_is_datetime
-      if last_modified_date.present? && !last_modified_date.kind_of?(DateTime)
-        errors.add(:last_modified_date, "is not a valid date")
-      end
-    end
+    validates :dat_id, :description, :presence => true
+    validates :last_modified_date, :presence => true, :date_time => true
 
     def self.convert(data)
       values = {}
