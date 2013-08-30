@@ -37,6 +37,14 @@ module ATDIS
       end
     end
 
+    def lodgement_date=(value)
+      if value.kind_of?(DateTime) || value.nil?
+        @lodgement_date = value
+      else
+        @lodgement_date = Application.iso8601(value)
+      end
+    end
+
     def self.convert(data)
       values = {}
       # Map json structure to our values
@@ -48,7 +56,6 @@ module ATDIS
       values[:people] = data[:people] if data[:people]
 
       # Convert values (if required)
-      values[:lodgement_date] = iso8601(values[:lodgement_date]) if values[:lodgement_date]
       values[:determination_date] = iso8601(values[:determination_date]) if values[:determination_date]
       values[:notification_start_date] = iso8601(values[:notification_start_date]) if values[:notification_start_date]
       values[:notification_end_date] = iso8601(values[:notification_end_date]) if values[:notification_end_date]
