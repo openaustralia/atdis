@@ -2,7 +2,8 @@ require 'multi_json'
 
 class DateTimeValidator < ActiveModel::EachValidator
   def validate_each(record, attribute, value)
-    if value.present? && !value.kind_of?(DateTime)
+    raw_value = record.send("#{attribute}_before_type_cast")
+    if raw_value.present? && !value.kind_of?(DateTime)
       record.errors.add(attribute, "is not a valid date")
     end
   end
@@ -10,8 +11,19 @@ end
 
 class UrlValidator < ActiveModel::EachValidator
   def validate_each(record, attribute, value)
-    if value.present? && !value.kind_of?(URI)
+    raw_value = record.send("#{attribute}_before_type_cast")
+    if raw_value.present? && !value.kind_of?(URI)
       record.errors.add(attribute, "is not a valid URL")
+    end
+  end
+end
+
+# Take into account the value before type casting
+class PresenceBeforeTypeCastValidator < ActiveModel::EachValidator
+  def validate_each(record, attribute, value)
+    raw_value = record.send("#{attribute}_before_type_cast")
+    unless raw_value.present?
+      record.errors.add(attribute, "can't be blank")
     end
   end
 end
@@ -23,40 +35,51 @@ module ATDIS
       :lodgement_date, :determination_date, :status, :notification_start_date, :notification_end_date,
       :officer, :estimated_cost, :more_info_url, :comments_url, :location, :events, :documents, :people
 
-    validates :dat_id, :description, :authority, :status, :more_info_url, :presence => true
-    validates :last_modified_date, :lodgement_date, :determination_date, :presence => true, :date_time => true
-    validates :more_info_url, :url => true
+    # TODO Would be nice to generate these dynamically
+    attr_reader :last_modified_date_before_type_cast, :more_info_url_before_type_cast,
+      :lodgement_date_before_type_cast, :determination_date_before_type_cast,
+      :notification_start_date_before_type_cast, :notification_end_date_before_type_cast
+
+    validates :dat_id, :description, :authority, :status, :presence => true
+    validates :last_modified_date, :lodgement_date, :determination_date, :presence_before_type_cast => true, :date_time => true
+    validates :more_info_url, :presence_before_type_cast => true, :url => true
     # Optional
     validates :notification_start_date, :notification_end_date, :date_time => true
 
     def last_modified_date=(value)
+      @last_modified_date_before_type_cast = value
       @last_modified_date = Application.cast_datetime(value)
     end
 
     def lodgement_date=(value)
+      @lodgement_date_before_type_cast = value
       @lodgement_date = Application.cast_datetime(value)
     end
 
     def determination_date=(value)
+      @determination_date_before_type_cast = value
       @determination_date = Application.cast_datetime(value)
     end
 
     def notification_start_date=(value)
+      @notification_start_date_before_type_cast = value
       @notification_start_date = Application.cast_datetime(value)
     end
 
     def notification_end_date=(value)
+      @notification_end_date_before_type_cast = value
       @notification_end_date = Application.cast_datetime(value)
     end
 
     def more_info_url=(value)
+      @more_info_url_before_type_cast = value
       @more_info_url = if value.kind_of?(URI)
         value
       else
         begin
           URI.parse(value)
         rescue URI::InvalidURIError
-          value
+          nil
         end
       end
     end

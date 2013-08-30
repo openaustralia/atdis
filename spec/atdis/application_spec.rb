@@ -81,9 +81,16 @@ describe ATDIS::Application do
       a.last_modified_date.should == DateTime.new(2013,1,1)
     end
 
-    it "should keep the original string when it's not a valid date" do
-      a.last_modified_date = "2013/01/01"
-      a.last_modified_date.should == "2013/01/01"
+    context "not a valid date" do
+      before :each do
+        a.last_modified_date = "2013/01/01"
+      end
+      it "should be nil" do
+        a.last_modified_date.should be_nil
+      end
+      it "should keep the original string" do
+        a.last_modified_date_before_type_cast.should == "2013/01/01"
+      end
     end
   end
 
@@ -99,9 +106,16 @@ describe ATDIS::Application do
       a.lodgement_date.should == DateTime.new(2013,1,1)
     end
 
-    it "should keep the original string when it's not a valid date" do
-      a.lodgement_date = "2013/01/01"
-      a.lodgement_date.should == "2013/01/01"
+    context "not a valid date" do
+      before :each do
+        a.lodgement_date = "2013/01/01"
+      end
+      it "should be nil" do
+        a.lodgement_date.should be_nil
+      end
+      it "should keep the original string" do
+        a.lodgement_date_before_type_cast.should == "2013/01/01"
+      end
     end
   end
 
@@ -117,9 +131,16 @@ describe ATDIS::Application do
       a.more_info_url.should == URI.parse("http://foo.com/bar")
     end
 
-    it "should keep the original string when it's not a valid url" do
-      a.more_info_url = "This is not a url"
-      a.more_info_url.should == "This is not a url"
+    context "not a valid url" do
+      before :each do
+        a.more_info_url = "This is not a url"
+      end
+      it "should be nil" do      
+        a.more_info_url.should be_nil
+      end
+      it "should keep the original string" do
+        a.more_info_url_before_type_cast.should == "This is not a url"
+      end
     end
   end
 
