@@ -51,37 +51,37 @@ module ATDIS
     
     def last_modified_date=(value)
       @last_modified_date_before_type_cast = value
-      @last_modified_date = Application.cast_datetime(value)
+      @last_modified_date = Application.cast(value, DateTime)
     end
 
     def lodgement_date=(value)
       @lodgement_date_before_type_cast = value
-      @lodgement_date = Application.cast_datetime(value)
+      @lodgement_date = Application.cast(value, DateTime)
     end
 
     def determination_date=(value)
       @determination_date_before_type_cast = value
-      @determination_date = Application.cast_datetime(value)
+      @determination_date = Application.cast(value, DateTime)
     end
 
     def notification_start_date=(value)
       @notification_start_date_before_type_cast = value
-      @notification_start_date = Application.cast_datetime(value)
+      @notification_start_date = Application.cast(value, DateTime)
     end
 
     def notification_end_date=(value)
       @notification_end_date_before_type_cast = value
-      @notification_end_date = Application.cast_datetime(value)
+      @notification_end_date = Application.cast(value, DateTime)
     end
 
     def more_info_url=(value)
       @more_info_url_before_type_cast = value
-      @more_info_url = Application.cast_uri(value)
+      @more_info_url = Application.cast(value, URI)
     end
 
     def comments_url=(value)
       @comments_url_before_type_cast = value
-      @comments_url = Application.cast_uri(value)
+      @comments_url = Application.cast(value, URI)
     end
 
     def self.convert(data)

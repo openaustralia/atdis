@@ -20,6 +20,18 @@ module ATDIS
       data
     end
 
+    def self.cast(value, type)
+      if type == DateTime
+        cast_datetime(value)
+      elsif type == URI
+        cast_uri(value)
+      else
+        raise
+      end
+    end
+
+    private
+
     def self.cast_datetime(value)
       if value.kind_of?(DateTime)
         value
