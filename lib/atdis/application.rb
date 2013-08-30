@@ -51,39 +51,49 @@ module ATDIS
       super(params)
     end
 
+    def attribute_types
+      {
+        :last_modified_date => DateTime,
+        :lodgement_date => DateTime,
+        :determination_date => DateTime,
+        :notification_start_date => DateTime,
+        :notification_end_date => DateTime,
+        :more_info_url => URI,
+        :comments_url => URI
+      }
+    end
+
+    def write_attribute(attr, value)
+      @attributes_before_type_cast[attr.to_sym] = value
+      @attributes[attr.to_sym] = Application.cast(value, attribute_types[attr.to_sym])
+    end
+
     def last_modified_date=(value)
-      @attributes_before_type_cast[:last_modified_date] = value
-      @attributes[:last_modified_date] = Application.cast(value, DateTime)
+      write_attribute('last_modified_date', value)
     end
 
     def lodgement_date=(value)
-      @attributes_before_type_cast[:lodgement_date] = value
-      @attributes[:lodgement_date] = Application.cast(value, DateTime)
+      write_attribute('lodgement_date', value)
     end
 
     def determination_date=(value)
-      @attributes_before_type_cast[:determination_date] = value
-      @attributes[:determination_date] = Application.cast(value, DateTime)
+      write_attribute('determination_date', value)
     end
 
     def notification_start_date=(value)
-      @attributes_before_type_cast[:notification_start_date] = value
-      @attributes[:notification_start_date] = Application.cast(value, DateTime)
+      write_attribute('notification_start_date', value)
     end
 
     def notification_end_date=(value)
-      @attributes_before_type_cast[:notification_end_date] = value
-      @attributes[:notification_end_date] = Application.cast(value, DateTime)
+      write_attribute('notification_end_date', value)
     end
 
     def more_info_url=(value)
-      @attributes_before_type_cast[:more_info_url] = value
-      @attributes[:more_info_url] = Application.cast(value, URI)
+      write_attribute('more_info_url', value)
     end
 
     def comments_url=(value)
-      @attributes_before_type_cast[:comments_url] = value
-      @attributes[:comments_url] = Application.cast(value, URI)
+      write_attribute('comments_url', value)
     end
 
     def self.convert(data)
