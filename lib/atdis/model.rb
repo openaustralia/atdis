@@ -25,6 +25,8 @@ module ATDIS
         cast_datetime(value)
       elsif type == URI
         cast_uri(value)
+      elsif type == String
+        cast_string(value)
       else
         raise
       end
@@ -59,6 +61,10 @@ module ATDIS
           nil
         end
       end
+    end
+
+    def self.cast_string(value)
+      value.to_s
     end
   end
 end

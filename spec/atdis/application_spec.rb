@@ -144,6 +144,25 @@ describe ATDIS::Application do
     end
   end
 
+  describe "#description=" do
+    let(:a) { ATDIS::Application.new }
+    it "should do not type casting when it's already a String" do
+      a.description = "foo"
+      a.description.should == "foo"
+    end
+    context "not a string" do
+      before :each do
+        a.description = 123
+      end
+      it "should cast to a string when it's not a string" do
+        a.description.should == "123"
+      end
+      it "should keep the original value" do
+        a.description_before_type_cast.should == 123
+      end
+    end
+  end
+
   describe "validations" do
     let(:a) { ATDIS::Application.new(
       :dat_id => "DA2013-0381",

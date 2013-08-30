@@ -34,9 +34,9 @@ module ATDIS
     attribute_method_suffix '_before_type_cast'
     attribute_method_suffix '='
     define_attribute_methods ['last_modified_date', 'more_info_url', 'lodgement_date', 'determination_date',
-      'notification_start_date', 'notification_end_date', 'comments_url']
+      'notification_start_date', 'notification_end_date', 'comments_url', 'description']
 
-    attr_accessor :dat_id, :description, :authority, :status, :officer, :estimated_cost, :location,
+    attr_accessor :dat_id, :authority, :status, :officer, :estimated_cost, :location,
       :events, :documents, :people
 
     validates :dat_id, :description, :authority, :status, :presence => true
@@ -80,7 +80,8 @@ module ATDIS
         'notification_start_date' => DateTime,
         'notification_end_date' => DateTime,
         'more_info_url' => URI,
-        'comments_url' => URI
+        'comments_url' => URI,
+        'description' => String
       }
     end
 
