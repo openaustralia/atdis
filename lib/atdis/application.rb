@@ -47,6 +47,8 @@ module ATDIS
     # Optional
     validates :notification_start_date, :notification_end_date, :date_time => true
 
+    # TODO Validate associated like locations, events, documents, people
+    
     def last_modified_date=(value)
       @last_modified_date_before_type_cast = value
       @last_modified_date = Application.cast_datetime(value)
