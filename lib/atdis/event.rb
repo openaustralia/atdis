@@ -1,11 +1,13 @@
 module ATDIS
   class Event < Model
-    attr_accessor :id, :date, :description, :event_type, :status
+    define_attribute_methods ['date']
 
-    def self.convert(data)
-      # Convert values (if required)
-      data[:date] = cast_datetime(data[:date]) if data[:date]
-      data
+    def attribute_types
+      {
+        'date' => DateTime
+      }
     end
+
+    attr_accessor :id, :description, :event_type, :status
   end
 end
