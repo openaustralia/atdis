@@ -43,7 +43,7 @@ module ATDIS
     # TODO Validate associated like locations, events, documents, people
 
     def initialize(params = {})
-      @attributes = {}
+      @attributes, @attributes_before_type_cast = {}, {}
       super(params)
     end
 
@@ -76,27 +76,27 @@ module ATDIS
     end
 
     def last_modified_date_before_type_cast
-      @last_modified_date_before_type_cast
+      @attributes_before_type_cast[:last_modified_date]
     end
 
     def more_info_url_before_type_cast
-      @more_info_url_before_type_cast
+      @attributes_before_type_cast[:more_info_url]
     end
 
     def lodgement_date_before_type_cast
-      @lodgement_date_before_type_cast
+      @attributes_before_type_cast[:lodgement_date]
     end
 
     def determination_date_before_type_cast
-      @determination_date_before_type_cast
+      @attributes_before_type_cast[:determination_date]
     end
 
     def notification_start_date_before_type_cast
-      @notification_start_date_before_type_cast
+      @attributes_before_type_cast[:notification_start_date]
     end
 
     def notification_end_date_before_type_cast
-      @notification_end_date_before_type_cast
+      @attributes_before_type_cast[:notification_end_date]
     end
 
     def comments_url_before_type_cast
@@ -104,32 +104,32 @@ module ATDIS
     end
 
     def last_modified_date=(value)
-      @last_modified_date_before_type_cast = value
+      @attributes_before_type_cast[:last_modified_date] = value
       @attributes[:last_modified_date] = Application.cast(value, DateTime)
     end
 
     def lodgement_date=(value)
-      @lodgement_date_before_type_cast = value
+      @attributes_before_type_cast[:lodgement_date] = value
       @attributes[:lodgement_date] = Application.cast(value, DateTime)
     end
 
     def determination_date=(value)
-      @determination_date_before_type_cast = value
+      @attributes_before_type_cast[:determination_date] = value
       @attributes[:determination_date] = Application.cast(value, DateTime)
     end
 
     def notification_start_date=(value)
-      @notification_start_date_before_type_cast = value
+      @attributes_before_type_cast[:notification_start_date] = value
       @attributes[:notification_start_date] = Application.cast(value, DateTime)
     end
 
     def notification_end_date=(value)
-      @notification_end_date_before_type_cast = value
+      @attributes_before_type_cast[:notification_end_date] = value
       @attributes[:notification_end_date] = Application.cast(value, DateTime)
     end
 
     def more_info_url=(value)
-      @more_info_url_before_type_cast = value
+      @attributes_before_type_cast[:more_info_url] = value
       @attributes[:more_info_url] = Application.cast(value, URI)
     end
 
