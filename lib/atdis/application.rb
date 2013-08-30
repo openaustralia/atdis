@@ -30,6 +30,10 @@ end
  
 module ATDIS
   class Application < Model
+    include ActiveModel::AttributeMethods
+    attribute_method_suffix '_before_type_cast'
+    define_attribute_methods ['last_modified_date', 'more_info_url', 'lodgement_date', 'determination_date',
+      'notification_start_date', 'notification_end_date', 'comments_url']
 
     attr_accessor :dat_id, :description, :authority, :status, :officer, :estimated_cost, :location,
       :events, :documents, :people
@@ -45,62 +49,6 @@ module ATDIS
     def initialize(params = {})
       @attributes, @attributes_before_type_cast = {}, {}
       super(params)
-    end
-
-    def last_modified_date
-      @attributes[:last_modified_date]
-    end
-
-    def lodgement_date
-      @attributes[:lodgement_date]
-    end
-
-    def determination_date
-      @attributes[:determination_date]
-    end
-
-    def notification_start_date
-      @attributes[:notification_start_date]
-    end
-
-    def notification_end_date
-      @attributes[:notification_end_date]
-    end
-
-    def more_info_url
-      @attributes[:more_info_url]
-    end
-
-    def comments_url
-      @attributes[:comments_url]
-    end
-
-    def last_modified_date_before_type_cast
-      @attributes_before_type_cast[:last_modified_date]
-    end
-
-    def more_info_url_before_type_cast
-      @attributes_before_type_cast[:more_info_url]
-    end
-
-    def lodgement_date_before_type_cast
-      @attributes_before_type_cast[:lodgement_date]
-    end
-
-    def determination_date_before_type_cast
-      @attributes_before_type_cast[:determination_date]
-    end
-
-    def notification_start_date_before_type_cast
-      @attributes_before_type_cast[:notification_start_date]
-    end
-
-    def notification_end_date_before_type_cast
-      @attributes_before_type_cast[:notification_end_date]
-    end
-
-    def comments_url_before_type_cast
-      @comments_url_before_type_cast
     end
 
     def last_modified_date=(value)
@@ -134,7 +82,7 @@ module ATDIS
     end
 
     def comments_url=(value)
-      @comments_url_before_type_cast = value
+      @attributes_before_type_cast[:comments_url] = value
       @attributes[:comments_url] = Application.cast(value, URI)
     end
 
@@ -156,5 +104,14 @@ module ATDIS
       values
     end
 
+    private
+
+    def attribute(attr)
+      @attributes[attr.to_sym]
+    end
+
+    def attribute_before_type_cast(attr)
+      @attributes_before_type_cast[attr.to_sym]
+    end
   end
 end
