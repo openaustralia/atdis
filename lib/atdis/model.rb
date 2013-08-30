@@ -48,7 +48,7 @@ module ATDIS
 
     def attribute=(attr, value)
       @attributes_before_type_cast[attr] = value
-      @attributes[attr] = Model.cast(value, attribute_types[attr])
+      @attributes[attr] = Model.cast(value, attribute_types[attr.to_sym])
     end
 
     def self.cast_datetime(value)

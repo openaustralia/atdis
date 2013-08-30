@@ -38,7 +38,7 @@ module ATDIS
 
     module ClassMethods
       def casting_attributes(p)
-        define_attribute_methods(p.keys)
+        define_attribute_methods(p.keys.map{|k| k.to_s})
         self.attribute_types = p
       end
     end
@@ -47,19 +47,19 @@ module ATDIS
   class Application < Model
     include TypeCastAttributes
 
-    casting_attributes 'last_modified_date' => DateTime,
-      'lodgement_date' => DateTime,
-      'determination_date' => DateTime,
-      'notification_start_date' => DateTime,
-      'notification_end_date' => DateTime,
-      'more_info_url' => URI,
-      'comments_url' => URI,
-      'description' => String,
-      'dat_id' => String,
-      'authority' => String,
-      'status' => String,
-      'officer' => String,
-      'estimated_cost' => String
+    casting_attributes :last_modified_date => DateTime,
+      :lodgement_date => DateTime,
+      :determination_date => DateTime,
+      :notification_start_date => DateTime,
+      :notification_end_date => DateTime,
+      :more_info_url => URI,
+      :comments_url => URI,
+      :description => String,
+      :dat_id => String,
+      :authority => String,
+      :status => String,
+      :officer => String,
+      :estimated_cost => String
 
     attr_accessor :location, :events, :documents, :people
 
