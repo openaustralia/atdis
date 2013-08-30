@@ -24,6 +24,18 @@ module ATDIS
       (value.kind_of?(DateTime) || value.nil?) ? value : iso8601(value)
     end
 
+    def self.cast_uri(value)
+      if value.kind_of?(URI)
+        value
+      else
+        begin
+          URI.parse(value)
+        rescue URI::InvalidURIError
+          nil
+        end
+      end
+    end
+
     def self.iso8601(text)
       # This would be much easier if we knew we only had to support Ruby 1.9 or greater because it has
       # an implementation built in. Because for the time being we need to support Ruby 1.8 as well

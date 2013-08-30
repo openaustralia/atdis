@@ -73,15 +73,7 @@ module ATDIS
 
     def more_info_url=(value)
       @more_info_url_before_type_cast = value
-      @more_info_url = if value.kind_of?(URI)
-        value
-      else
-        begin
-          URI.parse(value)
-        rescue URI::InvalidURIError
-          nil
-        end
-      end
+      @more_info_url = Application.cast_uri(value)
     end
 
     def self.convert(data)
