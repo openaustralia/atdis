@@ -74,27 +74,27 @@ module ATDIS
 
     def attribute_types
       {
-        :last_modified_date => DateTime,
-        :lodgement_date => DateTime,
-        :determination_date => DateTime,
-        :notification_start_date => DateTime,
-        :notification_end_date => DateTime,
-        :more_info_url => URI,
-        :comments_url => URI
+        'last_modified_date' => DateTime,
+        'lodgement_date' => DateTime,
+        'determination_date' => DateTime,
+        'notification_start_date' => DateTime,
+        'notification_end_date' => DateTime,
+        'more_info_url' => URI,
+        'comments_url' => URI
       }
     end
 
     def attribute(attr)
-      @attributes[attr.to_sym]
+      @attributes[attr]
     end
 
     def attribute_before_type_cast(attr)
-      @attributes_before_type_cast[attr.to_sym]
+      @attributes_before_type_cast[attr]
     end
 
     def attribute=(attr, value)
-      @attributes_before_type_cast[attr.to_sym] = value
-      @attributes[attr.to_sym] = Application.cast(value, attribute_types[attr.to_sym])
+      @attributes_before_type_cast[attr] = value
+      @attributes[attr] = Application.cast(value, attribute_types[attr])
     end
   end
 end
