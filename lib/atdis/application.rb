@@ -29,28 +29,37 @@ class PresenceBeforeTypeCastValidator < ActiveModel::EachValidator
 end
  
 module ATDIS
-  class Application < Model
-    define_attribute_methods ['last_modified_date', 'more_info_url', 'lodgement_date', 'determination_date',
-      'notification_start_date', 'notification_end_date', 'comments_url', 'description', 'dat_id', 'authority',
-      'status', 'officer', 'estimated_cost']
+  module TypeCastAttributes
+    extend ActiveSupport::Concern
 
-    def attribute_types
-      {
-        'last_modified_date' => DateTime,
-        'lodgement_date' => DateTime,
-        'determination_date' => DateTime,
-        'notification_start_date' => DateTime,
-        'notification_end_date' => DateTime,
-        'more_info_url' => URI,
-        'comments_url' => URI,
-        'description' => String,
-        'dat_id' => String,
-        'authority' => String,
-        'status' => String,
-        'officer' => String,
-        'estimated_cost' => String
-      }
+    included do
+      class_attribute :attribute_types
     end
+
+    module ClassMethods
+      def casting_attributes(p)
+        define_attribute_methods(p.keys)
+        self.attribute_types = p
+      end
+    end
+  end
+
+  class Application < Model
+    include TypeCastAttributes
+
+    casting_attributes 'last_modified_date' => DateTime,
+      'lodgement_date' => DateTime,
+      'determination_date' => DateTime,
+      'notification_start_date' => DateTime,
+      'notification_end_date' => DateTime,
+      'more_info_url' => URI,
+      'comments_url' => URI,
+      'description' => String,
+      'dat_id' => String,
+      'authority' => String,
+      'status' => String,
+      'officer' => String,
+      'estimated_cost' => String
 
     attr_accessor :location, :events, :documents, :people
 
