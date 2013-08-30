@@ -49,6 +49,18 @@ module ATDIS
       @notification_end_date = Application.cast_datetime(value)
     end
 
+    def more_info_url=(value)
+      @more_info_url = if value.kind_of?(URI)
+        value
+      else
+        begin
+          URI.parse(value)
+        rescue URI::InvalidURIError
+          value
+        end
+      end
+    end
+
     def self.convert(data)
       values = {}
       # Map json structure to our values

@@ -105,6 +105,24 @@ describe ATDIS::Application do
     end
   end
 
+  describe "#more_info_url=" do
+    let(:a) { ATDIS::Application.new }
+    it "should do no type casting when it's already a URI" do
+      a.more_info_url = URI.parse("http://foo.com/bar")
+      a.more_info_url.should == URI.parse("http://foo.com/bar")
+    end
+
+    it "should cast a string to a URI when it's a valid url" do
+      a.more_info_url = "http://foo.com/bar"
+      a.more_info_url.should == URI.parse("http://foo.com/bar")
+    end
+
+    it "should keep the original string when it's not a valid url" do
+      a.more_info_url = "This is not a url"
+      a.more_info_url.should == "This is not a url"
+    end
+  end
+
   describe "validations" do
     let(:a) { ATDIS::Application.new(
       :dat_id => "DA2013-0381",
