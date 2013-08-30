@@ -32,6 +32,7 @@ module ATDIS
   class Application < Model
     include ActiveModel::AttributeMethods
     attribute_method_suffix '_before_type_cast'
+    attribute_method_suffix '='
     define_attribute_methods ['last_modified_date', 'more_info_url', 'lodgement_date', 'determination_date',
       'notification_start_date', 'notification_end_date', 'comments_url']
 
@@ -49,51 +50,6 @@ module ATDIS
     def initialize(params = {})
       @attributes, @attributes_before_type_cast = {}, {}
       super(params)
-    end
-
-    def attribute_types
-      {
-        :last_modified_date => DateTime,
-        :lodgement_date => DateTime,
-        :determination_date => DateTime,
-        :notification_start_date => DateTime,
-        :notification_end_date => DateTime,
-        :more_info_url => URI,
-        :comments_url => URI
-      }
-    end
-
-    def write_attribute(attr, value)
-      @attributes_before_type_cast[attr.to_sym] = value
-      @attributes[attr.to_sym] = Application.cast(value, attribute_types[attr.to_sym])
-    end
-
-    def last_modified_date=(value)
-      write_attribute('last_modified_date', value)
-    end
-
-    def lodgement_date=(value)
-      write_attribute('lodgement_date', value)
-    end
-
-    def determination_date=(value)
-      write_attribute('determination_date', value)
-    end
-
-    def notification_start_date=(value)
-      write_attribute('notification_start_date', value)
-    end
-
-    def notification_end_date=(value)
-      write_attribute('notification_end_date', value)
-    end
-
-    def more_info_url=(value)
-      write_attribute('more_info_url', value)
-    end
-
-    def comments_url=(value)
-      write_attribute('comments_url', value)
     end
 
     def self.convert(data)
@@ -116,12 +72,29 @@ module ATDIS
 
     private
 
+    def attribute_types
+      {
+        :last_modified_date => DateTime,
+        :lodgement_date => DateTime,
+        :determination_date => DateTime,
+        :notification_start_date => DateTime,
+        :notification_end_date => DateTime,
+        :more_info_url => URI,
+        :comments_url => URI
+      }
+    end
+
     def attribute(attr)
       @attributes[attr.to_sym]
     end
 
     def attribute_before_type_cast(attr)
       @attributes_before_type_cast[attr.to_sym]
+    end
+
+    def attribute=(attr, value)
+      @attributes_before_type_cast[attr.to_sym] = value
+      @attributes[attr.to_sym] = Application.cast(value, attribute_types[attr.to_sym])
     end
   end
 end
