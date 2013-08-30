@@ -20,6 +20,10 @@ module ATDIS
       data
     end
 
+    def self.cast_datetime(value)
+      (value.kind_of?(DateTime) || value.nil?) ? value : iso8601(value)
+    end
+
     # TODO We're currently far more forgiving here then we should be. It will accept all
     # kinds of different date formats. Tighten this up only accept iso8601.
     def self.iso8601(text)

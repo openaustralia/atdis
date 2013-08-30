@@ -30,19 +30,23 @@ module ATDIS
     validates :notification_start_date, :notification_end_date, :date_time => true
 
     def last_modified_date=(value)
-      if value.kind_of?(DateTime) || value.nil?
-        @last_modified_date = value
-      else
-        @last_modified_date = Application.iso8601(value)
-      end
+      @last_modified_date = Application.cast_datetime(value)
     end
 
     def lodgement_date=(value)
-      if value.kind_of?(DateTime) || value.nil?
-        @lodgement_date = value
-      else
-        @lodgement_date = Application.iso8601(value)
-      end
+      @lodgement_date = Application.cast_datetime(value)
+    end
+
+    def determination_date=(value)
+      @determination_date = Application.cast_datetime(value)
+    end
+
+    def notification_start_date=(value)
+      @notification_start_date = Application.cast_datetime(value)
+    end
+
+    def notification_end_date=(value)
+      @notification_end_date = Application.cast_datetime(value)
     end
 
     def self.convert(data)
@@ -56,9 +60,6 @@ module ATDIS
       values[:people] = data[:people] if data[:people]
 
       # Convert values (if required)
-      values[:determination_date] = iso8601(values[:determination_date]) if values[:determination_date]
-      values[:notification_start_date] = iso8601(values[:notification_start_date]) if values[:notification_start_date]
-      values[:notification_end_date] = iso8601(values[:notification_end_date]) if values[:notification_end_date]
       values[:more_info_url] = URI.parse(values[:more_info_url]) if values[:more_info_url]
       values[:comments_url] = URI.parse(values[:comments_url]) if values[:comments_url]
       values[:location] = Location.interpret(values[:location]) if values[:location]
