@@ -38,7 +38,8 @@ module ATDIS
     # TODO Would be nice to generate these dynamically
     attr_reader :last_modified_date_before_type_cast, :more_info_url_before_type_cast,
       :lodgement_date_before_type_cast, :determination_date_before_type_cast,
-      :notification_start_date_before_type_cast, :notification_end_date_before_type_cast
+      :notification_start_date_before_type_cast, :notification_end_date_before_type_cast,
+      :comments_url_before_type_cast
 
     validates :dat_id, :description, :authority, :status, :presence => true
     validates :last_modified_date, :lodgement_date, :determination_date, :presence_before_type_cast => true, :date_time => true
@@ -76,6 +77,11 @@ module ATDIS
       @more_info_url = Application.cast_uri(value)
     end
 
+    def comments_url=(value)
+      @comments_url_before_type_cast = value
+      @comments_url = Application.cast_uri(value)
+    end
+
     def self.convert(data)
       values = {}
       # Map json structure to our values
@@ -87,8 +93,6 @@ module ATDIS
       values[:people] = data[:people] if data[:people]
 
       # Convert values (if required)
-      values[:more_info_url] = URI.parse(values[:more_info_url]) if values[:more_info_url]
-      values[:comments_url] = URI.parse(values[:comments_url]) if values[:comments_url]
       values[:location] = Location.interpret(values[:location]) if values[:location]
       values[:events] = values[:events].map{|e| Event.interpret(e)} if values[:events]
       values[:documents] = values[:documents].map{|d| Document.interpret(d)} if values[:documents]
