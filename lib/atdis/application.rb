@@ -34,12 +34,6 @@ module ATDIS
     attr_accessor :dat_id, :description, :authority, :status, :officer, :estimated_cost, :location,
       :events, :documents, :people
 
-    # TODO Would be nice to generate these dynamically
-    attr_reader :last_modified_date_before_type_cast, :more_info_url_before_type_cast,
-      :lodgement_date_before_type_cast, :determination_date_before_type_cast,
-      :notification_start_date_before_type_cast, :notification_end_date_before_type_cast,
-      :comments_url_before_type_cast
-
     validates :dat_id, :description, :authority, :status, :presence => true
     validates :last_modified_date, :lodgement_date, :determination_date, :presence_before_type_cast => true, :date_time => true
     validates :more_info_url, :presence_before_type_cast => true, :url => true
@@ -79,6 +73,34 @@ module ATDIS
 
     def comments_url
       @attributes[:comments_url]
+    end
+
+    def last_modified_date_before_type_cast
+      @last_modified_date_before_type_cast
+    end
+
+    def more_info_url_before_type_cast
+      @more_info_url_before_type_cast
+    end
+
+    def lodgement_date_before_type_cast
+      @lodgement_date_before_type_cast
+    end
+
+    def determination_date_before_type_cast
+      @determination_date_before_type_cast
+    end
+
+    def notification_start_date_before_type_cast
+      @notification_start_date_before_type_cast
+    end
+
+    def notification_end_date_before_type_cast
+      @notification_end_date_before_type_cast
+    end
+
+    def comments_url_before_type_cast
+      @comments_url_before_type_cast
     end
 
     def last_modified_date=(value)
