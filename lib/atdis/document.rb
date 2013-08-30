@@ -1,12 +1,6 @@
 module ATDIS
   class Document < Model
-    define_attribute_methods ['document_url']
-
-    def attribute_types
-      {
-        'document_url' => URI
-      }
-    end
+    casting_attributes :document_url => URI
 
     attr_accessor :ref, :title
   end

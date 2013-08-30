@@ -29,24 +29,7 @@ class PresenceBeforeTypeCastValidator < ActiveModel::EachValidator
 end
  
 module ATDIS
-  module TypeCastAttributes
-    extend ActiveSupport::Concern
-
-    included do
-      class_attribute :attribute_types
-    end
-
-    module ClassMethods
-      def casting_attributes(p)
-        define_attribute_methods(p.keys.map{|k| k.to_s})
-        self.attribute_types = p
-      end
-    end
-  end
-
   class Application < Model
-    include TypeCastAttributes
-
     casting_attributes :last_modified_date => DateTime,
       :lodgement_date => DateTime,
       :determination_date => DateTime,

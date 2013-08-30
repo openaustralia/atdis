@@ -2,9 +2,25 @@ require 'active_model'
 require 'date'
 
 module ATDIS
+  module TypeCastAttributes
+    extend ActiveSupport::Concern
+
+    included do
+      class_attribute :attribute_types
+    end
+
+    module ClassMethods
+      def casting_attributes(p)
+        define_attribute_methods(p.keys.map{|k| k.to_s})
+        self.attribute_types = p
+      end
+    end
+  end
+
   class Model
     include ActiveModel::Validations
     include ActiveModel::AttributeMethods
+    include TypeCastAttributes
     attribute_method_suffix '_before_type_cast'
     attribute_method_suffix '='
 
