@@ -4,6 +4,9 @@ require 'date'
 module ATDIS
   class Model
     include ActiveModel::Validations
+    include ActiveModel::AttributeMethods
+    attribute_method_suffix '_before_type_cast'
+    attribute_method_suffix '='
 
     def initialize(params={})
       params.each do |attr, value|
@@ -33,6 +36,19 @@ module ATDIS
     end
 
     private
+
+    def attribute(attr)
+      @attributes[attr]
+    end
+
+    def attribute_before_type_cast(attr)
+      @attributes_before_type_cast[attr]
+    end
+
+    def attribute=(attr, value)
+      @attributes_before_type_cast[attr] = value
+      @attributes[attr] = Application.cast(value, attribute_types[attr])
+    end
 
     def self.cast_datetime(value)
       if value.kind_of?(DateTime)

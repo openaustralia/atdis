@@ -30,12 +30,27 @@ end
  
 module ATDIS
   class Application < Model
-    include ActiveModel::AttributeMethods
-    attribute_method_suffix '_before_type_cast'
-    attribute_method_suffix '='
     define_attribute_methods ['last_modified_date', 'more_info_url', 'lodgement_date', 'determination_date',
       'notification_start_date', 'notification_end_date', 'comments_url', 'description', 'dat_id', 'authority',
       'status', 'officer', 'estimated_cost']
+
+    def attribute_types
+      {
+        'last_modified_date' => DateTime,
+        'lodgement_date' => DateTime,
+        'determination_date' => DateTime,
+        'notification_start_date' => DateTime,
+        'notification_end_date' => DateTime,
+        'more_info_url' => URI,
+        'comments_url' => URI,
+        'description' => String,
+        'dat_id' => String,
+        'authority' => String,
+        'status' => String,
+        'officer' => String,
+        'estimated_cost' => String
+      }
+    end
 
     attr_accessor :location, :events, :documents, :people
 
@@ -68,39 +83,6 @@ module ATDIS
       values[:documents] = values[:documents].map{|d| Document.interpret(d)} if values[:documents]
       values[:people] = values[:people].map{|p| Person.interpret(p)} if values[:people]
       values
-    end
-
-    private
-
-    def attribute_types
-      {
-        'last_modified_date' => DateTime,
-        'lodgement_date' => DateTime,
-        'determination_date' => DateTime,
-        'notification_start_date' => DateTime,
-        'notification_end_date' => DateTime,
-        'more_info_url' => URI,
-        'comments_url' => URI,
-        'description' => String,
-        'dat_id' => String,
-        'authority' => String,
-        'status' => String,
-        'officer' => String,
-        'estimated_cost' => String
-      }
-    end
-
-    def attribute(attr)
-      @attributes[attr]
-    end
-
-    def attribute_before_type_cast(attr)
-      @attributes_before_type_cast[attr]
-    end
-
-    def attribute=(attr, value)
-      @attributes_before_type_cast[attr] = value
-      @attributes[attr] = Application.cast(value, attribute_types[attr])
     end
   end
 end
