@@ -24,8 +24,6 @@ module ATDIS
       (value.kind_of?(DateTime) || value.nil?) ? value : iso8601(value)
     end
 
-    # TODO We're currently far more forgiving here then we should be. It will accept all
-    # kinds of different date formats. Tighten this up only accept iso8601.
     def self.iso8601(text)
       # This would be much easier if we knew we only had to support Ruby 1.9 or greater because it has
       # an implementation built in. Because for the time being we need to support Ruby 1.8 as well
