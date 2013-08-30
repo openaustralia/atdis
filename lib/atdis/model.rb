@@ -9,6 +9,7 @@ module ATDIS
     attribute_method_suffix '='
 
     def initialize(params={})
+      @attributes, @attributes_before_type_cast = {}, {}
       params.each do |attr, value|
         self.send("#{attr}=", value)
       end if params
@@ -47,7 +48,7 @@ module ATDIS
 
     def attribute=(attr, value)
       @attributes_before_type_cast[attr] = value
-      @attributes[attr] = Application.cast(value, attribute_types[attr])
+      @attributes[attr] = Model.cast(value, attribute_types[attr])
     end
 
     def self.cast_datetime(value)

@@ -62,11 +62,6 @@ module ATDIS
 
     # TODO Validate associated like locations, events, documents, people
 
-    def initialize(params = {})
-      @attributes, @attributes_before_type_cast = {}, {}
-      super(params)
-    end
-
     def self.convert(data)
       values = {}
       # Map json structure to our values
