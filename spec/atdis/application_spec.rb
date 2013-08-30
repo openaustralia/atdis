@@ -15,7 +15,7 @@ describe ATDIS::Application do
       ATDIS::Person.should_receive(:interpret).with(:name => "Buttle").and_return(buttle)
       ATDIS::Application.should_receive(:new).with(
         :dat_id => "DA2013-0381",
-        :last_modified_date => DateTime.new(2013,4,20,2,1,7),
+        :last_modified_date => "2013-04-20T02:01:07Z",
         :description => "New pool plus deck",
         :authority => "Example Council Shire Council",
         :lodgement_date => DateTime.new(2013,4,20,2,1,7),
@@ -66,6 +66,26 @@ describe ATDIS::Application do
       ATDIS::Application.should_receive(:new).with({}).and_return(application)
 
       ATDIS::Application.interpret(:info => {}, :reference => {}).should == application
+    end
+  end
+
+  describe "#last_modified_date=" do
+    it "should do no type casting when it's already a date" do
+      a = ATDIS::Application.new
+      a.last_modified_date = DateTime.new(2013,1,1)
+      a.last_modified_date.should == DateTime.new(2013,1,1)
+    end
+
+    it "should cast a string to a date when it's a valid date" do
+      a = ATDIS::Application.new
+      a.last_modified_date = "2013-01-01"
+      a.last_modified_date.should == DateTime.new(2013,1,1)
+    end
+
+    it "should keep the original string when it's not a valid date" do
+      a = ATDIS::Application.new
+      a.last_modified_date = "2013/01/01"
+      a.last_modified_date.should == "2013/01/01"
     end
   end
 

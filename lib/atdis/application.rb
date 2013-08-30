@@ -29,6 +29,14 @@ module ATDIS
     # Optional
     validates :notification_start_date, :notification_end_date, :date_time => true
 
+    def last_modified_date=(value)
+      if value.kind_of?(DateTime) || value.nil?
+        @last_modified_date = value
+      else
+        @last_modified_date = Application.iso8601(value)
+      end
+    end
+
     def self.convert(data)
       values = {}
       # Map json structure to our values
@@ -40,7 +48,6 @@ module ATDIS
       values[:people] = data[:people] if data[:people]
 
       # Convert values (if required)
-      values[:last_modified_date] = iso8601(values[:last_modified_date]) if values[:last_modified_date]
       values[:lodgement_date] = iso8601(values[:lodgement_date]) if values[:lodgement_date]
       values[:determination_date] = iso8601(values[:determination_date]) if values[:determination_date]
       values[:notification_start_date] = iso8601(values[:notification_start_date]) if values[:notification_start_date]
