@@ -1,10 +1,13 @@
 module ATDIS
   class Document < Model
-    attr_accessor :ref, :title, :document_url
+    define_attribute_methods ['document_url']
 
-    def self.convert(data)
-      data[:document_url] = URI.parse(data[:document_url]) if data[:document_url]
-      data
+    def attribute_types
+      {
+        'document_url' => URI
+      }
     end
+
+    attr_accessor :ref, :title
   end
 end
