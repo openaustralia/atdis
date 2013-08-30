@@ -4,7 +4,7 @@ module ATDIS
 
     def self.convert(data)
       # Convert values (if required)
-      data[:date] = iso8601(data[:date]) if data[:date]
+      data[:date] = cast_datetime(data[:date]) if data[:date]
       data
     end
   end
