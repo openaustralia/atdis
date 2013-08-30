@@ -31,9 +31,8 @@ end
 module ATDIS
   class Application < Model
 
-    attr_accessor :dat_id, :last_modified_date, :description, :authority,
-      :lodgement_date, :determination_date, :status, :notification_start_date, :notification_end_date,
-      :officer, :estimated_cost, :more_info_url, :comments_url, :location, :events, :documents, :people
+    attr_accessor :dat_id, :description, :authority, :status, :officer, :estimated_cost, :location,
+      :events, :documents, :people
 
     # TODO Would be nice to generate these dynamically
     attr_reader :last_modified_date_before_type_cast, :more_info_url_before_type_cast,
@@ -48,7 +47,35 @@ module ATDIS
     validates :notification_start_date, :notification_end_date, :date_time => true
 
     # TODO Validate associated like locations, events, documents, people
-    
+
+    def last_modified_date
+      @last_modified_date
+    end
+
+    def lodgement_date
+      @lodgement_date
+    end
+
+    def determination_date
+      @determination_date
+    end
+
+    def notification_start_date
+      @notification_start_date
+    end
+
+    def notification_end_date
+      @notification_end_date
+    end
+
+    def more_info_url
+      @more_info_url
+    end
+
+    def comments_url
+      @comments_url
+    end
+
     def last_modified_date=(value)
       @last_modified_date_before_type_cast = value
       @last_modified_date = Application.cast(value, DateTime)
