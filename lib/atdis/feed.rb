@@ -1,7 +1,7 @@
 require "rest-client"
 
 module ATDIS
-  class Applications
+  class Feed
     attr_reader :base_url
 
     # base_url - the base url from which the urls for all atdis urls are made

@@ -1,11 +1,11 @@
 require File.expand_path(File.dirname(__FILE__) + '/../spec_helper')
 
-describe ATDIS::Applications do
+describe ATDIS::Feed do
   let (:base_url_string) { "http://www.council.nsw.gov.au" }
   let (:base_url) { URI.parse(base_url_string) }
 
   context "base_url passed as string" do
-    let(:applications) { ATDIS::Applications.new(base_url_string) }
+    let(:applications) { ATDIS::Feed.new(base_url_string) }
 
     describe "#base_url" do
       it { applications.base_url.should == base_url }
@@ -21,7 +21,7 @@ describe ATDIS::Applications do
   end
 
   context "base_url passed as url" do
-    let(:applications) { ATDIS::Applications.new(base_url) }
+    let(:applications) { ATDIS::Feed.new(base_url) }
 
     describe "#base_url" do
       it { applications.base_url.should == base_url }
