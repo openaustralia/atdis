@@ -12,7 +12,7 @@ module ATDIS
       @base_url = base_url.kind_of?(URI) ? base_url : URI.parse(base_url)
     end
 
-    def all
+    def applications
       ApplicationsResults.read(ATDIS::SeparatedURL.new((base_url + "atdis/1.0/applications.json").to_s))
     end
   end
