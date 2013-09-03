@@ -4,20 +4,17 @@ module ATDIS
       :total_no_results, :total_no_pages, :results
 
     def self.read_url(url)
-      r = RestClient.get(url.to_s)
-      json_data = MultiJson.load(r.to_str, :symbolize_keys => true)
-
-      interpret(url.to_s, json_data)
+      r = read_json(RestClient.get(url.to_s).to_str)
+      r.url = url.to_s
+      r
     end
 
     def self.read_json(text)
-      json_data = MultiJson.load(text, :symbolize_keys => true)
-      interpret(nil, json_data)
+      interpret(MultiJson.load(text, :symbolize_keys => true))
     end
 
-    def self.convert(u, json_data)
+    def self.convert(json_data)
       values = {
-        :url => u,
         :results => json_data[:response].map {|a| Application.interpret(a[:application]) }
       }
 
