@@ -1,5 +1,5 @@
 module ATDIS
-  class ApplicationsResults < Model
+  class Page < Model
     attr_accessor :url, :previous_page_no, :next_page_no, :current_page_no, :no_results_per_page,
       :total_no_results, :total_no_pages, :results
 
@@ -28,7 +28,7 @@ module ATDIS
     end
 
     def next
-      ApplicationsResults.read(url.merge(:page => next_page_no)) if next_page_no
+      Page.read(url.merge(:page => next_page_no)) if next_page_no
     end
   end
 end

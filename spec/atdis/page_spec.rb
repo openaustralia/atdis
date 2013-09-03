@@ -1,6 +1,6 @@
 require File.expand_path(File.dirname(__FILE__) + '/../spec_helper')
 
-describe ATDIS::ApplicationsResults do
+describe ATDIS::Page do
   context "paging not supported by vendor" do
     before :each do
       # Mock network response
@@ -23,7 +23,7 @@ describe ATDIS::ApplicationsResults do
       ))
     end
 
-    let(:applications_results) { ATDIS::ApplicationsResults.read(ATDIS::SeparatedURL.new("http://www.council.nsw.gov.au/atdis/1.0/applications.json")) }
+    let(:applications_results) { ATDIS::Page.read(ATDIS::SeparatedURL.new("http://www.council.nsw.gov.au/atdis/1.0/applications.json")) }
 
     it ".results" do
       application1 = double("Application")
@@ -93,7 +93,7 @@ describe ATDIS::ApplicationsResults do
       ))
     end
 
-    let(:applications_results) { ATDIS::ApplicationsResults.read(ATDIS::SeparatedURL.new("http://www.council.nsw.gov.au/atdis/1.0/applications.json?page=2")) }
+    let(:applications_results) { ATDIS::Page.read(ATDIS::SeparatedURL.new("http://www.council.nsw.gov.au/atdis/1.0/applications.json?page=2")) }
 
     it ".previous_page_no" do
       applications_results.previous_page_no.should == 1
@@ -120,9 +120,9 @@ describe ATDIS::ApplicationsResults do
     end
 
     it ".next" do
-      n = double("ApplicationsResults")
+      n = double("Page")
       applications_results
-      ATDIS::ApplicationsResults.should_receive(:read).with(ATDIS::SeparatedURL.new("http://www.council.nsw.gov.au/atdis/1.0/applications.json?page=3")).and_return(n)
+      ATDIS::Page.should_receive(:read).with(ATDIS::SeparatedURL.new("http://www.council.nsw.gov.au/atdis/1.0/applications.json?page=3")).and_return(n)
       applications_results.next.should == n
     end
   end
