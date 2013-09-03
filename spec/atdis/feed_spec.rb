@@ -14,7 +14,7 @@ describe ATDIS::Feed do
     describe "#applications" do
       it do
         applications_results = double
-        ATDIS::Page.should_receive(:read).with(ATDIS::SeparatedURL.new("http://www.council.nsw.gov.au/atdis/1.0/applications.json")).and_return(applications_results)
+        ATDIS::Page.should_receive(:read).with(URI.parse("http://www.council.nsw.gov.au/atdis/1.0/applications.json")).and_return(applications_results)
         feed.applications.should == applications_results
       end
     end
