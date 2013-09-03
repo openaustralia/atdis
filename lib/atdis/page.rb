@@ -4,11 +4,10 @@ module ATDIS
       :total_no_results, :total_no_pages, :results
 
     def self.read(url)
-      u = ATDIS::SeparatedURL.new(url.to_s)
-      r = RestClient.get(u.full_url)
+      r = RestClient.get(url.to_s)
       json_data = MultiJson.load(r.to_str, :symbolize_keys => true)
 
-      interpret(u, json_data)      
+      interpret(url, json_data)
     end
 
     def self.convert(u, json_data)
@@ -29,7 +28,7 @@ module ATDIS
     end
 
     def next
-      Page.read(url.merge(:page => next_page_no).full_url) if next_page_no
+      Page.read(ATDIS::SeparatedURL.new(url.to_s).merge(:page => next_page_no).full_url) if next_page_no
     end
   end
 end
