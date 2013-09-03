@@ -1,10 +1,9 @@
 require File.expand_path(File.dirname(__FILE__) + '/../spec_helper')
 
 describe ATDIS::Page do
-  context "paging not supported by vendor" do
-    before :each do
-      # Mock network response
-      RestClient.should_receive(:get).with("http://www.council.nsw.gov.au/atdis/1.0/applications.json").and_return(double(:to_str => <<-EOF
+  context "paging supported by vendor" do
+    context "read from a json string" do
+      let(:page) { ATDIS::Page.read_json(<<-EOF
 {
   "response": [
     {
@@ -17,50 +16,94 @@ describe ATDIS::Page do
         "description": "application2"
       }      
     }
-  ]
-}
-      EOF
-      ))
+  ],
+  "count": 2,
+  "pagination": {
+    "previous": 1,
+    "next": 3,
+    "current": 2,
+    "per_page": 2,
+    "count": 50,
+    "pages": 25
+  }
+}        
+       EOF
+        )}
+      it ".results" do
+        application1 = double("Application")
+        application2 = double("Application")
+        ATDIS::Application.should_receive(:interpret).with(:description => "application1").and_return(application1)
+        ATDIS::Application.should_receive(:interpret).with(:description => "application2").and_return(application2)
+
+        page.results.should == [application1, application2]
+      end
+
+      it ".next" do
+        expect { page.next }.to raise_error "Can't use next when loaded with read_json"
+      end
     end
 
-    let(:applications_results) { ATDIS::Page.read_url("http://www.council.nsw.gov.au/atdis/1.0/applications.json") }
+    context "read from a url" do
+      before :each do
+        # Mock network response
+        RestClient.should_receive(:get).with("http://www.council.nsw.gov.au/atdis/1.0/applications.json").and_return(double(:to_str => <<-EOF
+  {
+    "response": [
+      {
+        "application": {
+          "description": "application1"
+        }     
+      },
+      {
+        "application": {
+          "description": "application2"
+        }      
+      }
+    ]
+  }
+        EOF
+        ))
+      end
 
-    it ".results" do
-      application1 = double("Application")
-      application2 = double("Application")
-      ATDIS::Application.should_receive(:interpret).with(:description => "application1").and_return(application1)
-      ATDIS::Application.should_receive(:interpret).with(:description => "application2").and_return(application2)
+      let(:applications_results) { ATDIS::Page.read_url("http://www.council.nsw.gov.au/atdis/1.0/applications.json") }
 
-      applications_results.results.should == [application1, application2]
-    end
+      it ".results" do
+        application1 = double("Application")
+        application2 = double("Application")
+        ATDIS::Application.should_receive(:interpret).with(:description => "application1").and_return(application1)
+        ATDIS::Application.should_receive(:interpret).with(:description => "application2").and_return(application2)
 
-    it ".next" do
-      applications_results.next.should be_nil
-    end
+        applications_results.results.should == [application1, application2]
+      end
 
-    it ".previous_page_no" do
-      applications_results.previous_page_no.should be_nil
-    end
+      it ".next" do
+        applications_results.next.should be_nil
+      end
 
-    it ".next_page_no" do
-      applications_results.next_page_no.should be_nil
-    end
+      it ".previous_page_no" do
+        applications_results.previous_page_no.should be_nil
+      end
 
-    it ".current_page_no" do
-      applications_results.current_page_no.should be_nil
-    end
+      it ".next_page_no" do
+        applications_results.next_page_no.should be_nil
+      end
 
-    it ".no_results_per_page" do
-      applications_results.no_results_per_page.should be_nil
-    end
+      it ".current_page_no" do
+        applications_results.current_page_no.should be_nil
+      end
 
-    it ".total_no_results" do
-      applications_results.total_no_results.should be_nil
-    end
+      it ".no_results_per_page" do
+        applications_results.no_results_per_page.should be_nil
+      end
 
-    it ".total_no_pages" do
-      applications_results.total_no_pages.should be_nil
-    end
+      it ".total_no_results" do
+        applications_results.total_no_results.should be_nil
+      end
+
+      it ".total_no_pages" do
+        applications_results.total_no_pages.should be_nil
+      end
+      end
   end
 
   context "paging supported by vendor" do

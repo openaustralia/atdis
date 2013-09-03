@@ -10,6 +10,11 @@ module ATDIS
       interpret(url.to_s, json_data)
     end
 
+    def self.read_json(text)
+      json_data = MultiJson.load(text, :symbolize_keys => true)
+      interpret(nil, json_data)
+    end
+
     def self.convert(u, json_data)
       values = {
         :url => u,
@@ -28,6 +33,7 @@ module ATDIS
     end
 
     def next
+      raise "Can't use next when loaded with read_json" if url.nil?
       Page.read_url(ATDIS::SeparatedURL.merge(url, :page => next_page_no)) if next_page_no
     end
   end
