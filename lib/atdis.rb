@@ -1,5 +1,6 @@
 require "atdis/version"
 
+require "atdis/validators"
 require "atdis/model"
 require "atdis/application"
 require "atdis/location"
