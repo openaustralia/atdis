@@ -19,6 +19,7 @@ module ATDIS
 
   class Model
     include ActiveModel::Validations
+    include Validators
     include ActiveModel::AttributeMethods
     include TypeCastAttributes
     attribute_method_suffix '_before_type_cast'
