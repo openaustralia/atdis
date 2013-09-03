@@ -1,22 +1,9 @@
 module ATDIS
   class SeparatedURL
-    attr_accessor :full_url
-
-    def initialize(full_url)
-      @full_url = full_url
-    end
-
-    def merge(params)
-      SeparatedURL.new(SeparatedURL.merge(full_url, params))
-    end
 
     def self.merge(full_url, params)
       url, url_params = split(full_url)
       combine(url, url_params.merge(params))
-    end
-
-    def ==(other)
-      full_url == other.full_url 
     end
 
     private
