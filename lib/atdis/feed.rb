@@ -13,7 +13,7 @@ module ATDIS
     end
 
     def applications
-      Page.read(base_url + "atdis/1.0/applications.json")
+      Page.read_url(base_url + "atdis/1.0/applications.json")
     end
   end
 end

@@ -3,7 +3,7 @@ module ATDIS
     attr_accessor :url, :previous_page_no, :next_page_no, :current_page_no, :no_results_per_page,
       :total_no_results, :total_no_pages, :results
 
-    def self.read(url)
+    def self.read_url(url)
       r = RestClient.get(url.to_s)
       json_data = MultiJson.load(r.to_str, :symbolize_keys => true)
 
@@ -28,7 +28,7 @@ module ATDIS
     end
 
     def next
-      Page.read(ATDIS::SeparatedURL.merge(url, :page => next_page_no)) if next_page_no
+      Page.read_url(ATDIS::SeparatedURL.merge(url, :page => next_page_no)) if next_page_no
     end
   end
 end

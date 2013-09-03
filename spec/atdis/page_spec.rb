@@ -23,7 +23,7 @@ describe ATDIS::Page do
       ))
     end
 
-    let(:applications_results) { ATDIS::Page.read("http://www.council.nsw.gov.au/atdis/1.0/applications.json") }
+    let(:applications_results) { ATDIS::Page.read_url("http://www.council.nsw.gov.au/atdis/1.0/applications.json") }
 
     it ".results" do
       application1 = double("Application")
@@ -93,7 +93,7 @@ describe ATDIS::Page do
       ))
     end
 
-    let(:applications_results) { ATDIS::Page.read("http://www.council.nsw.gov.au/atdis/1.0/applications.json?page=2") }
+    let(:applications_results) { ATDIS::Page.read_url("http://www.council.nsw.gov.au/atdis/1.0/applications.json?page=2") }
 
     it ".previous_page_no" do
       applications_results.previous_page_no.should == 1
@@ -122,7 +122,7 @@ describe ATDIS::Page do
     it ".next" do
       n = double("Page")
       applications_results
-      ATDIS::Page.should_receive(:read).with("http://www.council.nsw.gov.au/atdis/1.0/applications.json?page=3").and_return(n)
+      ATDIS::Page.should_receive(:read_url).with("http://www.council.nsw.gov.au/atdis/1.0/applications.json?page=3").and_return(n)
       applications_results.next.should == n
     end
   end
