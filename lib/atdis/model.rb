@@ -24,11 +24,18 @@ module ATDIS
     attribute_method_suffix '_before_type_cast'
     attribute_method_suffix '='
 
+    attr_reader :attributes
+
     def initialize(params={})
       @attributes, @attributes_before_type_cast = {}, {}
       params.each do |attr, value|
         self.send("#{attr}=", value)
       end if params
+    end
+
+    # Does what the equivalent on Activerecord does
+    def self.attribute_names
+      attribute_types.keys.map{|k| k.to_s}
     end
 
     def self.interpret(*params)
