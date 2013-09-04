@@ -41,7 +41,7 @@ module ATDIS
       values[:events] = values[:events].map{|e| Event.interpret(e)} if values[:events]
       values[:documents] = values[:documents].map{|d| Document.interpret(d)} if values[:documents]
       values[:people] = values[:people].map{|p| Person.interpret(p)} if values[:people]
-      values
+      [values, []]
     end
   end
 end
