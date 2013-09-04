@@ -213,7 +213,8 @@ describe ATDIS::Application do
       :lodgement_date => DateTime.new(2013,4,20,2,1,7),
       :determination_date => DateTime.new(2013,6,20),  
       :status => "OPEN",
-      :more_info_url => URI.parse("http://foo.com/bar")
+      :more_info_url => URI.parse("http://foo.com/bar"),
+      :json_left_overs => {}
   ) }
 
     it { a.should be_valid }
