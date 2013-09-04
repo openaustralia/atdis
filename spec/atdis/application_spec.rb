@@ -2,6 +2,29 @@ require File.expand_path(File.dirname(__FILE__) + '/../spec_helper')
 
 describe ATDIS::Application do
 
+  context "extra parameter in json" do
+    it "should not be valid" do
+      a = ATDIS::Application.interpret({
+        :info => {
+          :dat_id => "DA2013-0381",
+          :last_modified_date => "2013-04-20T02:01:07Z",
+          :description => "New pool plus deck",
+          :authority => "Example Council Shire Council",
+          :lodgement_date => "2013-04-20T02:01:07Z",
+          :determination_date => "2013-06-20",
+          :status => "OPEN"
+        },
+        :reference => {
+          # This is the extra parameter that shouldn't be here
+          :foo => "bar",
+          :more_info_url => "http://foo.com/bar"
+        }
+      })
+      a.should_not be_valid
+      a.errors.messages.should == {:json => ['Unexpected parameters in json data: {"reference":{"foo":"bar"}}']}
+    end
+  end
+
   describe ".interpret" do
     it "should parse the json and create an application object" do
       location, event1, event2, document1, document2, tuttle, buttle, application = double, double, double, double, double, double, double, double
@@ -30,7 +53,8 @@ describe ATDIS::Application do
         :location => location,
         :events => [event1, event2],
         :documents => [document1, document2],
-        :people => [tuttle, buttle]
+        :people => [tuttle, buttle],
+        :json_left_overs => {}
       ).and_return(application)
 
       ATDIS::Application.interpret(
@@ -63,7 +87,7 @@ describe ATDIS::Application do
 
     it "should create a nil valued application when there is no information in the json" do
       application = double
-      ATDIS::Application.should_receive(:new).with({}).and_return(application)
+      ATDIS::Application.should_receive(:new).with({:json_left_overs => {}}).and_return(application)
 
       ATDIS::Application.interpret(:info => {}, :reference => {}).should == application
     end

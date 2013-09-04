@@ -26,6 +26,18 @@ module ATDIS
     attribute_method_suffix '='
 
     attr_reader :attributes
+    # Stores any part of the json that could not be interpreted. Usually
+    # signals an error if it isn't empty.
+    attr_accessor :json_left_overs
+
+    validate :json_left_overs_is_empty
+
+    def json_left_overs_is_empty
+      if json_left_overs && !json_left_overs.empty?
+        # We have extra parameters that shouldn't be there
+        errors.add(:json, "Unexpected parameters in json data: #{MultiJson.dump(json_left_overs)}")
+      end
+    end
 
     def initialize(params={})
       @attributes, @attributes_before_type_cast = {}, {}
@@ -41,7 +53,7 @@ module ATDIS
 
     def self.interpret(*params)
       data, left_overs = convert(*params)
-      new(data)
+      new(data.merge(:json_left_overs => left_overs))
     end
 
     # By default do no conversion. You will usually override this.

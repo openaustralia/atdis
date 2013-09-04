@@ -26,22 +26,54 @@ module ATDIS
 
     # TODO Validate associated like locations, events, documents, people
 
+    VALID_INFO_FIELDS = [:dat_id, :last_modified_date, :description, :authority, :lodgement_date, :determination_date,
+        :status, :notification_start_date, :notification_end_date, :officer, :estimated_cost]
+    VALID_REFERENCE_FIELDS = [:more_info_url, :comments_url]
+
     def self.convert(data)
       values = {}
       # Map json structure to our values
-      values = values.merge(data[:info]) if data[:info]
-      values = values.merge(data[:reference]) if data[:reference]
-      values[:location] = data[:location] if data[:location]
-      values[:events] = data[:events] if data[:events]
-      values[:documents] = data[:documents] if data[:documents]
-      values[:people] = data[:people] if data[:people]
+      if data[:info]
+        data[:info].each do |key, value|
+          if VALID_INFO_FIELDS.include?(key)
+            values[key] = value
+            data[:info].delete(key)
+          end
+        end
+        data.delete(:info) if data[:info].empty?
+      end
+      if data[:reference]
+        data[:reference].each do |key, value|
+          if VALID_REFERENCE_FIELDS.include?(key)
+            values[key] = value
+            data[:reference].delete(key)
+          end
+        end
+        data.delete(:reference) if data[:reference].empty?
+      end
+      if data[:location]
+        values[:location] = data[:location]
+        data.delete(:location)
+      end
+      if data[:events]
+        values[:events] = data[:events]
+        data.delete(:events)
+      end
+      if data[:documents]
+        values[:documents] = data[:documents]
+        data.delete(:documents)
+      end
+      if data[:people]
+        values[:people] = data[:people]
+        data.delete(:people)
+      end
 
       # Convert values (if required)
       values[:location] = Location.interpret(values[:location]) if values[:location]
       values[:events] = values[:events].map{|e| Event.interpret(e)} if values[:events]
       values[:documents] = values[:documents].map{|d| Document.interpret(d)} if values[:documents]
       values[:people] = values[:people].map{|p| Person.interpret(p)} if values[:people]
-      [values, []]
+      [values, data]
     end
   end
 end
