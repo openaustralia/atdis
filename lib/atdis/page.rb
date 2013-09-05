@@ -26,7 +26,8 @@ module ATDIS
         values[:total_no_results] = json_data[:pagination][:count]
         values[:total_no_pages] = json_data[:pagination][:pages]
       end
-      [values, []]
+      values[:json_left_overs] = {}
+      values
     end
 
     def next

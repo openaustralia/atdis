@@ -11,7 +11,9 @@ module ATDIS
 
       # Convert values
       values[:geometry] = RGeo::GeoJSON.decode(hash_symbols_to_string(values[:geometry])) if values[:geometry]
-      [values, []]
+
+      values[:json_left_overs] = {}
+      values
     end
 
     private

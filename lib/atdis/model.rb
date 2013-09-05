@@ -52,16 +52,12 @@ module ATDIS
     end
 
     def self.interpret(*params)
-      data, left_overs = convert(*params)
-      new(data.merge(:json_left_overs => left_overs))
+      new(convert(*params))
     end
 
     # By default do no conversion. You will usually override this.
-    # Should return an array with the first value being the parameters for the constructor
-    # and the second value being whatever is left over from the json_data that can't be
-    # interpreted. This will usually signal an error if this is not empty.
     def self.convert(data)
-      [data, []]
+      data.merge(:json_left_overs => {})
     end
 
     def self.cast(value, type)
