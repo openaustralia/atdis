@@ -55,28 +55,21 @@ module ATDIS
       new(convert(*params))
     end
 
-    # TODO Refactor this to make it less hideous and confusing and
-    # generalise it so that it will work at multiple levels
+    # Map json structure to our values
     def self.map_fields(valid_fields, data)
       values = {}
       left_overs = {}
-      # Map json structure to our values
-      data.each_key do |key1|
-        if valid_fields[key1]
-          if valid_fields[key1].kind_of?(Hash)
-            data[key1].each_key do |key2|
-              if valid_fields[key1][key2]
-                values[valid_fields[key1][key2]] = data[key1][key2]
-              else
-                left_overs[key1] = {} if left_overs[key1].nil?
-                left_overs[key1][key2] = data[key1][key2]
-              end
-            end
+      data.each_key do |key|
+        if valid_fields[key]
+          if valid_fields[key].kind_of?(Hash)
+            v2, l2 = map_fields(valid_fields[key], data[key])
+            values = values.merge(v2)
+            left_overs[key] = l2 unless l2.empty?
           else
-            values[valid_fields[key1]] = data[key1]
+            values[valid_fields[key]] = data[key]
           end
         else
-          left_overs[key1] = data[key1]
+          left_overs[key] = data[key]
         end
       end
       [values, left_overs]
