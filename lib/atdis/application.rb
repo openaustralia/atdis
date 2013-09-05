@@ -26,10 +26,25 @@ module ATDIS
 
     # TODO Validate associated like locations, events, documents, people
 
+    # How the json parameters map to our attributes
     VALID_FIELDS = {
-      :info => [:dat_id, :last_modified_date, :description, :authority, :lodgement_date, :determination_date,
-        :status, :notification_start_date, :notification_end_date, :officer, :estimated_cost],
-      :reference => [:more_info_url, :comments_url]
+      :info => {
+        :dat_id => :dat_id,
+        :last_modified_date => :last_modified_date,
+        :description => :description,
+        :authority => :authority,
+        :lodgement_date => :lodgement_date,
+        :determination_date => :determination_date,
+        :status => :status,
+        :notification_start_date => :notification_start_date,
+        :notification_end_date => :notification_end_date,
+        :officer => :officer,
+        :estimated_cost => :estimated_cost
+      },
+      :reference => {
+        :more_info_url => :more_info_url,
+        :comments_url => :comments_url
+      }
     }
 
     def self.convert(data)
@@ -38,8 +53,9 @@ module ATDIS
       [:info, :reference].each do |a|
         if data[a]
           data[a].each do |key, value|
-            if VALID_FIELDS[a].include?(key)
-              values[key] = value
+            if VALID_FIELDS[a].has_key?(key)
+              new_key = VALID_FIELDS[a][key]
+              values[new_key] = value
               data[a].delete(key)
             end
           end
