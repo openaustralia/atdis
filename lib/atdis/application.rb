@@ -52,16 +52,24 @@ module ATDIS
       :people => :people
     }
 
+    def location=(v)
+      @location = Location.interpret(v) if v
+    end
+
+    def events=(v)
+      @events = v.map{|e| Event.interpret(e)} if v
+    end
+
+    def documents=(v)
+      @documents = v.map{|d| Document.interpret(d)} if v
+    end
+
+    def people=(v)
+      @people = v.map{|p| Person.interpret(p)} if v
+    end
+
     def self.convert(data)
-      values = map_fields2(VALID_FIELDS, data)
-
-      # Convert values (if required)
-      values[:location] = Location.interpret(values[:location]) if values[:location]
-      values[:events] = values[:events].map{|e| Event.interpret(e)} if values[:events]
-      values[:documents] = values[:documents].map{|d| Document.interpret(d)} if values[:documents]
-      values[:people] = values[:people].map{|p| Person.interpret(p)} if values[:people]
-
-      values
+      map_fields2(VALID_FIELDS, data)
     end
   end
 end

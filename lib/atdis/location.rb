@@ -14,13 +14,12 @@ module ATDIS
       :geometry => :geometry
     }
 
+    def geometry=(v)
+      @geometry = RGeo::GeoJSON.decode(Location.hash_symbols_to_string(v)) if v
+    end
+
     def self.convert(data)
-      values = map_fields2(VALID_FIELDS, data)
-
-      # Convert values
-      values[:geometry] = RGeo::GeoJSON.decode(hash_symbols_to_string(values[:geometry])) if values[:geometry]
-
-      values
+      map_fields2(VALID_FIELDS, data)
     end
 
     private

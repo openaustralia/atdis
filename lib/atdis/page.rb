@@ -25,10 +25,13 @@ module ATDIS
       interpret(MultiJson.load(text, :symbolize_keys => true))
     end
 
+    def results=(v)
+      # TODO Would be more consistent if we called Application.interpret(a)
+      @results = v.map {|a| Application.interpret(a[:application]) }
+    end
+
     def self.convert(data)
-      values = map_fields2(VALID_FIELDS, data)
-      values[:results] = values[:results].map {|a| Application.interpret(a[:application]) }
-      values
+      map_fields2(VALID_FIELDS, data)
     end
 
     def next

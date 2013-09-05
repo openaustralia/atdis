@@ -27,15 +27,8 @@ describe ATDIS::Application do
 
   describe ".interpret" do
     it "should parse the json and create an application object" do
-      location, event1, event2, document1, document2, tuttle, buttle, application = double, double, double, double, double, double, double, double
+      application = double
 
-      ATDIS::Location.should_receive(:interpret).with(:address => "123 Fourfivesix Street").and_return(location)
-      ATDIS::Event.should_receive(:interpret).with(:id => "event1").and_return(event1)
-      ATDIS::Event.should_receive(:interpret).with(:id => "event2").and_return(event2)
-      ATDIS::Document.should_receive(:interpret).with(:ref => "27B/6/a").and_return(document1)
-      ATDIS::Document.should_receive(:interpret).with(:ref => "27B/6/b").and_return(document2)
-      ATDIS::Person.should_receive(:interpret).with(:name => "Tuttle").and_return(tuttle)
-      ATDIS::Person.should_receive(:interpret).with(:name => "Buttle").and_return(buttle)
       ATDIS::Application.should_receive(:new).with(
         :dat_id => "DA2013-0381",
         :last_modified_date => "2013-04-20T02:01:07Z",
@@ -50,10 +43,10 @@ describe ATDIS::Application do
         :status => "OPEN",
         :more_info_url => "http://foo.com/bar",
         :comments_url => "http://foo.com/comment",
-        :location => location,
-        :events => [event1, event2],
-        :documents => [document1, document2],
-        :people => [tuttle, buttle],
+        :location => { :address => "123 Fourfivesix Street" },
+        :events => [ { :id => "event1" }, { :id => "event2" } ],
+        :documents => [ { :ref => "27B/6/a" }, { :ref => "27B/6/b" } ],
+        :people => [ { :name => "Tuttle" }, { :name => "Buttle" } ],
         :json_left_overs => {}
       ).and_return(application)
 
@@ -90,6 +83,49 @@ describe ATDIS::Application do
       ATDIS::Application.should_receive(:new).with({:json_left_overs => {}}).and_return(application)
 
       ATDIS::Application.interpret(:info => {}, :reference => {}).should == application
+    end
+  end
+
+  describe "#location=" do
+    let(:a) { ATDIS::Application.new }
+    it "should type cast to a location" do
+      location = double
+      ATDIS::Location.should_receive(:interpret).with(:address => "123 Fourfivesix Street").and_return(location)
+      a.location = { :address => "123 Fourfivesix Street" }
+      a.location.should == location
+    end
+  end
+
+  describe "#events" do
+    let(:a) { ATDIS::Application.new }
+    it "should type cast to several events" do
+      event1, event2 = double, double
+      ATDIS::Event.should_receive(:interpret).with(:id => "event1").and_return(event1)
+      ATDIS::Event.should_receive(:interpret).with(:id => "event2").and_return(event2)
+      a.events = [ { :id => "event1" }, { :id => "event2" } ]
+      a.events.should == [event1, event2]
+    end
+  end
+
+  describe "#documents" do
+    let(:a) { ATDIS::Application.new }
+    it "should type cast to several documents" do
+      document1, document2 = double, double
+      ATDIS::Document.should_receive(:interpret).with(:ref => "27B/6/a").and_return(document1)
+      ATDIS::Document.should_receive(:interpret).with(:ref => "27B/6/b").and_return(document2)
+      a.documents = [ { :ref => "27B/6/a" }, { :ref => "27B/6/b" } ]
+      a.documents.should == [document1, document2]
+    end
+  end
+
+  describe "#people" do
+    let(:a) { ATDIS::Application.new }
+    it "should type cast to several people" do
+      tuttle, buttle = double, double
+      ATDIS::Person.should_receive(:interpret).with(:name => "Tuttle").and_return(tuttle)
+      ATDIS::Person.should_receive(:interpret).with(:name => "Buttle").and_return(buttle)
+      a.people = [ { :name => "Tuttle" }, { :name => "Buttle" } ]
+      a.people.should == [tuttle, buttle]
     end
   end
 
