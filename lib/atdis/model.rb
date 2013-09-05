@@ -57,7 +57,7 @@ module ATDIS
 
     # By default do no conversion. You will usually override this.
     def self.convert(data)
-      data.merge(:json_left_overs => {})
+      raise "Implement self.convert in your class"
     end
 
     def self.cast(value, type)
