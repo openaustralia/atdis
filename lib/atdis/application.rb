@@ -2,6 +2,28 @@ require 'multi_json'
 
 module ATDIS
   class Application < Model
+    field_mappings :info => {
+        :dat_id => :dat_id,
+        :last_modified_date => :last_modified_date,
+        :description => :description,
+        :authority => :authority,
+        :lodgement_date => :lodgement_date,
+        :determination_date => :determination_date,
+        :status => :status,
+        :notification_start_date => :notification_start_date,
+        :notification_end_date => :notification_end_date,
+        :officer => :officer,
+        :estimated_cost => :estimated_cost
+      },
+      :reference => {
+        :more_info_url => :more_info_url,
+        :comments_url => :comments_url
+      },
+      :location => :location,
+      :events => :events,
+      :documents => :documents,
+      :people => :people
+  
     casting_attributes :last_modified_date => DateTime,
       :lodgement_date => DateTime,
       :determination_date => DateTime,
@@ -28,30 +50,6 @@ module ATDIS
 
     # TODO Validate associated like locations, events, documents, people
     # TODO Add support for "extended" json parameters
-
-    # How the json parameters map to our attributes
-    field_mappings :info => {
-        :dat_id => :dat_id,
-        :last_modified_date => :last_modified_date,
-        :description => :description,
-        :authority => :authority,
-        :lodgement_date => :lodgement_date,
-        :determination_date => :determination_date,
-        :status => :status,
-        :notification_start_date => :notification_start_date,
-        :notification_end_date => :notification_end_date,
-        :officer => :officer,
-        :estimated_cost => :estimated_cost
-      },
-      :reference => {
-        :more_info_url => :more_info_url,
-        :comments_url => :comments_url
-      },
-      :location => :location,
-      :events => :events,
-      :documents => :documents,
-      :people => :people
-  
     # TODO Do we need to do extra checking to ensure that events, documents and people are arrays?
   end
 end
