@@ -54,24 +54,21 @@ module ATDIS
     def self.convert(data)
       values = {}
       # Map json structure to our values
-      VALID_FIELDS.keys.each do |a|
-        if VALID_FIELDS[a].kind_of?(Hash)
-          if data[a]
-            data[a].each do |key, value|
-              if VALID_FIELDS[a].has_key?(key)
-                new_key = VALID_FIELDS[a][key]
-                values[new_key] = value
-                data[a].delete(key)
+      VALID_FIELDS.each do |key1, value1|
+        if data[key1]
+          if value1.kind_of?(Hash)
+            data[key1].each do |key2, value2|
+              if value1.has_key?(key2)
+                new_key = value1[key2]
+                values[new_key] = value2
+                data[key1].delete(key2)
               end
             end
-            data.delete(a) if data[a].empty?
+            data.delete(key1) if data[key1].empty?
+          else
+            values[value1] = data[key1]
+            data.delete(key1)
           end
-        else
-          if data[a]
-            new_key = VALID_FIELDS[a]
-            values[new_key] = data[a]
-            data.delete(a)
-          end          
         end
       end
 
