@@ -1,8 +1,10 @@
 module ATDIS
   class Event < Model
-    casting_attributes :date => DateTime
-
-    attr_accessor :id, :description, :event_type, :status
+    casting_attributes :id => String,
+      :date => DateTime,
+      :description => String,
+      :event_type => String,
+      :status => String
 
     field_mappings :id => :id,
       :date => :date,
