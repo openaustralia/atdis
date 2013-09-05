@@ -94,6 +94,12 @@ describe ATDIS::Application do
       a.location = { :address => "123 Fourfivesix Street" }
       a.location.should == location
     end
+
+    it "should not cast when it's already a location" do
+      l = ATDIS::Location.new
+      a.location = l
+      a.location.should == l
+    end
   end
 
   describe "#events" do

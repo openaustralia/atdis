@@ -52,7 +52,11 @@ module ATDIS
   
 
     def location=(v)
-      @location = Location.interpret(v) if v
+      if v.kind_of?(Location) || v.nil?
+        @location = v
+      else
+        @location = Location.interpret(v)
+      end
     end
 
     def events=(v)
