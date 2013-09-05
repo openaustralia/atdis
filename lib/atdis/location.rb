@@ -2,8 +2,6 @@ require "rgeo/geo_json"
 
 module ATDIS
   class Location < Model
-    attr_accessor :address, :lot, :section, :dpsp_id, :geometry
-
     field_mappings :address => :address,
       :land_title_ref => {
         :lot => :lot,
@@ -12,8 +10,10 @@ module ATDIS
       },
       :geometry => :geometry
 
-    def geometry=(v)
-      @geometry = Location.cast(v, RGeo::GeoJSON)
-    end
+    casting_attributes :address => String,
+      :lot => String,
+      :section => String,
+      :dpsp_id => String,
+      :geometry => RGeo::GeoJSON
   end
 end
