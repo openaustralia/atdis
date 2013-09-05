@@ -1,8 +1,8 @@
 module ATDIS
   class Document < Model
-    casting_attributes :document_url => URI
-
-    attr_accessor :ref, :title
+    casting_attributes :ref => String,
+      :title => String,
+      :document_url => URI
 
     field_mappings :ref => :ref,
       :title => :title,
