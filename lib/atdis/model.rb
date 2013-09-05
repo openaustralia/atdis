@@ -61,19 +61,18 @@ module ATDIS
       data = original_data.clone
       values = {}
       # Map json structure to our values
-      valid_fields.each do |key1, value1|
-        if data[key1]
-          if value1.kind_of?(Hash)
-            data[key1].each do |key2, value2|
-              if value1.has_key?(key2)
-                new_key = value1[key2]
-                values[new_key] = value2
+      data.each_key do |key1|
+        if valid_fields[key1]
+          if valid_fields[key1].kind_of?(Hash)
+            data[key1].each_key do |key2|
+              if valid_fields[key1][key2]
+                values[valid_fields[key1][key2]] = data[key1][key2]
                 data[key1].delete(key2)
               end
             end
             data.delete(key1) if data[key1].empty?
           else
-            values[value1] = data[key1]
+            values[valid_fields[key1]] = data[key1]
             data.delete(key1)
           end
         end
