@@ -57,7 +57,8 @@ module ATDIS
 
     # TODO Refactor this to make it less hideous and confusing and
     # generalise it so that it will work at multiple levels
-    def self.map_fields(valid_fields, data)
+    def self.map_fields(valid_fields, original_data)
+      data = original_data.clone
       values = {}
       # Map json structure to our values
       valid_fields.each do |key1, value1|
@@ -78,6 +79,7 @@ module ATDIS
         end
       end
       values
+      [values, data]
     end
 
     # By default do no conversion. You will usually override this.

@@ -10,4 +10,11 @@ describe ATDIS::Model do
     it {ATDIS::Model.cast_datetime("18 September 2013").should be_nil}
     it {ATDIS::Model.cast_datetime(DateTime.new(2013,4,20,2,1,7)).should == DateTime.new(2013,4,20,2,1,7)}
   end
+
+  describe ".map_fields" do
+    it do
+      ATDIS::Model.map_fields({:foo => :bar, :a => :b}, {:foo => 2, :a => 3, :d => 4}).should ==
+        [{:bar => 2, :b => 3}, {:d => 4}]
+    end
+  end
 end
