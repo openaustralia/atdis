@@ -26,30 +26,25 @@ module ATDIS
 
     # TODO Validate associated like locations, events, documents, people
 
-    VALID_INFO_FIELDS = [:dat_id, :last_modified_date, :description, :authority, :lodgement_date, :determination_date,
-        :status, :notification_start_date, :notification_end_date, :officer, :estimated_cost]
-    VALID_REFERENCE_FIELDS = [:more_info_url, :comments_url]
+    VALID_FIELDS = {
+      :info => [:dat_id, :last_modified_date, :description, :authority, :lodgement_date, :determination_date,
+        :status, :notification_start_date, :notification_end_date, :officer, :estimated_cost],
+      :reference => [:more_info_url, :comments_url]
+    }
 
     def self.convert(data)
       values = {}
       # Map json structure to our values
-      if data[:info]
-        data[:info].each do |key, value|
-          if VALID_INFO_FIELDS.include?(key)
-            values[key] = value
-            data[:info].delete(key)
+      [:info, :reference].each do |a|
+        if data[a]
+          data[a].each do |key, value|
+            if VALID_FIELDS[a].include?(key)
+              values[key] = value
+              data[a].delete(key)
+            end
           end
+          data.delete(a) if data[a].empty?
         end
-        data.delete(:info) if data[:info].empty?
-      end
-      if data[:reference]
-        data[:reference].each do |key, value|
-          if VALID_REFERENCE_FIELDS.include?(key)
-            values[key] = value
-            data[:reference].delete(key)
-          end
-        end
-        data.delete(:reference) if data[:reference].empty?
       end
       if data[:location]
         values[:location] = data[:location]
