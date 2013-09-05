@@ -57,9 +57,9 @@ module ATDIS
 
     # TODO Refactor this to make it less hideous and confusing and
     # generalise it so that it will work at multiple levels
-    def self.map_fields(valid_fields, original_data)
-      data = original_data.clone
+    def self.map_fields(valid_fields, data)
       values = {}
+      left_overs = {}
       # Map json structure to our values
       data.each_key do |key1|
         if valid_fields[key1]
@@ -67,18 +67,19 @@ module ATDIS
             data[key1].each_key do |key2|
               if valid_fields[key1][key2]
                 values[valid_fields[key1][key2]] = data[key1][key2]
-                data[key1].delete(key2)
+              else
+                left_overs[key1] = {} if left_overs[key1].nil?
+                left_overs[key1][key2] = data[key1][key2]
               end
             end
-            data.delete(key1) if data[key1].empty?
           else
             values[valid_fields[key1]] = data[key1]
-            data.delete(key1)
           end
+        else
+          left_overs[key1] = data[key1]
         end
       end
-      values
-      [values, data]
+      [values, left_overs]
     end
 
     # By default do no conversion. You will usually override this.
