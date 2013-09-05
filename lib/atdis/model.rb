@@ -93,6 +93,8 @@ module ATDIS
         cast_uri(value)
       elsif type == String
         cast_string(value)
+      elsif type == RGeo::GeoJSON
+        cast_geojson(value)
       # Otherwise try to use Type.interpret to do the typecasting
       elsif type.respond_to?(:interpret)
         type.interpret(value) if value
@@ -139,6 +141,23 @@ module ATDIS
 
     def self.cast_string(value)
       value.to_s
+    end
+
+    def self.cast_geojson(value)
+      RGeo::GeoJSON.decode(hash_symbols_to_string(value))
+    end
+
+    # Converts {:foo => {:bar => "yes"}} to {"foo" => {"bar" => "yes"}}
+    def self.hash_symbols_to_string(hash)
+      if hash.respond_to?(:each_pair)
+        result = {}
+        hash.each_pair do |key, value|
+          result[key.to_s] = hash_symbols_to_string(value)
+        end
+        result
+      else
+        hash
+      end
     end
   end
 end
