@@ -4,15 +4,23 @@ module ATDIS
   class Location < Model
     attr_accessor :address, :lot, :section, :dpsp_id, :geometry
 
+    VALID_FIELDS = {
+      :address => :address,
+      :land_title_ref => {
+        :lot => :lot,
+        :section => :section,
+        :dpsp_id => :dpsp_id
+      },
+      :geometry => :geometry
+    }
+
     def self.convert(data)
-      values = {:address => data[:address]}
-      values = values.merge(data[:land_title_ref]) if data[:land_title_ref]
-      values[:geometry] = data[:geometry]
+      values, json_left_overs = map_fields(VALID_FIELDS, data)
 
       # Convert values
       values[:geometry] = RGeo::GeoJSON.decode(hash_symbols_to_string(values[:geometry])) if values[:geometry]
 
-      values[:json_left_overs] = {}
+      values[:json_left_overs] = json_left_overs
       values
     end
 

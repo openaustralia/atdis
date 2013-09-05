@@ -25,6 +25,7 @@ module ATDIS
     validates :notification_start_date, :notification_end_date, :date_time => true
 
     # TODO Validate associated like locations, events, documents, people
+    # TODO Add support for "extended" json parameters
 
     # How the json parameters map to our attributes
     VALID_FIELDS = {
