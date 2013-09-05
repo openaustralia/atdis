@@ -55,6 +55,11 @@ module ATDIS
       new(convert(*params))
     end
 
+    def self.map_fields2(valid_fields, data)
+      values, json_left_overs = map_fields(valid_fields, data)
+      values.merge(:json_left_overs => json_left_overs)
+    end
+
     # Map json structure to our values
     def self.map_fields(valid_fields, data)
       values = {}

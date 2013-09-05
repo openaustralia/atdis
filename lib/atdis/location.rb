@@ -15,12 +15,11 @@ module ATDIS
     }
 
     def self.convert(data)
-      values, json_left_overs = map_fields(VALID_FIELDS, data)
+      values = map_fields2(VALID_FIELDS, data)
 
       # Convert values
       values[:geometry] = RGeo::GeoJSON.decode(hash_symbols_to_string(values[:geometry])) if values[:geometry]
 
-      values[:json_left_overs] = json_left_overs
       values
     end
 

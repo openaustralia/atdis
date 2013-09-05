@@ -8,10 +8,8 @@ module ATDIS
       :contact => :contact
     }
 
-    # TODO Do proper mapping of json parameters to our parameters
     def self.convert(data)
-      values, json_left_overs = map_fields(VALID_FIELDS, data)
-      values.merge(:json_left_overs => json_left_overs)
+      map_fields2(VALID_FIELDS, data)
     end
   end
 end

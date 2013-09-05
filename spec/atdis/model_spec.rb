@@ -11,16 +11,16 @@ describe ATDIS::Model do
     it {ATDIS::Model.cast_datetime(DateTime.new(2013,4,20,2,1,7)).should == DateTime.new(2013,4,20,2,1,7)}
   end
 
-  describe ".map_fields" do
+  describe ".map_fields2" do
     it do
-      ATDIS::Model.map_fields({:foo => :bar, :a => :b}, {:foo => 2, :a => 3, :d => 4}).should ==
-        [{:bar => 2, :b => 3}, {:d => 4}]
+      ATDIS::Model.map_fields2({:foo => :bar, :a => :b}, {:foo => 2, :a => 3, :d => 4}).should ==
+        {:bar => 2, :b => 3, :json_left_overs => {:d => 4}}
     end
 
     it do
-      ATDIS::Model.map_fields({:foo => :bar, :a => :b, :info => {:foo => :bar2, :a => :b2}},
+      ATDIS::Model.map_fields2({:foo => :bar, :a => :b, :info => {:foo => :bar2, :a => :b2}},
         {:foo => 2, :a => 3, :d => 4, :info => {:foo => 2, :a => 3, :d => 4}}).should ==
-        [{:bar => 2, :b => 3, :bar2 => 2, :b2 => 3}, {:d => 4, :info => {:d => 4}}]
+        {:bar => 2, :b => 3, :bar2 => 2, :b2 => 3, :json_left_overs => {:d => 4, :info => {:d => 4}}}
     end
   end
 end

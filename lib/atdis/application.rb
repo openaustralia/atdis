@@ -53,7 +53,7 @@ module ATDIS
     }
 
     def self.convert(data)
-      values, json_left_overs = map_fields(VALID_FIELDS, data)
+      values = map_fields2(VALID_FIELDS, data)
 
       # Convert values (if required)
       values[:location] = Location.interpret(values[:location]) if values[:location]
@@ -61,7 +61,6 @@ module ATDIS
       values[:documents] = values[:documents].map{|d| Document.interpret(d)} if values[:documents]
       values[:people] = values[:people].map{|p| Person.interpret(p)} if values[:people]
 
-      values[:json_left_overs] = json_left_overs
       values
     end
   end
