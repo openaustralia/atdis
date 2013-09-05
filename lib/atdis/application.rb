@@ -44,39 +44,35 @@ module ATDIS
       :reference => {
         :more_info_url => :more_info_url,
         :comments_url => :comments_url
-      }
+      },
+      :location => :location,
+      :events => :events,
+      :documents => :documents,
+      :people => :people
     }
 
     def self.convert(data)
       values = {}
       # Map json structure to our values
-      [:info, :reference].each do |a|
-        if data[a]
-          data[a].each do |key, value|
-            if VALID_FIELDS[a].has_key?(key)
-              new_key = VALID_FIELDS[a][key]
-              values[new_key] = value
-              data[a].delete(key)
+      VALID_FIELDS.keys.each do |a|
+        if VALID_FIELDS[a].kind_of?(Hash)
+          if data[a]
+            data[a].each do |key, value|
+              if VALID_FIELDS[a].has_key?(key)
+                new_key = VALID_FIELDS[a][key]
+                values[new_key] = value
+                data[a].delete(key)
+              end
             end
+            data.delete(a) if data[a].empty?
           end
-          data.delete(a) if data[a].empty?
+        else
+          if data[a]
+            new_key = VALID_FIELDS[a]
+            values[new_key] = data[a]
+            data.delete(a)
+          end          
         end
-      end
-      if data[:location]
-        values[:location] = data[:location]
-        data.delete(:location)
-      end
-      if data[:events]
-        values[:events] = data[:events]
-        data.delete(:events)
-      end
-      if data[:documents]
-        values[:documents] = data[:documents]
-        data.delete(:documents)
-      end
-      if data[:people]
-        values[:people] = data[:people]
-        data.delete(:people)
       end
 
       # Convert values (if required)
