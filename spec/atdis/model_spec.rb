@@ -9,6 +9,10 @@ describe ATDIS::Model do
     it {ATDIS::Model.cast("2013-04", DateTime).should be_nil}
     it {ATDIS::Model.cast("18 September 2013", DateTime).should be_nil}
     it {ATDIS::Model.cast(DateTime.new(2013,4,20,2,1,7), DateTime).should == DateTime.new(2013,4,20,2,1,7)}
+
+    it "should cast arrays by casting each member" do
+      ATDIS::Model.cast([1, 2, 3], String).should == ["1", "2", "3"]
+    end
   end
 
   describe ".map_fields" do

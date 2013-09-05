@@ -84,6 +84,9 @@ module ATDIS
       # If it's already the correct type then we don't need to do anything
       if value.kind_of?(type)
         value
+      # Special handling for arrays. When we typecast arrays we actually typecast each member of the array
+      elsif value.kind_of?(Array)
+        value.map {|v| cast(v, type)}
       elsif type == DateTime
         cast_datetime(value)
       elsif type == URI
