@@ -3,6 +3,18 @@ module ATDIS
     attr_accessor :url, :previous_page_no, :next_page_no, :current_page_no, :no_results_per_page,
       :total_no_results, :total_no_pages, :results
 
+    VALID_FIELDS = {
+      :response => :results,
+      :pagination => {
+        :previous => :previous_page_no,
+        :next => :next_page_no,
+        :current => :current_page_no,
+        :per_page => :no_results_per_page,
+        :count => :total_no_results,
+        :pages => :total_no_pages
+      }
+    }
+
     def self.read_url(url)
       r = read_json(RestClient.get(url.to_s).to_str)
       r.url = url.to_s
@@ -13,20 +25,9 @@ module ATDIS
       interpret(MultiJson.load(text, :symbolize_keys => true))
     end
 
-    def self.convert(json_data)
-      values = {
-        :results => json_data[:response].map {|a| Application.interpret(a[:application]) }
-      }
-
-      if json_data[:pagination]
-        values[:previous_page_no] = json_data[:pagination][:previous]
-        values[:next_page_no] = json_data[:pagination][:next]
-        values[:current_page_no] = json_data[:pagination][:current]
-        values[:no_results_per_page] = json_data[:pagination][:per_page]
-        values[:total_no_results] = json_data[:pagination][:count]
-        values[:total_no_pages] = json_data[:pagination][:pages]
-      end
-      values[:json_left_overs] = {}
+    def self.convert(data)
+      values = map_fields2(VALID_FIELDS, data)
+      values[:results] = values[:results].map {|a| Application.interpret(a[:application]) }
       values
     end
 
