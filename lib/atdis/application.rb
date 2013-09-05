@@ -15,9 +15,10 @@ module ATDIS
       :status => String,
       :officer => String,
       :estimated_cost => String,
-      :location => Location
-
-    attr_accessor :events, :documents, :people
+      :location => Location,
+      :events => Event,
+      :documents => Document,
+      :people => Person
 
     validates :dat_id, :description, :authority, :status, :presence => true
     validates :last_modified_date, :lodgement_date, :determination_date, :presence_before_type_cast => true, :date_time => true
@@ -51,16 +52,6 @@ module ATDIS
       :documents => :documents,
       :people => :people
   
-    def events=(v)
-      @events = v.map{|e| Event.interpret(e)} if v
-    end
-
-    def documents=(v)
-      @documents = v.map{|d| Document.interpret(d)} if v
-    end
-
-    def people=(v)
-      @people = v.map{|p| Person.interpret(p)} if v
-    end
+    # TODO Do we need to do extra checking to ensure that events, documents and people are arrays?
   end
 end
