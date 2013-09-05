@@ -57,7 +57,7 @@ module ATDIS
     end
 
     def self.interpret(*params)
-      new(convert(*params))
+      new(map_fields(valid_fields, *params))
     end
 
     # Map json structure to our values
@@ -78,10 +78,6 @@ module ATDIS
         end
       end
       values
-    end
-
-    def self.convert(data)
-      map_fields(valid_fields, data)
     end
 
     def self.cast(value, type)
