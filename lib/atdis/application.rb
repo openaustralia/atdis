@@ -51,10 +51,10 @@ module ATDIS
       :people => :people
     }
 
-    def self.convert(data)
+    def self.map_fields(valid_fields, data)
       values = {}
       # Map json structure to our values
-      VALID_FIELDS.each do |key1, value1|
+      valid_fields.each do |key1, value1|
         if data[key1]
           if value1.kind_of?(Hash)
             data[key1].each do |key2, value2|
@@ -71,6 +71,11 @@ module ATDIS
           end
         end
       end
+      values
+    end
+
+    def self.convert(data)
+      values = map_fields(VALID_FIELDS, data)
 
       # Convert values (if required)
       values[:location] = Location.interpret(values[:location]) if values[:location]
