@@ -56,29 +56,24 @@ module ATDIS
       new(convert(*params))
     end
 
-    def self.map_fields2(valid_fields, data)
-      values, json_left_overs = map_fields(valid_fields, data)
-      values.merge(:json_left_overs => json_left_overs)
-    end
-
     # Map json structure to our values
-    def self.map_fields(valid_fields, data)
-      values = {}
-      left_overs = {}
+    def self.map_fields2(valid_fields, data)
+      values = {:json_left_overs => {}}
       data.each_key do |key|
         if valid_fields[key]
           if valid_fields[key].kind_of?(Hash)
-            v2, l2 = map_fields(valid_fields[key], data[key])
+            v2 = map_fields2(valid_fields[key], data[key])
+            l2 = v2.delete(:json_left_overs)
             values = values.merge(v2)
-            left_overs[key] = l2 unless l2.empty?
+            values[:json_left_overs][key] = l2 unless l2.empty?
           else
             values[valid_fields[key]] = data[key]
           end
         else
-          left_overs[key] = data[key]
+          values[:json_left_overs][key] = data[key]
         end
       end
-      [values, left_overs]
+      values
     end
 
     def self.convert(data)
