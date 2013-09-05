@@ -28,7 +28,7 @@ module ATDIS
     # TODO Add support for "extended" json parameters
 
     # How the json parameters map to our attributes
-    VALID_FIELDS = {
+    Application.valid_fields = {
       :info => {
         :dat_id => :dat_id,
         :last_modified_date => :last_modified_date,
@@ -66,10 +66,6 @@ module ATDIS
 
     def people=(v)
       @people = v.map{|p| Person.interpret(p)} if v
-    end
-
-    def self.convert(data)
-      map_fields2(VALID_FIELDS, data)
     end
   end
 end

@@ -29,7 +29,8 @@ module ATDIS
     # Stores any part of the json that could not be interpreted. Usually
     # signals an error if it isn't empty.
     attr_accessor :json_left_overs
-
+    class_attribute :valid_fields
+    
     validate :json_left_overs_is_empty
 
     def json_left_overs_is_empty
@@ -80,9 +81,8 @@ module ATDIS
       [values, left_overs]
     end
 
-    # By default do no conversion. You will usually override this.
     def self.convert(data)
-      raise "Implement self.convert in your class"
+      map_fields2(valid_fields, data)
     end
 
     def self.cast(value, type)

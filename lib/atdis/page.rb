@@ -3,7 +3,7 @@ module ATDIS
     attr_accessor :url, :previous_page_no, :next_page_no, :current_page_no, :no_results_per_page,
       :total_no_results, :total_no_pages, :results
 
-    VALID_FIELDS = {
+    Page.valid_fields = {
       :response => :results,
       :pagination => {
         :previous => :previous_page_no,
@@ -28,10 +28,6 @@ module ATDIS
     def results=(v)
       # TODO Would be more consistent if we called Application.interpret(a)
       @results = v.map {|a| Application.interpret(a[:application]) }
-    end
-
-    def self.convert(data)
-      map_fields2(VALID_FIELDS, data)
     end
 
     def next

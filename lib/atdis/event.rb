@@ -4,17 +4,12 @@ module ATDIS
 
     attr_accessor :id, :description, :event_type, :status
 
-    VALID_FIELDS = {
+    Event.valid_fields = {
       :id => :id,
       :date => :date,
       :description => :description,
       :event_type => :event_type,
       :status => :status
     }
-
-    # TODO Do proper mapping of json parameters to our parameters
-    def self.convert(data)
-      map_fields2(VALID_FIELDS, data)
-    end
   end
 end
