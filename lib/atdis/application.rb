@@ -1,5 +1,5 @@
 require 'multi_json'
- 
+
 module ATDIS
   class Application < Model
     casting_attributes :last_modified_date => DateTime,
@@ -14,9 +14,10 @@ module ATDIS
       :authority => String,
       :status => String,
       :officer => String,
-      :estimated_cost => String
+      :estimated_cost => String,
+      :location => Location
 
-    attr_accessor :location, :events, :documents, :people
+    attr_accessor :events, :documents, :people
 
     validates :dat_id, :description, :authority, :status, :presence => true
     validates :last_modified_date, :lodgement_date, :determination_date, :presence_before_type_cast => true, :date_time => true
@@ -50,15 +51,6 @@ module ATDIS
       :documents => :documents,
       :people => :people
   
-
-    def location=(v)
-      if v.kind_of?(Location) || v.nil?
-        @location = v
-      else
-        @location = Location.interpret(v)
-      end
-    end
-
     def events=(v)
       @events = v.map{|e| Event.interpret(e)} if v
     end

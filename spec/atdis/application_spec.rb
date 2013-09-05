@@ -241,7 +241,7 @@ describe ATDIS::Application do
   describe "#attribute_names" do
     it do
       ATDIS::Application.attribute_names.sort.should == ["authority", "comments_url", "dat_id",
-        "description", "determination_date", "estimated_cost", "last_modified_date", "lodgement_date",
+        "description", "determination_date", "estimated_cost", "last_modified_date", "location", "lodgement_date",
         "more_info_url", "notification_end_date", "notification_start_date", "officer", "status"]
     end
   end

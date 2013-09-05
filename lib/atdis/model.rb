@@ -90,6 +90,9 @@ module ATDIS
         cast_uri(value)
       elsif type == String
         cast_string(value)
+      # Otherwise try to use Type.interpret to do the typecasting
+      elsif type.respond_to?(:interpret)
+        type.interpret(value) if value
       else
         raise
       end
