@@ -4,10 +4,8 @@ module ATDIS
 
     attr_accessor :ref, :title
 
-    Document.valid_fields = {
-      :ref => :ref,
+    field_mappings :ref => :ref,
       :title => :title,
       :document_url => :document_url
-    }    
   end
 end

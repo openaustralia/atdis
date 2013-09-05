@@ -4,12 +4,10 @@ module ATDIS
 
     attr_accessor :id, :description, :event_type, :status
 
-    Event.valid_fields = {
-      :id => :id,
+    field_mappings :id => :id,
       :date => :date,
       :description => :description,
       :event_type => :event_type,
       :status => :status
-    }
   end
 end

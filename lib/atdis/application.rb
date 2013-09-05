@@ -28,8 +28,7 @@ module ATDIS
     # TODO Add support for "extended" json parameters
 
     # How the json parameters map to our attributes
-    Application.valid_fields = {
-      :info => {
+    field_mappings :info => {
         :dat_id => :dat_id,
         :last_modified_date => :last_modified_date,
         :description => :description,
@@ -50,7 +49,7 @@ module ATDIS
       :events => :events,
       :documents => :documents,
       :people => :people
-    }
+  
 
     def location=(v)
       @location = Location.interpret(v) if v

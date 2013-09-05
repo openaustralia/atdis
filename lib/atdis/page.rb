@@ -3,8 +3,7 @@ module ATDIS
     attr_accessor :url, :previous_page_no, :next_page_no, :current_page_no, :no_results_per_page,
       :total_no_results, :total_no_pages, :results
 
-    Page.valid_fields = {
-      :response => :results,
+    field_mappings :response => :results,
       :pagination => {
         :previous => :previous_page_no,
         :next => :next_page_no,
@@ -13,7 +12,6 @@ module ATDIS
         :count => :total_no_results,
         :pages => :total_no_pages
       }
-    }
 
     def self.read_url(url)
       r = read_json(RestClient.get(url.to_s).to_str)

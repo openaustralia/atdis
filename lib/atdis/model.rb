@@ -7,12 +7,17 @@ module ATDIS
 
     included do
       class_attribute :attribute_types
+      class_attribute :valid_fields
     end
 
     module ClassMethods
       def casting_attributes(p)
         define_attribute_methods(p.keys.map{|k| k.to_s})
         self.attribute_types = p
+      end
+
+      def field_mappings(p)
+        self.valid_fields = p
       end
     end
   end
@@ -29,7 +34,6 @@ module ATDIS
     # Stores any part of the json that could not be interpreted. Usually
     # signals an error if it isn't empty.
     attr_accessor :json_left_overs
-    class_attribute :valid_fields
     
     validate :json_left_overs_is_empty
 

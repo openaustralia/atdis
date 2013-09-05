@@ -4,15 +4,13 @@ module ATDIS
   class Location < Model
     attr_accessor :address, :lot, :section, :dpsp_id, :geometry
 
-    Location.valid_fields = {
-      :address => :address,
+    field_mappings :address => :address,
       :land_title_ref => {
         :lot => :lot,
         :section => :section,
         :dpsp_id => :dpsp_id
       },
       :geometry => :geometry
-    }
 
     def geometry=(v)
       @geometry = RGeo::GeoJSON.decode(Location.hash_symbols_to_string(v)) if v
