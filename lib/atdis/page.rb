@@ -1,7 +1,6 @@
 module ATDIS
   class Page < Model
-    attr_accessor :url, :previous_page_no, :next_page_no, :current_page_no, :no_results_per_page,
-      :total_no_results, :total_no_pages
+    attr_accessor :url
 
     field_mappings :response => :results,
       :pagination => {
@@ -13,13 +12,12 @@ module ATDIS
         :pages => :total_no_pages
       }
     casting_attributes :results => Application,
-      # TODO Cast these as integers most likely
-      :previous_page_no => nil,
-      :next_page_no => nil,
-      :current_page_no => nil,
-      :no_results_per_page => nil,
-      :total_no_results => nil,
-      :total_no_pages => nil
+      :previous_page_no => Fixnum,
+      :next_page_no => Fixnum,
+      :current_page_no => Fixnum,
+      :no_results_per_page => Fixnum,
+      :total_no_results => Fixnum,
+      :total_no_pages => Fixnum
 
     def self.read_url(url)
       r = read_json(RestClient.get(url.to_s).to_str)
