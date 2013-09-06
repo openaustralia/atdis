@@ -12,6 +12,10 @@ module ATDIS
         :pages => [:total_no_pages, Fixnum]
       }
 
+    # Mandatory parameters
+    validates :results, :presence_before_type_cast => true
+    validates :results, :valid => true
+
     def self.read_url(url)
       r = read_json(RestClient.get(url.to_s).to_str)
       r.url = url.to_s

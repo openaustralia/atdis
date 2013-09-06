@@ -42,7 +42,7 @@ module ATDIS
     # This attribute itself needs to be valid
     class ValidValidator < ActiveModel::EachValidator
       def validate_each(record, attribute, value)
-        unless value.valid?
+        if (value.respond_to?(:valid?) && !value.valid?) || (!value.respond_to?(:valid?) && !value.all?{|v| v.valid?})
           record.errors.add(attribute, "is not valid")
         end
       end
