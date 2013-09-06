@@ -49,6 +49,7 @@ describe ATDIS::Application do
         :events => [ { :id => "event1" }, { :id => "event2" } ],
         :documents => [ { :ref => "27B/6/a" }, { :ref => "27B/6/b" } ],
         :people => [ { :name => "Tuttle" }, { :name => "Buttle" } ],
+        :extended => {:another_parameter => "with some value", :anything => "can go here"},
         :json_left_overs => {}
       ).and_return(application)
 
@@ -76,7 +77,8 @@ describe ATDIS::Application do
         :location => { :address => "123 Fourfivesix Street" },
         :events => [ { :id => "event1" }, { :id => "event2" } ],
         :documents => [ { :ref => "27B/6/a" }, { :ref => "27B/6/b" } ],
-        :people => [ { :name => "Tuttle" }, { :name => "Buttle" } ]
+        :people => [ { :name => "Tuttle" }, { :name => "Buttle" } ],
+        :extended => {:another_parameter => "with some value", :anything => "can go here"}
       }).should == application
     end
 
@@ -85,6 +87,13 @@ describe ATDIS::Application do
       ATDIS::Application.should_receive(:new).with({:json_left_overs => {}}).and_return(application)
 
       ATDIS::Application.interpret(:application => {:info => {}, :reference => {}}).should == application
+    end
+  end
+
+  describe "#extended" do
+    it "should do no typecasting" do
+      a = ATDIS::Application.new(:extended => {:another_parameter => "with some value", :anything => "can go here"})
+      a.extended.should == {:another_parameter => "with some value", :anything => "can go here"}
     end
   end
 
@@ -242,9 +251,10 @@ describe ATDIS::Application do
   # TODO This should really be a test on the Model base class
   describe "#attribute_names" do
     it do
-      ATDIS::Application.attribute_names.sort.should == ["authority", "comments_url", "dat_id",
-        "description", "determination_date", "documents", "estimated_cost", "events", "last_modified_date", "location", "lodgement_date",
-        "more_info_url", "notification_end_date", "notification_start_date", "officer", "people", "status"]
+      ATDIS::Application.attribute_names.sort.should == ["authority", "comments_url", "dat_id", "description",
+        "determination_date", "documents", "estimated_cost", "events", "extended", "last_modified_date",
+        "location", "lodgement_date", "more_info_url", "notification_end_date", "notification_start_date", "officer",
+        "people", "status"]
     end
   end
 

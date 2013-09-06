@@ -23,7 +23,8 @@ module ATDIS
       :location => [:location, Location],
       :events => [:events, Event],
       :documents => [:documents, Document],
-      :people => [:people, Person]
+      :people => [:people, Person],
+      :extended => [:extended, Object]
     }
   
     # Mandatory parameters
@@ -37,7 +38,6 @@ module ATDIS
     validates :location, :valid => true
 
     # TODO Validate associated like locations, events, documents, people
-    # TODO Add support for "extended" json parameters
     # TODO Do we need to do extra checking to ensure that events, documents and people are arrays?
     # TODO Separate validation for L2 and L3 compliance?
     # TODO Validate date orders. i.e. determination_date >= lodgement_date and notification_end_date >= notification_start_date
