@@ -2,7 +2,8 @@ require 'multi_json'
 
 module ATDIS
   class Application < Model
-    field_mappings :info => {
+    field_mappings :application => {
+      :info => {
         :dat_id => :dat_id,
         :last_modified_date => :last_modified_date,
         :description => :description,
@@ -23,6 +24,7 @@ module ATDIS
       :events => :events,
       :documents => :documents,
       :people => :people
+    }
   
     casting_attributes :last_modified_date => DateTime,
       :lodgement_date => DateTime,

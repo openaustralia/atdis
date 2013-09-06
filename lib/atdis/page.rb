@@ -25,7 +25,7 @@ module ATDIS
 
     def results=(v)
       # TODO Would be more consistent if we called Application.interpret(a)
-      @results = v.map {|a| Application.interpret(a[:application]) }
+      @results = v.map {|a| Application.interpret(a) }
     end
 
     def next

@@ -4,7 +4,7 @@ describe ATDIS::Application do
 
   context "extra parameter in json" do
     it "should not be valid" do
-      a = ATDIS::Application.interpret({
+      a = ATDIS::Application.interpret(:application => {
         :info => {
           :dat_id => "DA2013-0381",
           :last_modified_date => "2013-04-20T02:01:07Z",
@@ -21,7 +21,7 @@ describe ATDIS::Application do
         }
       })
       a.should_not be_valid
-      a.errors.messages.should == {:json => ['Unexpected parameters in json data: {"reference":{"foo":"bar"}}']}
+      a.errors.messages.should == {:json => ['Unexpected parameters in json data: {"application":{"reference":{"foo":"bar"}}}']}
     end
   end
 
@@ -50,7 +50,7 @@ describe ATDIS::Application do
         :json_left_overs => {}
       ).and_return(application)
 
-      ATDIS::Application.interpret(
+      ATDIS::Application.interpret(:application => {
         :info => {
           :dat_id => "DA2013-0381",
           :last_modified_date => "2013-04-20T02:01:07Z",
@@ -75,14 +75,14 @@ describe ATDIS::Application do
         :events => [ { :id => "event1" }, { :id => "event2" } ],
         :documents => [ { :ref => "27B/6/a" }, { :ref => "27B/6/b" } ],
         :people => [ { :name => "Tuttle" }, { :name => "Buttle" } ]
-      ).should == application
+      }).should == application
     end
 
     it "should create a nil valued application when there is no information in the json" do
       application = double
       ATDIS::Application.should_receive(:new).with({:json_left_overs => {}}).and_return(application)
 
-      ATDIS::Application.interpret(:info => {}, :reference => {}).should == application
+      ATDIS::Application.interpret(:application => {:info => {}, :reference => {}}).should == application
     end
   end
 

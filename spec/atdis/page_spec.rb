@@ -32,8 +32,8 @@ describe ATDIS::Page do
       it ".results" do
         application1 = double("Application")
         application2 = double("Application")
-        ATDIS::Application.should_receive(:interpret).with(:description => "application1").and_return(application1)
-        ATDIS::Application.should_receive(:interpret).with(:description => "application2").and_return(application2)
+        ATDIS::Application.should_receive(:interpret).with(:application => {:description => "application1"}).and_return(application1)
+        ATDIS::Application.should_receive(:interpret).with(:application => {:description => "application2"}).and_return(application2)
 
         page.results.should == [application1, application2]
       end
@@ -70,8 +70,8 @@ describe ATDIS::Page do
       it ".results" do
         application1 = double("Application")
         application2 = double("Application")
-        ATDIS::Application.should_receive(:interpret).with(:description => "application1").and_return(application1)
-        ATDIS::Application.should_receive(:interpret).with(:description => "application2").and_return(application2)
+        ATDIS::Application.should_receive(:interpret).with(:application => {:description => "application1"}).and_return(application1)
+        ATDIS::Application.should_receive(:interpret).with(:application => {:description => "application2"}).and_return(application2)
 
         applications_results.results.should == [application1, application2]
       end
