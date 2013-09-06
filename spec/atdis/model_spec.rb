@@ -13,6 +13,15 @@ describe ATDIS::Model do
     it "should cast arrays by casting each member" do
       ATDIS::Model.cast([1, 2, 3], String).should == ["1", "2", "3"]
     end
+
+    # This casting allows nil values
+    describe "casting Fixnum" do
+      it { ATDIS::Model.cast("3", Fixnum).should == 3}
+      it { ATDIS::Model.cast("4.0", Fixnum).should == 4}
+      it { ATDIS::Model.cast(5, Fixnum).should == 5}
+      it { ATDIS::Model.cast(0, Fixnum).should == 0}
+      it { ATDIS::Model.cast(nil, Fixnum).should be_nil}
+    end
   end
 
   describe ".map_fields" do

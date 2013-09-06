@@ -93,6 +93,8 @@ module ATDIS
         cast_uri(value)
       elsif type == String
         cast_string(value)
+      elsif type == Fixnum
+        cast_fixnum(value)
       elsif type == RGeo::GeoJSON
         cast_geojson(value)
       # Otherwise try to use Type.interpret to do the typecasting
@@ -141,6 +143,11 @@ module ATDIS
 
     def self.cast_string(value)
       value.to_s
+    end
+
+    # This casting allows nil values
+    def self.cast_fixnum(value)
+      value.to_i if value
     end
 
     def self.cast_geojson(value)
