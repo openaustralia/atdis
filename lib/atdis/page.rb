@@ -1,7 +1,7 @@
 module ATDIS
   class Page < Model
     attr_accessor :url, :previous_page_no, :next_page_no, :current_page_no, :no_results_per_page,
-      :total_no_results, :total_no_pages, :results
+      :total_no_results, :total_no_pages
 
     field_mappings :response => :results,
       :pagination => {
@@ -12,6 +12,14 @@ module ATDIS
         :count => :total_no_results,
         :pages => :total_no_pages
       }
+    casting_attributes :results => Application,
+      # TODO Cast these as integers most likely
+      :previous_page_no => nil,
+      :next_page_no => nil,
+      :current_page_no => nil,
+      :no_results_per_page => nil,
+      :total_no_results => nil,
+      :total_no_pages => nil
 
     def self.read_url(url)
       r = read_json(RestClient.get(url.to_s).to_str)
@@ -21,11 +29,6 @@ module ATDIS
 
     def self.read_json(text)
       interpret(MultiJson.load(text, :symbolize_keys => true))
-    end
-
-    def results=(v)
-      # TODO Would be more consistent if we called Application.interpret(a)
-      @results = v.map {|a| Application.interpret(a) }
     end
 
     def next
