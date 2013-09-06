@@ -3,6 +3,7 @@ module ATDIS
     attr_accessor :url
 
     field_mappings :response => [:results, Application],
+      :count => [:count, Fixnum],
       :pagination => {
         :previous => [:previous_page_no, Fixnum],
         :next => [:next_page_no, Fixnum],
