@@ -1,6 +1,36 @@
 require File.expand_path(File.dirname(__FILE__) + '/../spec_helper')
 
 describe ATDIS::Location do
+  describe "validation" do
+    context "valid location" do
+      let(:l) { ATDIS::Location.new(
+        :address => "123 Fourfivesix Street Neutral Bay NSW 2089",
+        :lot => "10",
+        :section => "ABC",
+        :dpsp_id => "DP2013-0381",
+        :geometry => {
+          :type => "Point",
+          :coordinates => [100.0, 0.0]
+        }, 
+        :json_left_overs => {}
+      )}
+      
+      it { l.should be_valid }
+
+      it "address" do
+        l.address = ""
+        l.should_not be_valid
+        l.errors.messages.should == {:address => ["can't be blank"]}
+      end
+
+      it "geometry" do
+        l.geometry = {:type => "Point"}
+        l.geometry.should be_nil
+        l.should_not be_valid
+      end
+    end
+  end
+
   describe ".interpret" do
     it "should interpret a parsed json block of location data" do
       l = ATDIS::Location.interpret(

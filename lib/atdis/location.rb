@@ -9,5 +9,10 @@ module ATDIS
         :dpsp_id => [:dpsp_id, String]
       },
       :geometry => [:geometry, RGeo::GeoJSON]
+
+    # Mandatory parameters
+    validates :address, :lot, :section, :dpsp_id, :presence_before_type_cast => true
+
+    validates :geometry, :geo_json => true
   end
 end

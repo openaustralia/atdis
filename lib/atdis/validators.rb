@@ -2,6 +2,15 @@ require 'active_model'
 
 module ATDIS
   module Validators
+    class GeoJsonValidator < ActiveModel::EachValidator
+      def validate_each(record, attribute, value)
+        raw_value = record.send("#{attribute}_before_type_cast")
+        if raw_value.present? && value.nil?
+          record.errors.add(attribute, "is not valid GeoJSON")
+        end
+      end
+    end
+
     class DateTimeValidator < ActiveModel::EachValidator
       def validate_each(record, attribute, value)
         raw_value = record.send("#{attribute}_before_type_cast")
