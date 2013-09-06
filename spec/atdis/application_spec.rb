@@ -4,6 +4,7 @@ describe ATDIS::Application do
 
   context "extra parameter in json" do
     it "should not be valid" do
+      ATDIS::Location.should_receive(:interpret).with(:foo => "Some location data").and_return(double(:valid? => true))
       a = ATDIS::Application.interpret(:application => {
         :info => {
           :dat_id => "DA2013-0381",
@@ -248,6 +249,11 @@ describe ATDIS::Application do
   end
 
   describe "validations" do
+    before :each do
+      l = double(:valid? => true)
+      ATDIS::Location.should_receive(:interpret).with(:address => "123 Fourfivesix Street Neutral Bay NSW 2089").and_return(l)
+    end
+
     let(:a) { ATDIS::Application.new(
       :dat_id => "DA2013-0381",
       :last_modified_date => DateTime.new(2013,4,20,2,1,7),
@@ -257,11 +263,20 @@ describe ATDIS::Application do
       :determination_date => DateTime.new(2013,6,20),  
       :status => "OPEN",
       :more_info_url => URI.parse("http://foo.com/bar"),
-      :location => {:foo => "some location data"},
+      :location => {:address => "123 Fourfivesix Street Neutral Bay NSW 2089"},
       :json_left_overs => {}
   ) }
 
     it { a.should be_valid }
+
+    describe ".location" do
+      it "should not be valid if the location is not valid" do
+        l = double(:valid? => false)
+        ATDIS::Location.should_receive(:interpret).with(:foo => "some location data").and_return(l)
+        a.location = {:foo => "some location data"}
+        a.should_not be_valid
+      end
+    end
 
     it ".dat_id" do
       a.dat_id = nil

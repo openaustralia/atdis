@@ -29,5 +29,14 @@ module ATDIS
         end
       end
     end
+
+    # This attribute itself needs to be valid
+    class ValidValidator < ActiveModel::EachValidator
+      def validate_each(record, attribute, value)
+        unless value.valid?
+          record.errors.add(attribute, "is not valid")
+        end
+      end
+    end
   end
 end

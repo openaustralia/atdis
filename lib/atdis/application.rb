@@ -34,10 +34,14 @@ module ATDIS
     validates :notification_start_date, :notification_end_date, :last_modified_date, :lodgement_date, :determination_date,
       :date_time => true
     validates :more_info_url, :url => true
+    validates :location, :valid => true
 
     # TODO Validate associated like locations, events, documents, people
     # TODO Add support for "extended" json parameters
     # TODO Do we need to do extra checking to ensure that events, documents and people are arrays?
     # TODO Separate validation for L2 and L3 compliance?
+    # TODO Validate date orders. i.e. determination_date >= lodgement_date and notification_end_date >= notification_start_date
+    # TODO also last_modified_date >= lodgement_date and all the other dates. In other words we can't put a future date in. That
+    # doesn't make sense in this context. Also should check dates in things like Events (to see that they're not in the future)
   end
 end
