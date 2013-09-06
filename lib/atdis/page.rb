@@ -2,7 +2,7 @@ module ATDIS
   class Page < Model
     attr_accessor :url
 
-    field_mappings2 :response => [:results, Application],
+    field_mappings :response => [:results, Application],
       :pagination => {
         :previous => [:previous_page_no, Fixnum],
         :next => [:next_page_no, Fixnum],

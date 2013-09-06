@@ -2,7 +2,7 @@ require 'multi_json'
 
 module ATDIS
   class Application < Model
-    field_mappings2 :application => {
+    field_mappings :application => {
       :info => {
         :dat_id => [:dat_id, String],
         :last_modified_date => [:last_modified_date, DateTime],

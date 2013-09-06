@@ -17,12 +17,8 @@ module ATDIS
       end
 
       def field_mappings(p)
-        self.valid_fields = p
-      end
-
-      def field_mappings2(p)
         a, b = translate_field_mappings(p)
-        field_mappings(a)
+        self.valid_fields = a
         casting_attributes(b)
       end
 
