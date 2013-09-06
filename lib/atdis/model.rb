@@ -19,6 +19,30 @@ module ATDIS
       def field_mappings(p)
         self.valid_fields = p
       end
+
+      def field_mappings2(p)
+        a, b = translate_field_mappings(p)
+        field_mappings(a)
+        casting_attributes(b)
+      end
+
+      private
+      
+      def translate_field_mappings(p)
+        f = {}
+        ca = {}
+        p.each do |k,v|
+          if v.kind_of?(Array)
+            f[k] = v[0]
+            ca[v.first] = v[1]
+          else
+            f2, ca2 = translate_field_mappings(v)
+            f[k] = f2
+            ca = ca.merge(ca2)
+          end
+        end
+        [f, ca]
+      end
     end
   end
 

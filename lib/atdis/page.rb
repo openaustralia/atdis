@@ -2,22 +2,15 @@ module ATDIS
   class Page < Model
     attr_accessor :url
 
-    field_mappings :response => :results,
+    field_mappings2 :response => [:results, Application],
       :pagination => {
-        :previous => :previous_page_no,
-        :next => :next_page_no,
-        :current => :current_page_no,
-        :per_page => :no_results_per_page,
-        :count => :total_no_results,
-        :pages => :total_no_pages
+        :previous => [:previous_page_no, Fixnum],
+        :next => [:next_page_no, Fixnum],
+        :current => [:current_page_no, Fixnum],
+        :per_page => [:no_results_per_page, Fixnum],
+        :count => [:total_no_results, Fixnum],
+        :pages => [:total_no_pages, Fixnum]
       }
-    casting_attributes :results => Application,
-      :previous_page_no => Fixnum,
-      :next_page_no => Fixnum,
-      :current_page_no => Fixnum,
-      :no_results_per_page => Fixnum,
-      :total_no_results => Fixnum,
-      :total_no_pages => Fixnum
 
     def self.read_url(url)
       r = read_json(RestClient.get(url.to_s).to_str)

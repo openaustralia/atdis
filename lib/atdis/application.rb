@@ -2,48 +2,30 @@ require 'multi_json'
 
 module ATDIS
   class Application < Model
-    field_mappings :application => {
+    field_mappings2 :application => {
       :info => {
-        :dat_id => :dat_id,
-        :last_modified_date => :last_modified_date,
-        :description => :description,
-        :authority => :authority,
-        :lodgement_date => :lodgement_date,
-        :determination_date => :determination_date,
-        :status => :status,
-        :notification_start_date => :notification_start_date,
-        :notification_end_date => :notification_end_date,
-        :officer => :officer,
-        :estimated_cost => :estimated_cost
+        :dat_id => [:dat_id, String],
+        :last_modified_date => [:last_modified_date, DateTime],
+        :description => [:description, String],
+        :authority => [:authority, String],
+        :lodgement_date => [:lodgement_date, DateTime],
+        :determination_date => [:determination_date, DateTime],
+        :status => [:status, String],
+        :notification_start_date => [:notification_start_date, DateTime],
+        :notification_end_date => [:notification_end_date, DateTime],
+        :officer => [:officer, String],
+        :estimated_cost => [:estimated_cost, String]
       },
       :reference => {
-        :more_info_url => :more_info_url,
-        :comments_url => :comments_url
+        :more_info_url => [:more_info_url, URI],
+        :comments_url => [:comments_url, URI]
       },
-      :location => :location,
-      :events => :events,
-      :documents => :documents,
-      :people => :people
+      :location => [:location, Location],
+      :events => [:events, Event],
+      :documents => [:documents, Document],
+      :people => [:people, Person]
     }
   
-    casting_attributes :last_modified_date => DateTime,
-      :lodgement_date => DateTime,
-      :determination_date => DateTime,
-      :notification_start_date => DateTime,
-      :notification_end_date => DateTime,
-      :more_info_url => URI,
-      :comments_url => URI,
-      :description => String,
-      :dat_id => String,
-      :authority => String,
-      :status => String,
-      :officer => String,
-      :estimated_cost => String,
-      :location => Location,
-      :events => Event,
-      :documents => Document,
-      :people => Person
-
     validates :dat_id, :description, :authority, :status, :presence => true
     validates :last_modified_date, :lodgement_date, :determination_date, :presence_before_type_cast => true, :date_time => true
     validates :more_info_url, :presence_before_type_cast => true, :url => true

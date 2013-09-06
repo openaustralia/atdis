@@ -1,10 +1,7 @@
 module ATDIS
   class Person < Model
-    field_mappings :name => :name,
-      :role => :role,
-      :contact => :contact
-    casting_attributes :name => String,
-      :role => String,
-      :contact => String
+    field_mappings2 :name => [:name, String],
+      :role => [:role, String],
+      :contact => [:contact, String]
   end
 end
