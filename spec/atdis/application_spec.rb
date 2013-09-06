@@ -18,7 +18,8 @@ describe ATDIS::Application do
           # This is the extra parameter that shouldn't be here
           :foo => "bar",
           :more_info_url => "http://foo.com/bar"
-        }
+        },
+        :location => {:foo => "Some location data"}
       })
       a.should_not be_valid
       a.errors.messages.should == {:json => ['Unexpected parameters in json data: {"application":{"reference":{"foo":"bar"}}}']}
@@ -256,6 +257,7 @@ describe ATDIS::Application do
       :determination_date => DateTime.new(2013,6,20),  
       :status => "OPEN",
       :more_info_url => URI.parse("http://foo.com/bar"),
+      :location => {:foo => "some location data"},
       :json_left_overs => {}
   ) }
 
