@@ -7,6 +7,6 @@ module ATDIS
     # Mandatory parameters
     validates :ref, :title, :document_url, :presence_before_type_cast => true
     # Other validations
-    validates :document_url, :url => true
+    validates :document_url, :http_url => true
   end
 end

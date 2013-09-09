@@ -34,7 +34,7 @@ module ATDIS
     # Other validations
     validates :notification_start_date, :notification_end_date, :last_modified_date, :lodgement_date, :determination_date,
       :date_time => true
-    validates :more_info_url, :url => true
+    validates :more_info_url, :http_url => true
     validates :location, :valid => true
 
     # TODO Validate associated like locations, events, documents, people

@@ -391,6 +391,16 @@ describe ATDIS::Application do
         a.should_not be_valid
         a.errors.messages.should == {:more_info_url => ["is not a valid URL"]}
       end
+      it do
+        a.more_info_url = "foo.com"
+        a.should_not be_valid
+        a.errors.messages.should == {:more_info_url => ["is not a valid URL"]}
+      end
+      it do
+        a.more_info_url = "httpss://foo.com"
+        a.should_not be_valid
+        a.errors.messages.should == {:more_info_url => ["is not a valid URL"]}
+      end
     end
   end
 end

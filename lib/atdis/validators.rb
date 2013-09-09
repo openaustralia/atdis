@@ -20,10 +20,10 @@ module ATDIS
       end
     end
 
-    class UrlValidator < ActiveModel::EachValidator
+    class HttpUrlValidator < ActiveModel::EachValidator
       def validate_each(record, attribute, value)
         raw_value = record.send("#{attribute}_before_type_cast")
-        if raw_value.present? && !value.kind_of?(URI)
+        if raw_value.present? && !value.kind_of?(URI::HTTP) && !value.kind_of?(URI::HTTPS) 
           record.errors.add(attribute, "is not a valid URL")
         end
       end
