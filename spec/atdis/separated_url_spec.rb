@@ -16,5 +16,10 @@ describe ATDIS::SeparatedURL do
       ATDIS::SeparatedURL.merge("http://foo.com/bar?foo=twenty&bar=12", :bar => "hello sir").should ==
         "http://foo.com/bar?bar=hello+sir&foo=twenty"
     end
+
+    it "should be fine if there are no parameters" do
+      ATDIS::SeparatedURL.merge("http://foo.com/bar", :page => 2).should ==
+        "http://foo.com/bar?page=2"
+    end
   end
 end
