@@ -11,20 +11,35 @@ describe ATDIS::Page do
 
       it {page.should be_valid}
 
-      context "count is consistent" do
+      context "with pagination" do
         before :each do
           page.count = 2
+          page.no_results_per_page = 25
+          page.current_page_no = 1
+          page.total_no_results = 100
+          page.total_no_pages = 1
         end
-        it {page.should be_valid}
-      end
+        it { page.should be_valid }
 
-      context "count is not consistent" do
-        before :each do
-          page.count = 1
+        context "count is not consistent" do
+          before :each do
+            page.count = 1
+          end
+          it do
+            page.should_not be_valid
+            page.errors.messages.should == {:count => ["is not the same as the number of applications returned"]}
+          end
         end
-        it do
-          page.should_not be_valid
-          page.errors.messages.should == {:count => ["is not the same as the number of applications returned"]}
+
+        context "count is absent" do
+          before :each do
+            page.count = nil
+          end
+
+          it do
+            page.should_not be_valid
+            page.errors.messages.should == {:count => ["should be present if pagination is being used"]}
+          end
         end
       end
     end
