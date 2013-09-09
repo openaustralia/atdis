@@ -2,15 +2,39 @@ require File.expand_path(File.dirname(__FILE__) + '/../spec_helper')
 
 describe ATDIS::Page do
   describe "validations" do
-    describe "count" do
-      it "can be absent if there is pagination at all" do
-        ATDIS::Application.should_receive(:interpret).with(:application => {:description => "application1"}).and_return(double(:valid? => true))
-        ATDIS::Application.should_receive(:interpret).with(:application => {:description => "application2"}).and_return(double(:valid? => true))
-        page = ATDIS::Page.new(:results => [
-          {:application => {:description => "application1"}},
-          {:application => {:description => "application2"}}
-        ])
-        page.should be_valid
+    context "two valid applications no paging" do
+      before :each do
+        ATDIS::Application.should_receive(:interpret).with(:description => "application1").and_return(double(:valid? => true))
+        ATDIS::Application.should_receive(:interpret).with(:description => "application2").and_return(double(:valid? => true))
+      end
+      let(:page) { ATDIS::Page.new(:results => [{:description => "application1"}, {:description => "application2"}]) }
+
+      it {page.should be_valid}
+    end
+
+    context "one valid application out of two no paging" do
+      before :each do
+        ATDIS::Application.should_receive(:interpret).with(:description => "application1").and_return(double(:valid? => true))
+        ATDIS::Application.should_receive(:interpret).with(:description => "application2").and_return(double(:valid? => false))
+      end
+      let(:page) { ATDIS::Page.new(:results => [{:description => "application1"}, {:description => "application2"}]) }
+
+      it do
+        page.should_not be_valid
+        page.errors.messages.should == {:results => ["is not valid"]}
+      end
+    end
+
+    context "two invalid applications no paging" do
+      before :each do
+        ATDIS::Application.should_receive(:interpret).with(:description => "application1").and_return(double(:valid? => false))
+        ATDIS::Application.should_receive(:interpret).with(:description => "application2").and_return(double(:valid? => false))
+      end
+      let(:page) { ATDIS::Page.new(:results => [{:description => "application1"}, {:description => "application2"}]) }
+
+      it do
+        page.should_not be_valid
+        page.errors.messages.should == {:results => ["is not valid"]}
       end
     end
   end
