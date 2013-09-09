@@ -11,8 +11,7 @@ describe ATDIS::Location do
         :geometry => {
           :type => "Point",
           :coordinates => [100.0, 0.0]
-        }, 
-        :json_left_overs => {}
+        }
       )}
       
       it { l.should be_valid }

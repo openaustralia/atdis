@@ -58,7 +58,7 @@ module ATDIS
     validate :json_left_overs_is_empty
 
     def json_left_overs_is_empty
-      unless json_left_overs.empty?
+      if json_left_overs && !json_left_overs.empty?
         # We have extra parameters that shouldn't be there
         errors.add(:json, "Unexpected parameters in json data: #{MultiJson.dump(json_left_overs)}")
       end

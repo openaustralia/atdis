@@ -273,8 +273,7 @@ describe ATDIS::Application do
       :determination_date => DateTime.new(2013,6,20),  
       :status => "OPEN",
       :more_info_url => URI.parse("http://foo.com/bar"),
-      :location => {:address => "123 Fourfivesix Street Neutral Bay NSW 2089"},
-      :json_left_overs => {}
+      :location => {:address => "123 Fourfivesix Street Neutral Bay NSW 2089"}
   ) }
 
     it { a.should be_valid }
