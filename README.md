@@ -8,6 +8,8 @@ We're developing this against version ATDIS 1.0.4.
 
 This is **highly alpha** software that probably doesn't yet do what it says on the tin. It is very much a work in progress.
 
+Source code is available on GitHub at https://github.com/openaustralia/atdis
+
 ## Installation
 
 Add this line to your application's Gemfile:
