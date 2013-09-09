@@ -55,11 +55,35 @@ describe ATDIS::Page do
         context "previous page number if nil but not on first page" do
           before :each do
             page.current_page_no = 4
+            page.next_page_no = 5
             page.previous_page_no = nil
           end
           it do
             page.should_not be_valid
             page.errors.messages.should == {:previous_page_no => ["can't be null if not on the first page"]}
+          end
+        end
+
+        context "next page number is pointing to a weird page number" do
+          before :each do
+            page.next_page_no = 5
+          end
+          it do
+            page.should_not be_valid
+            page.errors.messages.should == {:next_page_no => ["should be one greater than current page number or null if last page"]}
+          end          
+        end
+
+        context "next page number is nil but not on last page" do
+          before :each do
+            page.current_page_no = 4
+            page.previous_page_no = 3
+            page.next_page_no = nil
+            page.total_no_pages = 6
+          end
+          it do
+            page.should_not be_valid
+            page.errors.messages.should == {:next_page_no => ["can't be null if not on the last page"]}
           end
         end
       end

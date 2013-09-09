@@ -16,7 +16,7 @@ module ATDIS
     # Mandatory parameters
     validates :results, :presence_before_type_cast => true
     validates :results, :valid => true
-    validate :count_is_consistent, :all_pagination_is_present, :previous_page_no_is_consistent
+    validate :count_is_consistent, :all_pagination_is_present, :previous_page_no_is_consistent, :next_page_no_is_consistent
 
     # If some of the pagination fields are present all of the required ones should be present
     def all_pagination_is_present
@@ -48,6 +48,15 @@ module ATDIS
           end
         end
       end 
+    end
+
+    def next_page_no_is_consistent
+      if next_page_no && next_page_no != current_page_no + 1
+        errors.add(:next_page_no, "should be one greater than current page number or null if last page")
+      end
+      if next_page_no.nil? && current_page_no != total_no_pages
+        errors.add(:next_page_no, "can't be null if not on the last page")
+      end
     end
 
     def self.read_url(url)
