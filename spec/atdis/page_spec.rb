@@ -1,6 +1,20 @@
 require File.expand_path(File.dirname(__FILE__) + '/../spec_helper')
 
 describe ATDIS::Page do
+  describe "validations" do
+    describe "count" do
+      it "can be absent if there is pagination at all" do
+        ATDIS::Application.should_receive(:interpret).with(:application => {:description => "application1"}).and_return(double(:valid? => true))
+        ATDIS::Application.should_receive(:interpret).with(:application => {:description => "application2"}).and_return(double(:valid? => true))
+        page = ATDIS::Page.new(:results => [
+          {:application => {:description => "application1"}},
+          {:application => {:description => "application2"}}
+        ])
+        page.should be_valid
+      end
+    end
+  end
+
   context "paging supported by vendor" do
     context "read from a json string" do
       let(:page) { ATDIS::Page.read_json(<<-EOF
