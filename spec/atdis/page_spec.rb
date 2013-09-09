@@ -41,6 +41,27 @@ describe ATDIS::Page do
             page.errors.messages.should == {:count => ["should be present if pagination is being used"]}
           end
         end
+
+        context "previous page number is pointing to a weird page number" do
+          before :each do
+            page.previous_page_no = 5
+          end
+          it do
+            page.should_not be_valid
+            page.errors.messages.should == {:previous_page_no => ["should be one less than current page number or null if first page"]}
+          end
+        end
+
+        context "previous page number if nil but not on first page" do
+          before :each do
+            page.current_page_no = 4
+            page.previous_page_no = nil
+          end
+          it do
+            page.should_not be_valid
+            page.errors.messages.should == {:previous_page_no => ["can't be null if not on the first page"]}
+          end
+        end
       end
     end
 
