@@ -56,6 +56,9 @@ describe ATDIS::Page do
         context "previous page number is pointing to a weird page number" do
           before :each do
             page.previous_page_no = 5
+            page.current_page_no = 2
+            page.total_no_results = 50
+            page.total_no_pages = 2
           end
           it do
             page.should_not be_valid
@@ -77,9 +80,25 @@ describe ATDIS::Page do
           end
         end
 
+        context "previous page number not nil but on first page" do
+          before :each do
+            page.current_page_no = 1
+            page.next_page_no = 2
+            page.previous_page_no = 0
+            page.total_no_results = 240
+            page.total_no_pages = 10
+          end
+          it do
+            page.should_not be_valid
+            page.errors.messages.should == {:previous_page_no => ["should be null if on the first page"]}
+          end
+        end
+
         context "next page number is pointing to a weird page number" do
           before :each do
             page.next_page_no = 5
+            page.total_no_results = 50
+            page.total_no_pages = 2
           end
           it do
             page.should_not be_valid
@@ -98,6 +117,20 @@ describe ATDIS::Page do
           it do
             page.should_not be_valid
             page.errors.messages.should == {:next_page_no => ["can't be null if not on the last page"]}
+          end
+        end
+
+        context "next page number is not nil but on last page" do
+          before :each do
+            page.previous_page_no = 3
+            page.current_page_no = 4
+            page.next_page_no = 5
+            page.total_no_results = 100
+            page.total_no_pages = 4
+          end
+          it do
+            page.should_not be_valid
+            page.errors.messages.should == {:next_page_no => ["should be null if on the last page"]}
           end
         end
 

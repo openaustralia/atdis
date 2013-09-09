@@ -44,6 +44,9 @@ module ATDIS
           if previous_page_no != current_page_no - 1
             errors.add(:previous_page_no, "should be one less than current page number or null if first page")
           end
+          if current_page_no == 1
+            errors.add(:previous_page_no, "should be null if on the first page")
+          end            
         else
           if current_page_no > 1
             errors.add(:previous_page_no, "can't be null if not on the first page")
@@ -58,6 +61,9 @@ module ATDIS
       end
       if next_page_no.nil? && current_page_no != total_no_pages
         errors.add(:next_page_no, "can't be null if not on the last page")
+      end
+      if next_page_no && current_page_no == total_no_pages
+        errors.add(:next_page_no, "should be null if on the last page")
       end
     end
 
