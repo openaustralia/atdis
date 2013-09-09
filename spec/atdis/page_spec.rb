@@ -16,7 +16,7 @@ describe ATDIS::Page do
           page.count = 2
           page.no_results_per_page = 25
           page.current_page_no = 1
-          page.total_no_results = 100
+          page.total_no_results = 2
           page.total_no_pages = 1
         end
         it { page.should be_valid }
@@ -57,6 +57,7 @@ describe ATDIS::Page do
             page.current_page_no = 4
             page.next_page_no = 5
             page.previous_page_no = nil
+            page.total_no_results = 240
             page.total_no_pages = 10
           end
           it do
@@ -80,6 +81,7 @@ describe ATDIS::Page do
             page.current_page_no = 4
             page.previous_page_no = 3
             page.next_page_no = nil
+            page.total_no_results = 140
             page.total_no_pages = 6
           end
           it do
@@ -109,6 +111,34 @@ describe ATDIS::Page do
           it do
             page.should_not be_valid
             page.errors.messages.should == {:current_page_no => ["can not be less than 1"]}
+          end          
+        end
+
+        context "total_no_results is larger than would be expected" do
+          before :each do
+            page.current_page_no = 1
+            page.next_page_no = 2
+            page.no_results_per_page = 25
+            page.total_no_pages = 4
+            page.total_no_results = 101
+          end
+          it do
+            page.should_not be_valid
+            page.errors.messages.should == {:total_no_results => ["is larger than can be retrieved through paging"]}
+          end          
+        end
+
+        context "total no_results is less than would be expected" do
+          before :each do
+            page.current_page_no = 1
+            page.next_page_no = 2
+            page.no_results_per_page = 25
+            page.total_no_pages = 4
+            page.total_no_results = 75
+          end
+          it do
+            page.should_not be_valid
+            page.errors.messages.should == {:total_no_results => ["could fit into a smaller number of pages"]}
           end          
         end
       end

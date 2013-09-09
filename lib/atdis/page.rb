@@ -17,7 +17,7 @@ module ATDIS
     validates :results, :presence_before_type_cast => true
     validates :results, :valid => true
     validate :count_is_consistent, :all_pagination_is_present, :previous_page_no_is_consistent, :next_page_no_is_consistent
-    validate :current_page_no_is_consistent
+    validate :current_page_no_is_consistent, :total_no_results_is_consistent
 
     # If some of the pagination fields are present all of the required ones should be present
     def all_pagination_is_present
@@ -64,6 +64,15 @@ module ATDIS
       if current_page_no
         errors.add(:current_page_no, "is larger than the number of pages") if current_page_no > total_no_pages        
         errors.add(:current_page_no, "can not be less than 1") if current_page_no < 1
+      end
+    end
+
+    def total_no_results_is_consistent
+      if total_no_pages && total_no_results > total_no_pages * no_results_per_page
+        errors.add(:total_no_results, "is larger than can be retrieved through paging")
+      end
+      if total_no_pages && total_no_results <= (total_no_pages - 1) * no_results_per_page
+        errors.add(:total_no_results, "could fit into a smaller number of pages")
       end
     end
 
