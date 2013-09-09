@@ -57,6 +57,7 @@ describe ATDIS::Page do
             page.current_page_no = 4
             page.next_page_no = 5
             page.previous_page_no = nil
+            page.total_no_pages = 10
           end
           it do
             page.should_not be_valid
@@ -85,6 +86,30 @@ describe ATDIS::Page do
             page.should_not be_valid
             page.errors.messages.should == {:next_page_no => ["can't be null if not on the last page"]}
           end
+        end
+
+        context "current page is larger than the number of pages" do
+          before :each do
+            page.current_page_no = 2
+            page.previous_page_no = 1
+            page.next_page_no = 3
+            page.total_no_pages = 1
+          end
+          it do
+            page.should_not be_valid
+            page.errors.messages.should == {:current_page_no => ["is larger than the number of pages"]}
+          end
+        end
+
+        context "current page is zero" do
+          before :each do
+            page.current_page_no = 0
+            page.next_page_no = 1
+          end
+          it do
+            page.should_not be_valid
+            page.errors.messages.should == {:current_page_no => ["can not be less than 1"]}
+          end          
         end
       end
     end
