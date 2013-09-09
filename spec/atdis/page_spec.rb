@@ -10,6 +10,23 @@ describe ATDIS::Page do
       let(:page) { ATDIS::Page.new(:results => [{:description => "application1"}, {:description => "application2"}]) }
 
       it {page.should be_valid}
+
+      context "count is consistent" do
+        before :each do
+          page.count = 2
+        end
+        it {page.should be_valid}
+      end
+
+      context "count is not consistent" do
+        before :each do
+          page.count = 1
+        end
+        it do
+          page.should_not be_valid
+          page.errors.messages.should == {:count => ["is not the same as the number of applications returned"]}
+        end
+      end
     end
 
     context "one valid application out of two no paging" do

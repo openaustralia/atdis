@@ -16,6 +16,13 @@ module ATDIS
     # Mandatory parameters
     validates :results, :presence_before_type_cast => true
     validates :results, :valid => true
+    validate :count_is_consistent
+
+    def count_is_consistent
+      if count && count != results.count
+        errors.add(:count, "is not the same as the number of applications returned")
+      end
+    end
 
     def self.read_url(url)
       r = read_json(RestClient.get(url.to_s).to_str)
