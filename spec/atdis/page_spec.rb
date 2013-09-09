@@ -31,6 +31,17 @@ describe ATDIS::Page do
           end
         end
 
+        context "count is larger than number of results per page" do
+          before :each do
+            page.no_results_per_page = 1
+            page.total_no_results = 1
+          end
+          it do
+            page.should_not be_valid
+            page.errors.messages.should == {:count => ["should not be larger than the number of results per page"]}
+          end
+        end
+
         context "count is absent" do
           before :each do
             page.count = nil

@@ -32,8 +32,9 @@ module ATDIS
     end
 
     def count_is_consistent
-      if count && count != results.count
-        errors.add(:count, "is not the same as the number of applications returned")
+      if count
+        errors.add(:count, "is not the same as the number of applications returned") if count != results.count        
+        errors.add(:count, "should not be larger than the number of results per page") if count > no_results_per_page
       end
     end
 
