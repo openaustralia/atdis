@@ -29,12 +29,12 @@ describe ATDIS::Feed do
   end
 
   context "request for page 2" do
-    let(:feed) { ATDIS::Feed.new(base_url_string, 2)}
+    let(:feed) { ATDIS::Feed.new(base_url_string)}
 
     it "#applications" do
         applications_results = double
         ATDIS::Page.should_receive(:read_url).with(URI.parse("http://www.council.nsw.gov.au/atdis/1.0/applications.json?page=2")).and_return(applications_results)
-        feed.applications.should == applications_results
+        feed.applications(2).should == applications_results
     end
   end
 end
