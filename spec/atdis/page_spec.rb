@@ -253,7 +253,7 @@ describe ATDIS::Page do
       end
 
       it ".next" do
-        expect { page.next }.to raise_error "Can't use next when loaded with read_json"
+        expect { page.next }.to raise_error "Can't use next_url when loaded with read_json"
       end
     end
 

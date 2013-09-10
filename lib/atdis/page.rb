@@ -93,13 +93,21 @@ module ATDIS
       interpret(MultiJson.load(text, :symbolize_keys => true))
     end
 
+    def previous_url
+      raise "Can't use previous_url when loaded with read_json" if url.nil?
+      ATDIS::SeparatedURL.merge(url, :page => previous_page_no) if previous_page_no
+    end
+
     def next_url
-      raise "Can't use next when loaded with read_json" if url.nil?
+      raise "Can't use next_url when loaded with read_json" if url.nil?
       ATDIS::SeparatedURL.merge(url, :page => next_page_no) if next_page_no
     end
 
+    def previous
+      Page.read_url(previous_url) if previous_url
+    end
+
     def next
-      raise "Can't use next when loaded with read_json" if url.nil?
       Page.read_url(next_url) if next_url
     end
   end
