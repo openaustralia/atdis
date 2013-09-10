@@ -376,6 +376,10 @@ describe ATDIS::Page do
       applications_results.total_no_pages.should == 25
     end
 
+    it ".next_url" do
+      applications_results.next_url.should == "http://www.council.nsw.gov.au/atdis/1.0/applications.json?page=3"
+    end
+
     it ".next" do
       n = double("Page")
       applications_results
