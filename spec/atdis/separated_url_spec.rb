@@ -26,5 +26,15 @@ describe ATDIS::SeparatedURL do
       ATDIS::SeparatedURL.merge("http://foo.com/bar", {}).should ==
         "http://foo.com/bar"
     end
-  end
+
+    it "should be able to handle port numbers in URLS" do
+      ATDIS::SeparatedURL.merge("http://foo.com:3000/bar", {}).should ==
+        "http://foo.com:3000/bar"      
+    end
+
+    it "should be able to handle https" do
+      ATDIS::SeparatedURL.merge("https://foo.com/bar", {}).should ==
+        "https://foo.com/bar"
+    end
+   end
 end

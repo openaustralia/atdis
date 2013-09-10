@@ -20,7 +20,11 @@ module ATDIS
 
     def self.split(full_url)
       uri = URI.parse(full_url)
-      url = "#{uri.scheme}://#{uri.host}#{uri.path}"
+      if (uri.scheme == "http" && uri.port == 80) || (uri.scheme == "https" && uri.port == 443)
+        url = "#{uri.scheme}://#{uri.host}#{uri.path}"
+      else
+        url = "#{uri.scheme}://#{uri.host}:#{uri.port}#{uri.path}"
+      end
       if uri.query
         url_params = Hash[*CGI::parse(uri.query).map{|k,v| [k.to_sym,v.first]}.flatten]
       else
