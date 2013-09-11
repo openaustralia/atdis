@@ -403,6 +403,20 @@ describe ATDIS::Application do
         a.notification_end_date.should be_nil
         a.should be_valid
       end
+
+      it "only start date set to none" do
+        a.notification_start_date = "none"
+        a.notification_end_date = DateTime.new(2013,2,1,0,0,0)
+        a.should_not be_valid
+        a.errors.messages.should == {:notification_start_date => ["can't be none unless notification_end_date is none as well"]}
+      end
+
+      it "only end date set to none" do
+        a.notification_start_date = DateTime.new(2013,2,1,0,0,0)
+        a.notification_end_date = "none"
+        a.should_not be_valid
+        a.errors.messages.should == {:notification_end_date => ["can't be none unless notification_start_date is none as well"]}
+      end
     end
 
     describe ".more_info_url" do

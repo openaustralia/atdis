@@ -47,6 +47,12 @@ module ATDIS
         !notification_end_date.kind_of?(DateTime)
         errors.add(:notification_end_date, "is not a valid date")
       end
+      if notification_start_date_before_type_cast == "none" && notification_end_date_before_type_cast != "none"
+        errors.add(:notification_start_date, "can't be none unless notification_end_date is none as well")
+      end
+      if notification_start_date_before_type_cast != "none" && notification_end_date_before_type_cast == "none"
+        errors.add(:notification_end_date, "can't be none unless notification_start_date is none as well")
+      end
       if notification_start_date_before_type_cast && notification_end_date_before_type_cast.blank?
         errors.add(:notification_end_date, "can not be blank if notification_start_date is set")
       end
