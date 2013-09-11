@@ -50,12 +50,31 @@ module ATDIS
     attribute_method_suffix '_before_type_cast'
     attribute_method_suffix '='
 
-    attr_reader :attributes
+    attr_reader :attributes, :attributes_before_type_cast
     # Stores any part of the json that could not be interpreted. Usually
     # signals an error if it isn't empty.
     attr_accessor :json_left_overs
     
     validate :json_left_overs_is_empty
+
+    def json_attribute(a, fields = valid_fields)
+      fields.each do |attribute, v|
+        if v == a
+          return {attribute => attributes_before_type_cast[v.to_s]}
+        end
+        if v.kind_of?(Hash)
+          r = json_attribute(a, v)
+          if r
+            return {attribute => r}
+          end
+        end
+      end
+      nil
+    end
+
+    def json_errors
+      errors.messages.map{|attribute, e| [json_attribute(attribute), e]}
+    end
 
     def json_left_overs_is_empty
       if json_left_overs && !json_left_overs.empty?
