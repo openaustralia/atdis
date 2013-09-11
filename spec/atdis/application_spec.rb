@@ -356,27 +356,37 @@ describe ATDIS::Application do
       end
     end
 
-    describe ".notification_start_date" do
-      it do
+    describe "notification_date" do
+      it "both valid start and end dates" do
         a.notification_start_date = DateTime.new(2013,4,20,2,1,7)
+        a.notification_end_date = DateTime.new(2013,5,20,0,0,0)
         a.should be_valid
       end
-      it do
+
+      it "invalid start date" do
         a.notification_start_date = "18 January 2013"
+        a.notification_end_date = DateTime.new(2013,2,1,0,0,0)
         a.should_not be_valid
         a.errors.messages.should == {:notification_start_date => ["is not a valid date"]}
       end
-    end
 
-    describe ".notification_end_date" do
-      it do
-        a.notification_end_date = DateTime.new(2013,5,20,2,1,7)
-        a.should be_valid
-      end
-      it do
+      it "invalid end date" do
+        a.notification_start_date = DateTime.new(2013,1,10,0,0,0)
         a.notification_end_date = "18 January 2013"
         a.should_not be_valid
         a.errors.messages.should == {:notification_end_date => ["is not a valid date"]}
+      end
+
+      it "only start date set" do
+        a.notification_start_date = DateTime.new(2013,4,20,2,1,7)
+        a.should_not be_valid
+        a.errors.messages.should == {:notification_end_date => ["can not be blank if notification_start_date is set"]}
+      end
+
+      it "only end date set" do
+        a.notification_end_date = DateTime.new(2013,4,20,2,1,7)
+        a.should_not be_valid
+        a.errors.messages.should == {:notification_start_date => ["can not be blank if notification_end_date is set"]}
       end
     end
 

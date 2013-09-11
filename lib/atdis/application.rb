@@ -37,6 +37,17 @@ module ATDIS
     validates :more_info_url, :http_url => true
     validates :location, :valid => true
 
+    validate :notification_dates_consistent!
+
+    def notification_dates_consistent!
+      if notification_start_date_before_type_cast && notification_end_date_before_type_cast.blank?
+        errors.add(:notification_end_date, "can not be blank if notification_start_date is set")
+      end
+      if notification_start_date_before_type_cast.blank? && notification_end_date_before_type_cast
+        errors.add(:notification_start_date, "can not be blank if notification_end_date is set")
+      end
+    end
+
     # TODO Validate associated like locations, events, documents, people
     # TODO Do we need to do extra checking to ensure that events, documents and people are arrays?
     # TODO Separate validation for L2 and L3 compliance?
