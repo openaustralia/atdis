@@ -388,6 +388,13 @@ describe ATDIS::Application do
         a.should_not be_valid
         a.errors.messages.should == {:notification_start_date => ["can not be blank if notification_end_date is set"]}
       end
+
+      it "end date is before start date" do
+        a.notification_start_date = DateTime.new(2013,5,20,0,0,0)
+        a.notification_end_date = DateTime.new(2013,4,20,2,1,7)
+        a.should_not be_valid        
+        a.errors.messages.should == {:notification_end_date => ["can not be earlier than notification_start_date"]}
+      end
     end
 
     describe ".more_info_url" do

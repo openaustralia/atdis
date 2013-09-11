@@ -46,6 +46,9 @@ module ATDIS
       if notification_start_date_before_type_cast.blank? && notification_end_date_before_type_cast
         errors.add(:notification_start_date, "can not be blank if notification_end_date is set")
       end
+      if notification_start_date && notification_end_date && notification_start_date > notification_end_date
+        errors.add(:notification_end_date, "can not be earlier than notification_start_date")
+      end
     end
 
     # TODO Validate associated like locations, events, documents, people
