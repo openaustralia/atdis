@@ -395,6 +395,16 @@ describe ATDIS::Application do
         a.should_not be_valid        
         a.errors.messages.should == {:notification_end_date => ["can not be earlier than notification_start_date"]}
       end
+
+      it "both dates set to none" do
+        a.notification_start_date = "none"
+        a.notification_end_date = "none"
+        a.notification_start_date.should be_nil
+        a.notification_end_date.should be_nil
+        a.valid?
+        p a.errors.messages
+        a.should be_valid
+      end
     end
 
     describe ".more_info_url" do
