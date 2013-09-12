@@ -58,9 +58,13 @@ module ATDIS
     validate :json_left_overs_is_empty
 
     def json_attribute(a, fields = valid_fields)
+      json_attribute2(a, fields, attributes_before_type_cast[a.to_s])
+    end
+
+    def json_attribute2(a, fields, new_value)
       fields.each do |attribute, v|
         if v == a
-          return {attribute => attributes_before_type_cast[v.to_s]}
+          return {attribute => new_value}
         end
         if v.kind_of?(Hash)
           r = json_attribute(a, v)
@@ -73,7 +77,19 @@ module ATDIS
     end
 
     def json_errors
-      errors.messages.map{|attribute, e| [json_attribute(attribute), e]}
+      r = []
+      errors.messages.each do |attribute, e|
+        value = attributes[attribute.to_s]
+        if (value.respond_to?(:valid?) && !value.valid?)
+          r += value.json_errors.map{|a, b| [json_attribute2(attribute, valid_fields, a), b]}
+        elsif (value && !value.respond_to?(:valid?) && value.respond_to?(:all?) && !value.all?{|v| v.valid?})
+          f = value.find{|v| !v.valid?}
+          r += f.json_errors.map{|a, b| [json_attribute2(attribute, valid_fields, a), b]}
+        else
+          r << [json_attribute(attribute), e]
+        end
+      end
+      r
     end
 
     def json_left_overs_is_empty

@@ -206,15 +206,22 @@ describe ATDIS::Page do
     end
 
     context "two invalid applications no paging" do
+      let(:a1) { double(:valid? => false, :json_errors => [[{:dat_id => "null"}, ["can not be empty"]]]) }
+      let(:a2) { double(:valid? => false) }
       before :each do
-        ATDIS::Application.should_receive(:interpret).with(:description => "application1").and_return(double(:valid? => false))
-        ATDIS::Application.should_receive(:interpret).with(:description => "application2").and_return(double(:valid? => false))
+        ATDIS::Application.should_receive(:interpret).with(:description => "application1").and_return(a1)
+        ATDIS::Application.should_receive(:interpret).with(:description => "application2").and_return(a2)
       end
       let(:page) { ATDIS::Page.new(:results => [{:description => "application1"}, {:description => "application2"}]) }
 
       it do
         page.should_not be_valid
         page.errors.messages.should == {:results => ["is not valid"]}
+      end
+
+      it "the errors from the first errored application should be here" do
+        page.should_not be_valid
+        page.json_errors.should == [[{:response => {:dat_id => "null"}} , ["can not be empty"]]]
       end
     end
   end
