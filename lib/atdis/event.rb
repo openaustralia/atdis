@@ -9,4 +9,7 @@ module ATDIS
     # Mandatory parameters
     validates :id, :date, :description, :presence_before_type_cast => true
   end
+
+  # TODO Check that :id is unique within an authority
+  
 end
