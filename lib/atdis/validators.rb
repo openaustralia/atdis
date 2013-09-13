@@ -42,7 +42,7 @@ module ATDIS
     class PresenceBeforeTypeCastValidator < ActiveModel::EachValidator
       def validate_each(record, attribute, value)
         raw_value = record.send("#{attribute}_before_type_cast")
-        unless raw_value.present?
+        if !raw_value.kind_of?(Array) && !raw_value.present?
           record.errors.add(attribute, "can't be blank")
         end
       end

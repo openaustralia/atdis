@@ -29,7 +29,7 @@ module ATDIS
   
     # Mandatory parameters
     validates :dat_id, :last_modified_date, :description, :authority, :lodgement_date, :determination_date, :status, 
-      :more_info_url, :location, :presence_before_type_cast => true
+      :more_info_url, :location, :events, :presence_before_type_cast => true
 
     # Other validations
     validates :last_modified_date, :lodgement_date, :date_time => true

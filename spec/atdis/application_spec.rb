@@ -20,7 +20,8 @@ describe ATDIS::Application do
           :foo => "bar",
           :more_info_url => "http://foo.com/bar"
         },
-        :location => {:foo => "Some location data"}
+        :location => {:foo => "Some location data"},
+        :events => []
       })
       a.should_not be_valid
       a.errors.messages.should == {:json => ['Unexpected parameters in json data: {"application":{"reference":{"foo":"bar"}}}']}
@@ -273,7 +274,8 @@ describe ATDIS::Application do
       :determination_date => DateTime.new(2013,6,20),  
       :status => "OPEN",
       :more_info_url => URI.parse("http://foo.com/bar"),
-      :location => {:address => "123 Fourfivesix Street Neutral Bay NSW 2089"}
+      :location => {:address => "123 Fourfivesix Street Neutral Bay NSW 2089"},
+      :events => []
   ) }
 
     it { a.should be_valid }
@@ -459,6 +461,12 @@ describe ATDIS::Application do
         a.events = []
         a.events.should == []
         a.should be_valid
+      end
+
+      it "can not be empty" do
+        a.events = nil
+        a.should_not be_valid
+        a.errors.messages.should == {:events => ["can't be blank"]}
       end
     end
   end
