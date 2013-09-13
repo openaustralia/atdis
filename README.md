@@ -4,7 +4,7 @@
 
 A ruby interface to the application tracking data interchange specification (ATDIS) API
 
-We're developing this against version ATDIS 1.0.4.
+We're developing this against version ATDIS 1.0.7.
 
 This is **highly alpha** software that probably doesn't yet do what it says on the tin. It is very much a work in progress.
 
