@@ -344,7 +344,7 @@ describe ATDIS::Application do
       it do
         a.determination_date = "18 January 2013"
         a.should_not be_valid
-        a.errors.messages.should == {:determination_date => ["is not a valid date"]}
+        a.errors.messages.should == {:determination_date => ["is not a valid date or none"]}
       end
       it "none should be allowed if the application is not yet determined" do
         a.determination_date = "none"
@@ -372,14 +372,14 @@ describe ATDIS::Application do
         a.notification_start_date = "18 January 2013"
         a.notification_end_date = DateTime.new(2013,2,1,0,0,0)
         a.should_not be_valid
-        a.errors.messages.should == {:notification_start_date => ["is not a valid date"]}
+        a.errors.messages.should == {:notification_start_date => ["is not a valid date or none"]}
       end
 
       it "invalid end date" do
         a.notification_start_date = DateTime.new(2013,1,10,0,0,0)
         a.notification_end_date = "18 January 2013"
         a.should_not be_valid
-        a.errors.messages.should == {:notification_end_date => ["is not a valid date"]}
+        a.errors.messages.should == {:notification_end_date => ["is not a valid date or none"]}
       end
 
       it "only start date set" do
