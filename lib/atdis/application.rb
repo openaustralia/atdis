@@ -36,15 +36,9 @@ module ATDIS
     validates :determination_date, :notification_start_date, :notification_end_date, :date_time_or_none => true
     validates :more_info_url, :http_url => true
     validates :location, :valid => true
+    validates :events, :array => true
 
     validate :notification_dates_consistent!
-    validate :events_is_array!
-
-    def events_is_array!
-      if events && !events.kind_of?(Array)
-        errors.add(:events, "should be an array")
-      end
-    end
 
     def notification_dates_consistent!
       if notification_start_date_before_type_cast == "none" && notification_end_date_before_type_cast != "none"
