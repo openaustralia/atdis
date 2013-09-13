@@ -27,6 +27,48 @@ describe ATDIS::Location do
         l.geometry.should be_nil
         l.should_not be_valid
       end
+
+      describe "lot" do
+        it "can not be blank" do
+          l.lot = ""
+          l.should_not be_valid
+          l.errors.messages.should == {:lot => ["can't be blank"]}
+        end
+
+        it "can be none" do
+          l.lot = "none"
+          l.lot.should be_nil
+          l.should be_valid
+        end
+      end
+
+      describe "section" do
+        it "can not be blank" do
+          l.section = ""
+          l.should_not be_valid
+          l.errors.messages.should == {:section => ["can't be blank"]}
+        end
+
+        it "can be none" do
+          l.section = "none"
+          l.section.should be_nil
+          l.should be_valid
+        end
+      end
+
+      describe "dpsp_id" do
+        it "can not be blank" do
+          l.dpsp_id = ""
+          l.should_not be_valid
+          l.errors.messages.should == {:dpsp_id => ["can't be blank"]}
+        end
+
+        it "can be none" do
+          l.dpsp_id = "none"
+          l.dpsp_id.should be_nil
+          l.should be_valid
+        end
+      end
     end
   end
 
