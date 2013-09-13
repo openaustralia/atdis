@@ -38,6 +38,13 @@ module ATDIS
     validates :location, :valid => true
 
     validate :notification_dates_consistent!
+    validate :events_is_array!
+
+    def events_is_array!
+      if events && !events.kind_of?(Array)
+        errors.add(:events, "should be an array")
+      end
+    end
 
     def notification_dates_consistent!
       if notification_start_date_before_type_cast == "none" && notification_end_date_before_type_cast != "none"

@@ -446,5 +446,14 @@ describe ATDIS::Application do
         a.errors.messages.should == {:more_info_url => ["is not a valid URL"]}
       end
     end
+
+    describe "events" do
+      it "has to be an array" do
+        a.events = {:foo => "bar"}
+        #a.events.should be_nil
+        a.should_not be_valid
+        a.errors.messages.should == {:events => ["should be an array"]}
+      end
+    end
   end
 end
