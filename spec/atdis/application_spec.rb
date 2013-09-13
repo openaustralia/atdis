@@ -21,7 +21,8 @@ describe ATDIS::Application do
           :more_info_url => "http://foo.com/bar"
         },
         :location => {:foo => "Some location data"},
-        :events => []
+        :events => [],
+        :documents => []
       })
       a.should_not be_valid
       a.errors.messages.should == {:json => ['Unexpected parameters in json data: {"application":{"reference":{"foo":"bar"}}}']}
@@ -275,7 +276,8 @@ describe ATDIS::Application do
       :status => "OPEN",
       :more_info_url => URI.parse("http://foo.com/bar"),
       :location => {:address => "123 Fourfivesix Street Neutral Bay NSW 2089"},
-      :events => []
+      :events => [],
+      :documents => []
   ) }
 
     it { a.should be_valid }

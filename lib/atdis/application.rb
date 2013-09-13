@@ -29,14 +29,14 @@ module ATDIS
   
     # Mandatory parameters
     validates :dat_id, :last_modified_date, :description, :authority, :lodgement_date, :determination_date, :status, 
-      :more_info_url, :location, :events, :presence_before_type_cast => true
+      :more_info_url, :location, :events, :documents, :presence_before_type_cast => true
 
     # Other validations
     validates :last_modified_date, :lodgement_date, :date_time => true
     validates :determination_date, :notification_start_date, :notification_end_date, :date_time_or_none => true
     validates :more_info_url, :http_url => true
     validates :location, :valid => true
-    validates :events, :array => true
+    validates :events, :documents, :array => true
 
     validate :notification_dates_consistent!
 
