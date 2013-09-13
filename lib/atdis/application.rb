@@ -57,6 +57,7 @@ module ATDIS
       end
     end
 
+    # TODO Validate contents of estimated_cost
     # TODO Validate associated like locations, events, documents, people
     # TODO Do we need to do extra checking to ensure that events, documents and people are arrays?
     # TODO Separate validation for L2 and L3 compliance?
