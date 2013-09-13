@@ -346,6 +346,11 @@ describe ATDIS::Application do
         a.should_not be_valid
         a.errors.messages.should == {:determination_date => ["is not a valid date"]}
       end
+      it "none should be allowed if the application is not yet determined" do
+        a.determination_date = "none"
+        a.determination_date.should be_nil
+        a.should be_valid
+      end
     end
 
     describe ".status" do

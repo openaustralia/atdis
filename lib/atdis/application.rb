@@ -32,11 +32,19 @@ module ATDIS
       :more_info_url, :location, :presence_before_type_cast => true
 
     # Other validations
-    validates :last_modified_date, :lodgement_date, :determination_date, :date_time => true
+    validates :last_modified_date, :lodgement_date, :date_time => true
     validates :more_info_url, :http_url => true
     validates :location, :valid => true
 
     validate :notification_dates_consistent!
+    validate :determination_date!
+
+    def determination_date!
+      if determination_date_before_type_cast.present? && determination_date_before_type_cast != "none" &&
+        !determination_date.kind_of?(DateTime)
+        errors.add(:determination_date, "is not a valid date")
+      end
+    end
 
     def notification_dates_consistent!
       if notification_start_date_before_type_cast.present? && notification_start_date_before_type_cast != "none" &&
