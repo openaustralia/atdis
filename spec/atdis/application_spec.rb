@@ -454,6 +454,12 @@ describe ATDIS::Application do
         a.should_not be_valid
         a.errors.messages.should == {:events => ["should be an array"]}
       end
+
+      it "can be an empty array" do
+        a.events = []
+        a.events.should == []
+        a.should be_valid
+      end
     end
   end
 end
