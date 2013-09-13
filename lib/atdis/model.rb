@@ -30,7 +30,7 @@ module ATDIS
         p.each do |k,v|
           if v.kind_of?(Array)
             f[k] = v[0]
-            ca[v.first] = v[1]
+            ca[v.first] = v[1..-1]
           else
             f2, ca2 = translate_field_mappings(v)
             f[k] = f2
@@ -135,13 +135,15 @@ module ATDIS
       values
     end
 
-    def self.cast(value, type)
+    def self.cast(value, type, options = {})
+      if options[:none_is_nil] && value == "none"
+        nil
       # If it's already the correct type then we don't need to do anything
-      if value.kind_of?(type)
+      elsif value.kind_of?(type)
         value
       # Special handling for arrays. When we typecast arrays we actually typecast each member of the array
       elsif value.kind_of?(Array)
-        value.map {|v| cast(v, type)}
+        value.map {|v| cast(v, type, options)}
       elsif type == DateTime
         cast_datetime(value)
       elsif type == URI
@@ -172,7 +174,7 @@ module ATDIS
 
     def attribute=(attr, value)
       @attributes_before_type_cast[attr] = value
-      @attributes[attr] = Model.cast(value, attribute_types[attr.to_sym])
+      @attributes[attr] = Model.cast(value, attribute_types[attr.to_sym][0], attribute_types[attr.to_sym][1] || {})
     end
 
     def self.cast_datetime(value)
