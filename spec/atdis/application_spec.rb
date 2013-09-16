@@ -253,10 +253,27 @@ describe ATDIS::Application do
   # TODO This should really be a test on the Model base class
   describe "#attribute_names" do
     it do
-      ATDIS::Application.attribute_names.sort.should == ["authority", "comments_url", "dat_id", "description",
-        "determination_date", "documents", "estimated_cost", "events", "extended", "last_modified_date",
-        "location", "lodgement_date", "more_info_url", "notification_end_date", "notification_start_date", "officer",
-        "people", "status"]
+      # These are also ordered in a way that corresponds to the specification. Makes for easy reading by humans.
+      ATDIS::Application.attribute_names.sort.should == [
+        "dat_id",
+        "last_modified_date",
+        "description",
+        "authority",
+        "lodgement_date",
+        "determination_date",
+        "status",
+        "notification_start_date",
+        "notification_end_date",
+        "officer",
+        "estimated_cost",
+        "more_info_url",
+        "comments_url",
+        "location",
+        "events",
+        "documents",
+        "people",
+        "extended"
+      ].sort
     end
   end
 
