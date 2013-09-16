@@ -25,12 +25,19 @@ module ATDIS
       end
 
       private
+
+      def leaf_array?(v)
+        if !v.kind_of?(Array)
+          return false
+        end
+        v.all?{|a| !a.kind_of?(Array)}
+      end
       
       def translate_field_mappings(p)
         f = {}
         ca = {}
         p.each do |k,v|
-          if v.kind_of?(Array)
+          if leaf_array?(v)
             f[k] = v[0]
             ca[v.first] = v[1..-1]
           else

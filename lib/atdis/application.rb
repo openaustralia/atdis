@@ -2,30 +2,32 @@ require 'multi_json'
 
 module ATDIS
   class Application < Model
-    field_mappings :application => {
-      :info => {
-        :dat_id => [:dat_id, String],
-        :last_modified_date => [:last_modified_date, DateTime],
-        :description => [:description, String],
-        :authority => [:authority, String],
-        :lodgement_date => [:lodgement_date, DateTime],
-        :determination_date => [:determination_date, DateTime],
-        :status => [:status, String],
-        :notification_start_date => [:notification_start_date, DateTime],
-        :notification_end_date => [:notification_end_date, DateTime],
-        :officer => [:officer, String],
-        :estimated_cost => [:estimated_cost, String]
-      },
-      :reference => {
-        :more_info_url => [:more_info_url, URI],
-        :comments_url => [:comments_url, URI]
-      },
-      :location => [:location, Location],
-      :events => [:events, Event],
-      :documents => [:documents, Document],
-      :people => [:people, Person],
-      :extended => [:extended, Object]
-    }
+    field_mappings [
+      [:application, [
+        [:info, [
+          [:dat_id,                   [:dat_id, String]],
+          [:last_modified_date,       [:last_modified_date, DateTime]],
+          [:description,              [:description, String]],
+          [:authority,                [:authority, String]],
+          [:lodgement_date,           [:lodgement_date, DateTime]],
+          [:determination_date,       [:determination_date, DateTime]],
+          [:status,                   [:status, String]],
+          [:notification_start_date,  [:notification_start_date, DateTime]],
+          [:notification_end_date,    [:notification_end_date, DateTime]],
+          [:officer,                  [:officer, String]],
+          [:estimated_cost,           [:estimated_cost, String]]
+        ]],
+        [:reference, [
+          [:more_info_url,            [:more_info_url, URI]],
+          [:comments_url,             [:comments_url, URI]]
+        ]],
+        [:location,                   [:location, Location]],
+        [:events,                     [:events, Event]],
+        [:documents,                  [:documents, Document]],
+        [:people,                     [:people, Person]],
+        [:extended,                   [:extended, Object]]
+      ]]
+    ]
   
     # Mandatory parameters
     validates :dat_id, :last_modified_date, :description, :authority, :lodgement_date, :determination_date, :status, 
