@@ -11,6 +11,7 @@ module ATDIS
     end
 
     module ClassMethods
+      # of the form {:section=>[String, {:none_is_nil=>true}], :address=>[String]}
       def casting_attributes(p)
         define_attribute_methods(p.keys.map{|k| k.to_s})
         self.attribute_types = p
@@ -18,6 +19,7 @@ module ATDIS
 
       def field_mappings(p)
         a, b = translate_field_mappings(p)
+        # valid_fields is of the form {:pagination=>{:previous=>:previous_page_no, :pages=>:total_no_pages}}
         self.valid_fields = a
         casting_attributes(b)
       end
