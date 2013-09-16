@@ -1,6 +1,10 @@
 require File.expand_path(File.dirname(__FILE__) + '/../spec_helper')
 
 describe ATDIS::Person do
+  it ".attribute_names" do
+    ATDIS::Person.attribute_names.should == ["name", "role", "contact"]
+  end
+
   it ".name" do
     ATDIS::Person.interpret(:name => "Tuttle").name.should == "Tuttle"
   end

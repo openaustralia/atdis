@@ -2,16 +2,18 @@ module ATDIS
   class Page < Model
     attr_accessor :url
 
-    field_mappings :response => [:results, Application],
-      :count => [:count, Fixnum],
-      :pagination => {
-        :previous => [:previous_page_no, Fixnum],
-        :next => [:next_page_no, Fixnum],
-        :current => [:current_page_no, Fixnum],
-        :per_page => [:no_results_per_page, Fixnum],
-        :count => [:total_no_results, Fixnum],
-        :pages => [:total_no_pages, Fixnum]
-      }
+    field_mappings [
+      [:response, [:results, Application]],
+      [:count, [:count, Fixnum]],
+      [:pagination, [
+        [:previous, [:previous_page_no, Fixnum]],
+        [:next, [:next_page_no, Fixnum]],
+        [:current, [:current_page_no, Fixnum]],
+        [:per_page, [:no_results_per_page, Fixnum]],
+        [:count, [:total_no_results, Fixnum]],
+        [:pages, [:total_no_pages, Fixnum]]
+      ]]
+    ]
 
     # Mandatory parameters
     validates :results, :presence_before_type_cast => true

@@ -1,6 +1,11 @@
 require File.expand_path(File.dirname(__FILE__) + '/../spec_helper')
 
 describe ATDIS::Page do
+  it ".attribute_names" do
+    ATDIS::Page.attribute_names.should == ["results", "count", "previous_page_no", "next_page_no", "current_page_no",
+      "no_results_per_page", "total_no_results", "total_no_pages"]
+  end
+
   describe "validations" do
     context "two valid applications no paging" do
       before :each do

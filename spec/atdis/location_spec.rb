@@ -1,6 +1,16 @@
 require File.expand_path(File.dirname(__FILE__) + '/../spec_helper')
 
 describe ATDIS::Location do
+  it ".attribute_names" do
+    ATDIS::Location.attribute_names.should == [
+      "address",
+      "lot",
+      "section",
+      "dpsp_id",
+      "geometry"
+    ]
+  end
+
   describe "validation" do
     context "valid location" do
       let(:l) { ATDIS::Location.new(

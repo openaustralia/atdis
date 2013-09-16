@@ -1,6 +1,10 @@
 require File.expand_path(File.dirname(__FILE__) + '/../spec_helper')
 
 describe ATDIS::Event do
+  it ".attribute_names" do
+    ATDIS::Event.attribute_names.should == ["id", "date", "description", "event_type", "status"]
+  end
+
   it ".id" do
     ATDIS::Event.interpret(:id => "27B/6").id.should == "27B/6"
   end
