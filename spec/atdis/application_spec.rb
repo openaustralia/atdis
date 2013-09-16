@@ -254,7 +254,7 @@ describe ATDIS::Application do
   describe "#attribute_names" do
     it do
       # These are also ordered in a way that corresponds to the specification. Makes for easy reading by humans.
-      ATDIS::Application.attribute_names.sort.should == [
+      ATDIS::Application.attribute_names.should == [
         "dat_id",
         "last_modified_date",
         "description",
@@ -273,7 +273,7 @@ describe ATDIS::Application do
         "documents",
         "people",
         "extended"
-      ].sort
+      ]
     end
   end
 

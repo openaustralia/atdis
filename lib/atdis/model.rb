@@ -34,8 +34,8 @@ module ATDIS
       end
       
       def translate_field_mappings(p)
-        f = {}
-        ca = {}
+        f = ActiveSupport::OrderedHash.new
+        ca = ActiveSupport::OrderedHash.new
         p.each do |k,v|
           if leaf_array?(v)
             f[k] = v[0]
