@@ -66,6 +66,10 @@ module ATDIS
     
     validate :json_left_overs_is_empty
 
+    def self.level_attribute_names(level)
+      attribute_types.find_all{|k,v| (v[1] || {})[:level] == level }.map{|k,v| k.to_s}
+    end
+
     def json_attribute(a, fields = valid_fields)
       json_attribute2(a, fields, attributes_before_type_cast[a.to_s])
     end

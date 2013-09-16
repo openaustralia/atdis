@@ -7,30 +7,30 @@ module ATDIS
     field_mappings [
       [:application, [
         [:info, [
-          [:dat_id,                   [:dat_id, String]],
-          [:last_modified_date,       [:last_modified_date, DateTime]],
-          [:description,              [:description, String]],
-          [:authority,                [:authority, String]],
-          [:lodgement_date,           [:lodgement_date, DateTime]],
-          [:determination_date,       [:determination_date, DateTime]],
-          [:status,                   [:status, String]],
-          [:notification_start_date,  [:notification_start_date, DateTime]],
-          [:notification_end_date,    [:notification_end_date, DateTime]],
-          [:officer,                  [:officer, String]],
-          [:estimated_cost,           [:estimated_cost, String]]
+          [:dat_id,                   [:dat_id, String, {:level => 1}]],
+          [:last_modified_date,       [:last_modified_date, DateTime, {:level => 1}]],
+          [:description,              [:description, String, {:level => 1}]],
+          [:authority,                [:authority, String, {:level => 1}]],
+          [:lodgement_date,           [:lodgement_date, DateTime, {:level => 1}]],
+          [:determination_date,       [:determination_date, DateTime, {:level => 1}]],
+          [:status,                   [:status, String, {:level => 1}]],
+          [:notification_start_date,  [:notification_start_date, DateTime, {:level => 1}]],
+          [:notification_end_date,    [:notification_end_date, DateTime, {:level => 1}]],
+          [:officer,                  [:officer, String, {:level => 1}]],
+          [:estimated_cost,           [:estimated_cost, String, {:level => 1}]]
         ]],
         [:reference, [
-          [:more_info_url,            [:more_info_url, URI]],
-          [:comments_url,             [:comments_url, URI]]
+          [:more_info_url,            [:more_info_url, URI, {:level => 1}]],
+          [:comments_url,             [:comments_url, URI, {:level => 1}]]
         ]],
-        [:location,                   [:location, Location]],
-        [:events,                     [:events, Event]],
-        [:documents,                  [:documents, Document]],
-        [:people,                     [:people, Person]],
-        [:extended,                   [:extended, Object]]
+        [:location,                   [:location, Location, {:level => 1}]],
+        [:events,                     [:events, Event, {:level => 1}]],
+        [:documents,                  [:documents, Document, {:level => 1}]],
+        [:people,                     [:people, Person, {:level => 2}]],
+        [:extended,                   [:extended, Object, {:level => 3}]]
       ]]
     ]
-  
+
     # Mandatory parameters
     validates :dat_id, :last_modified_date, :description, :authority, :lodgement_date, :determination_date, :status, 
       :more_info_url, :location, :events, :documents, :presence_before_type_cast => true
@@ -41,6 +41,7 @@ module ATDIS
     validates :more_info_url, :http_url => true
     validates :location, :valid => true
     validates :events, :documents, :array => true
+    # TODO people should be an array if it's included
 
     validate :notification_dates_consistent!
 
