@@ -35,9 +35,9 @@ describe ATDIS::Location do
           l.errors.messages.should == {:lot => ["can't be blank"]}
         end
 
-        it "can be none" do
+        it "can be none but is not interpreted in any special way" do
           l.lot = "none"
-          l.lot.should be_nil
+          l.lot.should == "none"
           l.should be_valid
         end
       end
@@ -63,9 +63,9 @@ describe ATDIS::Location do
           l.errors.messages.should == {:dpsp_id => ["can't be blank"]}
         end
 
-        it "can be none" do
+        it "can be none but is not interpreted in any special way" do
           l.dpsp_id = "none"
-          l.dpsp_id.should be_nil
+          l.dpsp_id.should == "none"
           l.should be_valid
         end
       end

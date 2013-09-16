@@ -4,9 +4,9 @@ module ATDIS
   class Location < Model
     field_mappings :address => [:address, String],
       :land_title_ref => {
-        :lot => [:lot, String, {:none_is_nil => true}],
+        :lot => [:lot, String],
         :section => [:section, String, {:none_is_nil => true}],
-        :dpsp_id => [:dpsp_id, String, {:none_is_nil => true}]
+        :dpsp_id => [:dpsp_id, String]
       },
       :geometry => [:geometry, RGeo::GeoJSON]
 
