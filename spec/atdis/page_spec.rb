@@ -249,6 +249,41 @@ describe ATDIS::Page do
     end
   end
 
+  describe ".L2_used?" do
+    context "two applications with only L1 features" do
+      before :each do
+        ATDIS::Application.should_receive(:interpret).with(:description => "application1").and_return(double(:L2_used? => false))
+        ATDIS::Application.should_receive(:interpret).with(:description => "application2").and_return(double(:L2_used? => false))
+      end
+      let(:page) { ATDIS::Page.new(:results => [{:description => "application1"}, {:description => "application2"}]) }
+
+      it { page.should_not be_L2_used }
+
+      context "L2 feature used on Page" do
+        before :each do
+          page.count = 2
+        end
+
+        it { page.should be_L2_used }
+      end
+    end
+
+    context "two applications with L2 features" do
+      let(:a1) { double }
+      let(:a2) { double }
+      before :each do
+        ATDIS::Application.should_receive(:interpret).with(:description => "application1").and_return(a1)
+        ATDIS::Application.should_receive(:interpret).with(:description => "application2").and_return(a2)
+      end
+      let(:page) { ATDIS::Page.new(:results => [{:description => "application1"}, {:description => "application2"}]) }
+
+      it "should ask the applications whether they have L2 features" do
+        a1.should_receive(:L2_used?).and_return(true)
+        page.should be_L2_used
+      end
+    end
+  end
+
   context "paging supported by vendor" do
     context "read from a json string" do
       let(:page) { ATDIS::Page.read_json(<<-EOF
