@@ -107,7 +107,7 @@ module ATDIS
 
     # Have we tried to use this attribute?
     def used_attribute?(a)
-      !attributes_before_type_cast[a].blank?
+      !attributes_before_type_cast[a].nil?
     end
 
     def level_used_locally?(level)
