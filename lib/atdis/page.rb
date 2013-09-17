@@ -45,34 +45,6 @@ module ATDIS
       !attributes_before_type_cast[a].blank?
     end
 
-    # Whether we have used any attributes that are L1
-    def L1_used?
-      Page.level_attribute_names(1).any?{|a| used_attribute?(a)}
-    end
-
-    def level_used_locally?(level)
-      Page.level_attribute_names(level).any?{|a| used_attribute?(a)}
-    end
-
-    def level_used_in_children?(level)
-      attributes.each_value do |a|
-        if a.respond_to?(:level_used?) && a.level_used?(level)
-          return true
-        elsif !a.respond_to?(:level_used?) && a.respond_to?(:any?) && a.any?{|b| b.level_used?(level)}
-          return true
-        end
-      end
-      false
-    end
-
-    def level_used?(level)
-      level_used_locally?(level) || level_used_in_children?(level)
-    end
-
-    def L2_used?
-      level_used?(2)
-    end
-
     def previous_page_no_is_consistent
       if current_page_no
         if previous_page_no
