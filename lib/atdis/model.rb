@@ -105,6 +105,11 @@ module ATDIS
       r
     end
 
+    # Have we tried to use this attribute?
+    def used_attribute?(a)
+      !attributes_before_type_cast[a].blank?
+    end
+
     def level_used_locally?(level)
       Page.level_attribute_names(level).any?{|a| used_attribute?(a)}
     end

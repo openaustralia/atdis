@@ -40,11 +40,6 @@ module ATDIS
       end
     end
 
-    # Have we tried to use this attribute?
-    def used_attribute?(a)
-      !attributes_before_type_cast[a].blank?
-    end
-
     def previous_page_no_is_consistent
       if current_page_no
         if previous_page_no
