@@ -50,21 +50,23 @@ module ATDIS
       Page.level_attribute_names(1).any?{|a| used_attribute?(a)}
     end
 
-    def L2_used?
-      l2_used_locally = Page.level_attribute_names(2).any?{|a| used_attribute?(a)}
-      if l2_used_locally
-        true
-      else
-        # Ask child objects
-        attributes.each_value do |a|
-          if a.respond_to?(:L2_used?) && a.L2_used?
-            return true
-          elsif !a.respond_to?(:L2_used?) && a.respond_to?(:any?) && a.any?{|b| b.L2_used?}
-            return true
-          end
+    def L2_used_locally?
+      Page.level_attribute_names(2).any?{|a| used_attribute?(a)}
+    end
+
+    def L2_used_in_children?
+      attributes.each_value do |a|
+        if a.respond_to?(:L2_used?) && a.L2_used?
+          return true
+        elsif !a.respond_to?(:L2_used?) && a.respond_to?(:any?) && a.any?{|b| b.L2_used?}
+          return true
         end
-        false
       end
+      false
+    end
+
+    def L2_used?
+      L2_used_locally? || L2_used_in_children?
     end
 
     def previous_page_no_is_consistent
