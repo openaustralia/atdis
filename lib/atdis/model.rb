@@ -111,7 +111,7 @@ module ATDIS
     end
 
     def level_used_locally?(level)
-      Page.level_attribute_names(level).any?{|a| used_attribute?(a)}
+      self.class.level_attribute_names(level).any?{|a| used_attribute?(a)}
     end
 
     # TODO This is doing a similar stepping down into the children that json_errors is doing. Would be nice
