@@ -228,6 +228,24 @@ describe ATDIS::Page do
         page.should_not be_valid
         page.json_errors.should == [[{:response => {:dat_id => "null"}} , ["can not be empty"]]]
       end
+
+    end
+  end
+
+  describe ".L1_used?" do
+    context "two applications" do
+      before :each do
+        ATDIS::Application.should_receive(:interpret).with(:description => "application1").and_return(double)
+        ATDIS::Application.should_receive(:interpret).with(:description => "application2").and_return(double)
+      end
+      let(:page) { ATDIS::Page.new(:results => [{:description => "application1"}, {:description => "application2"}]) }
+
+      it { page.should be_L1_used }
+    end
+
+    context "no L1 features used" do
+      let(:page) { ATDIS::Page.new }
+      it { page.should_not be_L1_used }
     end
   end
 
