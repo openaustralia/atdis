@@ -60,9 +60,9 @@ module ATDIS
 
     def L2_used_in_children?
       attributes.each_value do |a|
-        if a.respond_to?(:L2_used?) && a.L2_used?
+        if a.respond_to?(:level_used?) && a.level_used?(2)
           return true
-        elsif !a.respond_to?(:L2_used?) && a.respond_to?(:any?) && a.any?{|b| b.L2_used?}
+        elsif !a.respond_to?(:level_used?) && a.respond_to?(:any?) && a.any?{|b| b.level_used?(2)}
           return true
         end
       end

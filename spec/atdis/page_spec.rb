@@ -251,13 +251,19 @@ describe ATDIS::Page do
 
   describe ".L2_used?" do
     context "two applications with only L1 features" do
+      let(:a1) { double }
+      let(:a2) { double }
       before :each do
-        ATDIS::Application.should_receive(:interpret).with(:description => "application1").and_return(double(:L2_used? => false))
-        ATDIS::Application.should_receive(:interpret).with(:description => "application2").and_return(double(:L2_used? => false))
+        ATDIS::Application.should_receive(:interpret).with(:description => "application1").and_return(a1)
+        ATDIS::Application.should_receive(:interpret).with(:description => "application2").and_return(a2)
       end
       let(:page) { ATDIS::Page.new(:results => [{:description => "application1"}, {:description => "application2"}]) }
 
-      it { page.should_not be_L2_used }
+      it do
+        a1.should_receive(:level_used?).with(2).and_return(false)
+        a2.should_receive(:level_used?).with(2).and_return(false)
+        page.should_not be_L2_used
+      end
 
       context "L2 feature used on Page" do
         before :each do
@@ -278,7 +284,7 @@ describe ATDIS::Page do
       let(:page) { ATDIS::Page.new(:results => [{:description => "application1"}, {:description => "application2"}]) }
 
       it "should ask the applications whether they have L2 features" do
-        a1.should_receive(:L2_used?).and_return(true)
+        a1.should_receive(:level_used?).with(2).and_return(true)
         page.should be_L2_used
       end
     end
