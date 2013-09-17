@@ -109,6 +109,8 @@ module ATDIS
       Page.level_attribute_names(level).any?{|a| used_attribute?(a)}
     end
 
+    # TODO This is doing a similar stepping down into the children that json_errors is doing. Would be nice
+    # to extract the commond code to make this less horrible and arbitrary
     def level_used_in_children?(level)
       attributes.each_value do |a|
         if a.respond_to?(:level_used?) && a.level_used?(level)
