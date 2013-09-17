@@ -309,7 +309,14 @@ describe ATDIS::Page do
 
       it do
         page.should_not be_valid
-        page.errors.messages.should == {:json => ['Invalid JSON: unexpected "}"']}
+        page.errors.messages.has_key?(:json).should be_true
+        page.errors.messages.count.should == 1
+        # The error messages returned by the library are different for different Ruby versions
+        ruby18_message = 'Invalid JSON: unexpected "}"'
+        ruby19_message = "Invalid JSON: 784: unexpected token at '{\n  \"response\": [\n    {\n      \"application\": {\n        \"description\": \"application2\"\n      }      \n    }\n  ],\n}        \n'"
+        page.errors.messages[:json].count.should == 1
+        message = page.errors.messages[:json].first
+        (message == ruby18_message || message == ruby19_message).should be_true
       end
     end
 
