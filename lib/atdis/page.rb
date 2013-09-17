@@ -54,23 +54,23 @@ module ATDIS
       Page.level_attribute_names(level).any?{|a| used_attribute?(a)}
     end
 
-    def L2_used_locally?
-      level_used_locally?(2)
-    end
-
-    def L2_used_in_children?
+    def level_used_in_children?(level)
       attributes.each_value do |a|
-        if a.respond_to?(:level_used?) && a.level_used?(2)
+        if a.respond_to?(:level_used?) && a.level_used?(level)
           return true
-        elsif !a.respond_to?(:level_used?) && a.respond_to?(:any?) && a.any?{|b| b.level_used?(2)}
+        elsif !a.respond_to?(:level_used?) && a.respond_to?(:any?) && a.any?{|b| b.level_used?(level)}
           return true
         end
       end
       false
     end
 
+    def level_used?(level)
+      level_used_locally?(level) || level_used_in_children?(level)
+    end
+
     def L2_used?
-      L2_used_locally? || L2_used_in_children?
+      level_used?(2)
     end
 
     def previous_page_no_is_consistent
