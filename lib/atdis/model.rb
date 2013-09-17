@@ -115,7 +115,7 @@ module ATDIS
       attributes.each_value do |a|
         if a.respond_to?(:level_used?) && a.level_used?(level)
           return true
-        elsif !a.respond_to?(:level_used?) && a.respond_to?(:any?) && a.any?{|b| b.level_used?(level)}
+        elsif a.kind_of?(Array) && a.any?{|b| b.level_used?(level)}
           return true
         end
       end
