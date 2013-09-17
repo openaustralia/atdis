@@ -50,8 +50,12 @@ module ATDIS
       Page.level_attribute_names(1).any?{|a| used_attribute?(a)}
     end
 
+    def level_used_locally?(level)
+      Page.level_attribute_names(level).any?{|a| used_attribute?(a)}
+    end
+
     def L2_used_locally?
-      Page.level_attribute_names(2).any?{|a| used_attribute?(a)}
+      level_used_locally?(2)
     end
 
     def L2_used_in_children?
