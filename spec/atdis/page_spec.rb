@@ -293,6 +293,26 @@ describe ATDIS::Page do
   end
 
   context "paging supported by vendor" do
+    context "read a from an invalid json string" do
+      let(:page) { ATDIS::Page.read_json(<<-EOF
+{
+  "response": [
+    {
+      "application": {
+        "description": "application2"
+      }      
+    }
+  ],
+}        
+       EOF
+        )}
+
+      it do
+        page.should_not be_valid
+        page.errors.messages.should == {:json => ['Invalid JSON: unexpected "}"']}
+      end
+    end
+
     context "read from a json string" do
       let(:page) { ATDIS::Page.read_json(<<-EOF
 {

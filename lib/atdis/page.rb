@@ -20,6 +20,13 @@ module ATDIS
     validates :results, :valid => true
     validate :count_is_consistent, :all_pagination_is_present, :previous_page_no_is_consistent, :next_page_no_is_consistent
     validate :current_page_no_is_consistent, :total_no_results_is_consistent
+    validate :json_loaded_correctly!
+
+    def json_loaded_correctly!
+      if json_load_error
+        errors.add(:json, "Invalid JSON: #{json_load_error}")
+      end
+    end
 
     # If some of the pagination fields are present all of the required ones should be present
     def all_pagination_is_present
@@ -92,7 +99,14 @@ module ATDIS
     end
 
     def self.read_json(text)
-      interpret(MultiJson.load(text, :symbolize_keys => true))
+      begin
+        data = MultiJson.load(text, :symbolize_keys => true)
+        interpret(data)
+      rescue MultiJson::LoadError => e
+        a = interpret({:response => []})
+        a.json_load_error = e.to_s
+        a
+      end
     end
 
     def previous_url

@@ -62,7 +62,7 @@ module ATDIS
     attr_reader :attributes, :attributes_before_type_cast
     # Stores any part of the json that could not be interpreted. Usually
     # signals an error if it isn't empty.
-    attr_accessor :json_left_overs
+    attr_accessor :json_left_overs, :json_load_error
     
     validate :json_left_overs_is_empty
 
