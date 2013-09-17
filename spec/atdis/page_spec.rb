@@ -314,9 +314,10 @@ describe ATDIS::Page do
         # The error messages returned by the library are different for different Ruby versions
         ruby18_message = 'Invalid JSON: unexpected "}"'
         ruby19_message = "Invalid JSON: 784: unexpected token at '{\n  \"response\": [\n    {\n      \"application\": {\n        \"description\": \"application2\"\n      }      \n    }\n  ],\n}        \n'"
+        ruby20_message = "Invalid JSON: 795: unexpected token at '{\n  \"response\": [\n    {\n      \"application\": {\n        \"description\": \"application2\"\n      }      \n    }\n  ],\n}        \n'"
         page.errors.messages[:json].count.should == 1
         message = page.errors.messages[:json].first
-        (message == ruby18_message || message == ruby19_message).should be_true
+        (message == ruby18_message || message == ruby19_message || message == ruby20_message).should be_true
       end
     end
 
