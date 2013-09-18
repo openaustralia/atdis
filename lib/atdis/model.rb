@@ -101,7 +101,7 @@ module ATDIS
       mappings.each do |k, v|
         if v == key
           return data[k]
-        elsif v.kind_of?(Hash)
+        elsif v.kind_of?(Hash) && data.has_key?(k)
           r = map_field2(key, data[k], mappings[k])
           if r
             return r
