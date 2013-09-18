@@ -7,7 +7,7 @@ module ATDIS
 
     included do
       class_attribute :attribute_types
-      class_attribute :valid_fields
+      class_attribute :field_mappings
     end
 
     module ClassMethods
@@ -17,10 +17,10 @@ module ATDIS
         self.attribute_types = p
       end
 
-      def field_mappings(p)
+      def set_field_mappings(p)
         a, b = translate_field_mappings(p)
-        # valid_fields is of the form {:pagination=>{:previous=>:previous_page_no, :pages=>:total_no_pages}}
-        self.valid_fields = a
+        # field_mappings is of the form {:pagination=>{:previous=>:previous_page_no, :pages=>:total_no_pages}}
+        self.field_mappings = a
         casting_attributes(b)
       end
 
@@ -70,7 +70,7 @@ module ATDIS
       attribute_types.find_all{|k,v| (v[1] || {})[:level] == level }.map{|k,v| k.to_s}
     end
 
-    def json_attribute(a, new_value, fields = valid_fields)
+    def json_attribute(a, new_value, fields = field_mappings)
       fields.each do |attribute, v|
         if v == a
           return {attribute => new_value}
@@ -86,7 +86,7 @@ module ATDIS
     end
 
     # Map json structure to our values
-    def self.map_fields(data, fields = valid_fields)
+    def self.map_fields(data, fields = field_mappings)
       values = {:json_left_overs => {}}
       data.each_key do |key|
         if fields[key]

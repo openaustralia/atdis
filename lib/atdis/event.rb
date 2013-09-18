@@ -1,6 +1,6 @@
 module ATDIS
   class Event < Model
-    field_mappings [
+    set_field_mappings [
       [:id, [:id, String, {:level => 1}]],
       [:date, [:date, DateTime, {:level => 1}]],
       [:description, [:description, String, {:level => 1}]],

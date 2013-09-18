@@ -4,7 +4,7 @@ module ATDIS
   class Application < Model
     # TODO When we remove support for Ruby 1.8 we can convert field_mappings back to a hash
     # which is much more readable
-    field_mappings [
+    set_field_mappings [
       [:application, [
         [:info, [
           [:dat_id,                   [:dat_id, String, {:level => 1}]],

@@ -1,6 +1,6 @@
 module ATDIS
   class Person < Model
-    field_mappings [
+    set_field_mappings [
       [:name, [:name, String, {:level => 2}]],
       [:role, [:role, String, {:level => 2}]],
       [:contact, [:contact, String, {:level => 2}]]

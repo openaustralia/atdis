@@ -2,7 +2,7 @@ module ATDIS
   class Page < Model
     attr_accessor :url
 
-    field_mappings [
+    set_field_mappings [
       [:response, [:results, Application, {:level => 1}]],
       [:count, [:count, Fixnum, {:level => 2}]],
       [:pagination, [

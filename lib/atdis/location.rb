@@ -2,7 +2,7 @@ require "rgeo/geo_json"
 
 module ATDIS
   class Location < Model
-    field_mappings [
+    set_field_mappings [
       [:address, [:address, String, {:level => 1}]],
       [:land_title_ref, [
         [:lot, [:lot, String, {:level => 1}]],
