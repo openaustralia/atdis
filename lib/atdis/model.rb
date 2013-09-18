@@ -85,6 +85,26 @@ module ATDIS
       nil
     end
 
+    # Map json structure to our values
+    def self.map_fields(data, fields = valid_fields)
+      values = {:json_left_overs => {}}
+      data.each_key do |key|
+        if fields[key]
+          if fields[key].kind_of?(Hash)
+            v2 = map_fields(data[key], fields[key])
+            l2 = v2.delete(:json_left_overs)
+            values = values.merge(v2)
+            values[:json_left_overs][key] = l2 unless l2.empty?
+          else
+            values[fields[key]] = data[key]
+          end
+        else
+          values[:json_left_overs][key] = data[key]
+        end
+      end
+      values
+    end
+
     def json_errors
       r = []
       errors.messages.each do |attribute, e|
@@ -148,26 +168,6 @@ module ATDIS
 
     def self.interpret(*params)
       new(map_fields(*params))
-    end
-
-    # Map json structure to our values
-    def self.map_fields(data, fields = valid_fields)
-      values = {:json_left_overs => {}}
-      data.each_key do |key|
-        if fields[key]
-          if fields[key].kind_of?(Hash)
-            v2 = map_fields(data[key], fields[key])
-            l2 = v2.delete(:json_left_overs)
-            values = values.merge(v2)
-            values[:json_left_overs][key] = l2 unless l2.empty?
-          else
-            values[fields[key]] = data[key]
-          end
-        else
-          values[:json_left_overs][key] = data[key]
-        end
-      end
-      values
     end
 
     def self.cast(value, type, options = {})
