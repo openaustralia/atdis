@@ -147,12 +147,11 @@ module ATDIS
     end
 
     def self.interpret(*params)
-      v = *params
-      new(map_fields(v, valid_fields))
+      new(map_fields(*params))
     end
 
     # Map json structure to our values
-    def self.map_fields(data, fields)
+    def self.map_fields(data, fields = valid_fields)
       values = {:json_left_overs => {}}
       data.each_key do |key|
         if fields[key]
