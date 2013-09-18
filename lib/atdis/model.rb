@@ -85,6 +85,17 @@ module ATDIS
       nil
     end
 
+    # This is currently not used by anything
+    def self.map_field(key, mappings)
+      if key.kind_of?(Hash)
+        raise "should be one item in hash" if key.count != 1
+        k = key.keys.first
+        map_field(key[k], mappings[k])
+      else
+        mappings[key]
+      end
+    end
+
     # Map json structure to our values
     def self.map_fields(data, mappings = field_mappings)
       values = {:json_left_overs => {}}
