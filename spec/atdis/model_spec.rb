@@ -93,6 +93,20 @@ describe ATDIS::Model do
     end
   end
 
+  describe ".attribute_names_from_mappings" do
+    it do
+      # Doing this nastiness to support Ruby 1.8
+      h = ActiveSupport::OrderedHash.new
+      h[:foo] = :bar
+      h[:a] = :b
+      h2 = ActiveSupport::OrderedHash.new
+      h2[:foo] = :bar2
+      h2[:a] = :b2
+      h[:info] = h2
+      ATDIS::Model.attribute_names_from_mappings(h).should == [:bar, :b, :bar2, :b2]
+    end
+  end
+
   describe ".map_fields" do
     it do
       ATDIS::Model.map_fields(

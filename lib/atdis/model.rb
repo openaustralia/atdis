@@ -126,6 +126,19 @@ module ATDIS
       json_left_overs
     end
 
+    # Not currently used by anything
+    def self.attribute_names_from_mappings(mappings)
+      result = []
+      mappings.each do |k, v|
+        if v.kind_of?(Hash)
+          result += attribute_names_from_mappings(v)
+        else
+          result << v
+        end
+      end
+      result
+    end
+
     # Map json structure to our values
     def self.map_fields(data, mappings = field_mappings)
       map_fields2(data, mappings).merge(:json_left_overs => unused_data(data, mappings))
