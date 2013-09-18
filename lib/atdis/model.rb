@@ -71,10 +71,10 @@ module ATDIS
     end
 
     def json_attribute(a, fields = valid_fields)
-      json_attribute2(a, fields, attributes_before_type_cast[a.to_s])
+      json_attribute2(a, attributes_before_type_cast[a.to_s], fields)
     end
 
-    def json_attribute2(a, fields, new_value)
+    def json_attribute2(a, new_value, fields = valid_fields)
       fields.each do |attribute, v|
         if v == a
           return {attribute => new_value}
@@ -94,10 +94,10 @@ module ATDIS
       errors.messages.each do |attribute, e|
         value = attributes[attribute.to_s]
         if (value.respond_to?(:valid?) && !value.valid?)
-          r += value.json_errors.map{|a, b| [json_attribute2(attribute, valid_fields, a), b]}
+          r += value.json_errors.map{|a, b| [json_attribute2(attribute, a), b]}
         elsif (value && !value.respond_to?(:valid?) && value.respond_to?(:all?) && !value.all?{|v| v.valid?})
           f = value.find{|v| !v.valid?}
-          r += f.json_errors.map{|a, b| [json_attribute2(attribute, valid_fields, a), b]}
+          r += f.json_errors.map{|a, b| [json_attribute2(attribute, a), b]}
         else
           r << [json_attribute(attribute), e]
         end
