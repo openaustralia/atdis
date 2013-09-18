@@ -26,13 +26,13 @@ describe ATDIS::Model do
 
   describe ".map_fields" do
     it do
-      ATDIS::Model.map_fields({:foo => :bar, :a => :b}, {:foo => 2, :a => 3, :d => 4}).should ==
+      ATDIS::Model.map_fields({:foo => 2, :a => 3, :d => 4}, {:foo => :bar, :a => :b}).should ==
         {:bar => 2, :b => 3, :json_left_overs => {:d => 4}}
     end
 
     it do
-      ATDIS::Model.map_fields({:foo => :bar, :a => :b, :info => {:foo => :bar2, :a => :b2}},
-        {:foo => 2, :a => 3, :d => 4, :info => {:foo => 2, :a => 3, :d => 4}}).should ==
+      ATDIS::Model.map_fields({:foo => 2, :a => 3, :d => 4, :info => {:foo => 2, :a => 3, :d => 4}},
+        {:foo => :bar, :a => :b, :info => {:foo => :bar2, :a => :b2}}).should ==
         {:bar => 2, :b => 3, :bar2 => 2, :b2 => 3, :json_left_overs => {:d => 4, :info => {:d => 4}}}
     end
   end
