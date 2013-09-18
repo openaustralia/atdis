@@ -68,7 +68,7 @@ describe ATDIS::Page do
           it do
             page.should_not be_valid
             page.errors.messages.should == {:previous_page_no => ["should be one less than current page number or null if first page"]}
-            # Really should be testing this in model_spec
+            # TODO Really should be testing this in model_spec
             page.json_attribute(:previous_page_no, {:previous=>:previous_page_no}).should == {:previous => 5}
             page.json_attribute(:previous_page_no).should == {:pagination => {:previous => 5}}
             page.json_errors.should == [[{:pagination => {:previous => 5}}, ["should be one less than current page number or null if first page"]]]
