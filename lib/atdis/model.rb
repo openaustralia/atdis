@@ -151,17 +151,17 @@ module ATDIS
     end
 
     # Map json structure to our values
-    def self.map_fields(valid_fields, data)
+    def self.map_fields(fields, data)
       values = {:json_left_overs => {}}
       data.each_key do |key|
-        if valid_fields[key]
-          if valid_fields[key].kind_of?(Hash)
-            v2 = map_fields(valid_fields[key], data[key])
+        if fields[key]
+          if fields[key].kind_of?(Hash)
+            v2 = map_fields(fields[key], data[key])
             l2 = v2.delete(:json_left_overs)
             values = values.merge(v2)
             values[:json_left_overs][key] = l2 unless l2.empty?
           else
-            values[valid_fields[key]] = data[key]
+            values[fields[key]] = data[key]
           end
         else
           values[:json_left_overs][key] = data[key]
