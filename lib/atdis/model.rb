@@ -96,7 +96,6 @@ module ATDIS
       end
     end
 
-    # This is currently not used by anything
     def self.map_field2(key, data, mappings)
       mappings.each do |k, v|
         if v == key
@@ -147,14 +146,8 @@ module ATDIS
     # Map json structure to our values
     def self.map_fields2(data, mappings = field_mappings)
       values = {}
-      data.each_key do |key|
-        if mappings[key]
-          if mappings[key].kind_of?(Hash)
-            values = values.merge(map_fields2(data[key], mappings[key]))
-          else
-            values[mappings[key]] = data[key]
-          end
-        end
+      attribute_names_from_mappings(mappings).each do |attribute|
+        values[attribute] = map_field2(attribute, data, mappings)
       end
       values
     end

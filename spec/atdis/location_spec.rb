@@ -100,11 +100,10 @@ describe ATDIS::Location do
 
     it "should gracefully handle the land_title_ref block being missing" do
       l = ATDIS::Location.interpret(:address => "123 Fourfivesix Street Neutral Bay NSW 2089")
-      
       l.address.should == "123 Fourfivesix Street Neutral Bay NSW 2089"
-      l.lot.should be_nil
-      l.section.should be_nil
-      l.dpsp_id.should be_nil
+      l.lot.should == ""
+      l.section.should == ""
+      l.dpsp_id.should == ""
     end
 
     it "should pass on the responsibility for parsing the geometry section" do

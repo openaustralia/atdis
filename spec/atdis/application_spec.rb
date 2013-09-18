@@ -98,7 +98,10 @@ describe ATDIS::Application do
 
     it "should create a nil valued application when there is no information in the json" do
       application = double
-      ATDIS::Application.should_receive(:new).with({:json_left_overs => {}}).and_return(application)
+      ATDIS::Application.should_receive(:new).with({:json_left_overs => {}, :status=>nil, :determination_date=>nil, :estimated_cost=>nil,
+        :comments_url=>nil, :description=>nil, :more_info_url=>nil, :dat_id=>nil, :notification_start_date=>nil, :location=>nil,
+        :extended=>nil, :events=>nil, :last_modified_date=>nil, :notification_end_date=>nil, :documents=>nil, :authority=>nil,
+        :lodgement_date=>nil, :officer=>nil, :people=>nil}).and_return(application)
 
       ATDIS::Application.interpret(:application => {:info => {}, :reference => {}}).should == application
     end
