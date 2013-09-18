@@ -80,7 +80,7 @@ module ATDIS
           return {attribute => new_value}
         end
         if v.kind_of?(Hash)
-          r = json_attribute(a, v)
+          r = json_attribute2(a, new_value, v)
           if r
             return {attribute => r}
           end

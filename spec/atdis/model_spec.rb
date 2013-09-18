@@ -36,4 +36,17 @@ describe ATDIS::Model do
         {:bar => 2, :b => 3, :bar2 => 2, :b2 => 3, :json_left_overs => {:d => 4, :info => {:d => 4}}}
     end
   end
+
+  describe "#json_attribute2" do
+    let(:model) { ATDIS::Model.new }
+    let(:mapping) { {:previous => :previous_page_no, :next => :next_page_no, :foo => {:bar => :apple, :foo => :orange}} }
+
+    it "simple case" do
+      model.json_attribute2(:previous_page_no, 12, mapping).should == {:previous => 12}
+    end
+
+    it "with recursion" do
+      model.json_attribute2(:apple, 12, mapping).should == {:foo => {:bar => 12}}
+    end
+  end
 end
