@@ -70,10 +70,6 @@ module ATDIS
       attribute_types.find_all{|k,v| (v[1] || {})[:level] == level }.map{|k,v| k.to_s}
     end
 
-    def json_attribute(a, fields = valid_fields)
-      json_attribute2(a, attributes_before_type_cast[a.to_s], fields)
-    end
-
     def json_attribute2(a, new_value, fields = valid_fields)
       fields.each do |attribute, v|
         if v == a
@@ -99,7 +95,7 @@ module ATDIS
           f = value.find{|v| !v.valid?}
           r += f.json_errors.map{|a, b| [json_attribute2(attribute, a), b]}
         else
-          r << [json_attribute(attribute), e]
+          r << [json_attribute2(attribute, attributes_before_type_cast[attribute.to_s]), e]
         end
       end
       r
