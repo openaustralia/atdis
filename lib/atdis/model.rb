@@ -70,8 +70,8 @@ module ATDIS
       attribute_types.find_all{|k,v| (v[1] || {})[:level] == level }.map{|k,v| k.to_s}
     end
 
-    def json_attribute(a, new_value, fields = field_mappings)
-      fields.each do |attribute, v|
+    def json_attribute(a, new_value, mappings = field_mappings)
+      mappings.each do |attribute, v|
         if v == a
           return {attribute => new_value}
         end
@@ -86,17 +86,17 @@ module ATDIS
     end
 
     # Map json structure to our values
-    def self.map_fields(data, fields = field_mappings)
+    def self.map_fields(data, mappings = field_mappings)
       values = {:json_left_overs => {}}
       data.each_key do |key|
-        if fields[key]
-          if fields[key].kind_of?(Hash)
-            v2 = map_fields(data[key], fields[key])
+        if mappings[key]
+          if mappings[key].kind_of?(Hash)
+            v2 = map_fields(data[key], mappings[key])
             l2 = v2.delete(:json_left_overs)
             values = values.merge(v2)
             values[:json_left_overs][key] = l2 unless l2.empty?
           else
-            values[fields[key]] = data[key]
+            values[mappings[key]] = data[key]
           end
         else
           values[:json_left_overs][key] = data[key]
