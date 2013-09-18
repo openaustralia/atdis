@@ -99,7 +99,7 @@ module ATDIS
       nil
     end
 
-    def self.unused_data(data, mappings)
+    def self.unused_data(data, mappings = field_mappings)
       json_left_overs = {}
       data.each_key do |key|
         if mappings[key]
@@ -128,11 +128,6 @@ module ATDIS
 
     # Map json structure to our values
     def self.map_fields(data, mappings = field_mappings)
-      map_fields2(data, mappings).merge(:json_left_overs => unused_data(data, mappings))
-    end
-
-    # Map json structure to our values
-    def self.map_fields2(data, mappings = field_mappings)
       values = {}
       attribute_names_from_mappings(mappings).each do |attribute|
         values[attribute] = map_field(attribute, data, mappings)
@@ -202,7 +197,7 @@ module ATDIS
     end
 
     def self.interpret(*params)
-      new(map_fields(*params))
+      new(map_fields(*params).merge(:json_left_overs => unused_data(*params)))
     end
 
     def self.cast(value, type, options = {})

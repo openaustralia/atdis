@@ -123,9 +123,6 @@ describe ATDIS::Model do
       {
         :bar => 2,
         :b => 3,
-        :json_left_overs => {
-          :d => 4
-        }
       }
     end
 
@@ -153,13 +150,7 @@ describe ATDIS::Model do
         :bar => 2,
         :b => 3,
         :bar2 => 2,
-        :b2 => 3,
-        :json_left_overs => {
-          :d => 4,
-          :info => {
-            :d => 4
-          }
-        }
+        :b2 => 3
       }
     end
   end
