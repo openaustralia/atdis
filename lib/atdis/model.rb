@@ -111,7 +111,6 @@ module ATDIS
       nil
     end
 
-    # This is currently not used by anything
     def self.unused_data(data, mappings)
       json_left_overs = {}
       data.each_key do |key|
@@ -129,19 +128,19 @@ module ATDIS
 
     # Map json structure to our values
     def self.map_fields(data, mappings = field_mappings)
-      values = {:json_left_overs => {}}
+      map_fields2(data, mappings).merge(:json_left_overs => unused_data(data, mappings))
+    end
+
+    # Map json structure to our values
+    def self.map_fields2(data, mappings = field_mappings)
+      values = {}
       data.each_key do |key|
         if mappings[key]
           if mappings[key].kind_of?(Hash)
-            v2 = map_fields(data[key], mappings[key])
-            l2 = v2.delete(:json_left_overs)
-            values = values.merge(v2)
-            values[:json_left_overs][key] = l2 unless l2.empty?
+            values = values.merge(map_fields2(data[key], mappings[key]))
           else
             values[mappings[key]] = data[key]
           end
-        else
-          values[:json_left_overs][key] = data[key]
         end
       end
       values
