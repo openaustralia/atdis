@@ -96,6 +96,21 @@ module ATDIS
       end
     end
 
+    # This is currently not used by anything
+    def self.map_field2(key, data, mappings)
+      mappings.each do |k, v|
+        if v == key
+          return data[k]
+        elsif v.kind_of?(Hash)
+          r = map_field2(key, data[k], mappings[k])
+          if r
+            return r
+          end
+        end
+      end
+      nil
+    end
+
     # Map json structure to our values
     def self.map_fields(data, mappings = field_mappings)
       values = {:json_left_overs => {}}

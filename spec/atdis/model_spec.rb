@@ -36,6 +36,17 @@ describe ATDIS::Model do
     it { ATDIS::Model.map_field({:info => :d}, mappings).should be_nil }
   end
 
+  describe ".map_field2" do
+    let(:mappings) { { :foo => :bar, :a => :b, :info => { :foo => :bar2, :a => :b2, :c => :c2 } } }
+    let(:data) { { :foo => 2, :a => 3, :d => 4, :info => { :foo => 2, :a => 3, :d => 4 } } }
+
+    it { ATDIS::Model.map_field2(:bar, data, mappings).should == 2 }
+    it { ATDIS::Model.map_field2(:b, data, mappings).should == 3 }
+    it { ATDIS::Model.map_field2(:bar2, data, mappings).should == 2 }
+    it { ATDIS::Model.map_field2(:b2, data, mappings).should == 3 }
+    it { ATDIS::Model.map_field2(:c2, data, mappings).should be_nil }
+  end
+
   describe ".map_fields" do
     it do
       ATDIS::Model.map_fields(
