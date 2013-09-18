@@ -121,15 +121,6 @@ module ATDIS
       r
     end
 
-    # Have we tried to use this attribute?
-    def used_attribute?(a)
-      !attributes_before_type_cast[a].nil?
-    end
-
-    def level_used_locally?(level)
-      self.class.level_attribute_names(level).any?{|a| used_attribute?(a)}
-    end
-
     # TODO This is doing a similar stepping down into the children that json_errors is doing. Would be nice
     # to extract the commond code to make this less horrible and arbitrary
     def level_used_in_children?(level)
@@ -141,6 +132,15 @@ module ATDIS
         end
       end
       false
+    end
+
+    # Have we tried to use this attribute?
+    def used_attribute?(a)
+      !attributes_before_type_cast[a].nil?
+    end
+
+    def level_used_locally?(level)
+      self.class.level_attribute_names(level).any?{|a| used_attribute?(a)}
     end
 
     def level_used?(level)
