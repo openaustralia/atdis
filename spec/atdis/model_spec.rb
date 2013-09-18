@@ -47,6 +47,52 @@ describe ATDIS::Model do
     it { ATDIS::Model.map_field2(:c2, data, mappings).should be_nil }
   end
 
+  describe ".unused_data" do
+    it do
+      ATDIS::Model.unused_data(
+      {
+        :foo => 2,
+        :a => 3,
+        :d => 4
+      },
+      {
+        :foo => :bar,
+        :a => :b
+      }).should ==
+      {
+        :d => 4
+      }
+    end
+
+    it do
+      ATDIS::Model.unused_data(
+      {
+        :foo => 2,
+        :a => 3,
+        :d => 4,
+        :info => {
+          :foo => 2,
+          :a => 3,
+          :d => 4
+        }
+      },
+      {
+        :foo => :bar,
+        :a => :b,
+        :info => {
+          :foo => :bar2,
+          :a => :b2
+        }
+      }).should ==
+      {
+        :d => 4,
+        :info => {
+          :d => 4
+        }
+      }
+    end
+  end
+
   describe ".map_fields" do
     it do
       ATDIS::Model.map_fields(
