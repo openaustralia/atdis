@@ -85,23 +85,12 @@ module ATDIS
       nil
     end
 
-    # This is currently not used by anything
-    def self.map_field(key, mappings)
-      if key.kind_of?(Hash)
-        raise "should be one item in hash" if key.count != 1
-        k = key.keys.first
-        map_field(key[k], mappings[k])
-      else
-        mappings[key]
-      end
-    end
-
-    def self.map_field2(key, data, mappings)
+    def self.map_field(key, data, mappings)
       mappings.each do |k, v|
         if v == key
           return data[k]
         elsif v.kind_of?(Hash) && data.has_key?(k)
-          r = map_field2(key, data[k], mappings[k])
+          r = map_field(key, data[k], mappings[k])
           if r
             return r
           end
@@ -125,7 +114,6 @@ module ATDIS
       json_left_overs
     end
 
-    # Not currently used by anything
     def self.attribute_names_from_mappings(mappings)
       result = []
       mappings.each do |k, v|
@@ -147,7 +135,7 @@ module ATDIS
     def self.map_fields2(data, mappings = field_mappings)
       values = {}
       attribute_names_from_mappings(mappings).each do |attribute|
-        values[attribute] = map_field2(attribute, data, mappings)
+        values[attribute] = map_field(attribute, data, mappings)
       end
       values
     end

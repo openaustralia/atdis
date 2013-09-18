@@ -25,38 +25,26 @@ describe ATDIS::Model do
   end
 
   describe ".map_field" do
-    let(:mappings) { { :foo => :bar, :a => :b, :info => { :foo => :bar2, :a => :b2 } } }
-
-    it { ATDIS::Model.map_field(:foo, mappings).should == :bar }
-    it { ATDIS::Model.map_field(:a, mappings).should == :b }
-    it { ATDIS::Model.map_field(:d, mappings).should be_nil }
-
-    it { ATDIS::Model.map_field({:info => :foo}, mappings).should == :bar2 }
-    it { ATDIS::Model.map_field({:info => :a}, mappings).should == :b2 }
-    it { ATDIS::Model.map_field({:info => :d}, mappings).should be_nil }
-  end
-
-  describe ".map_field2" do
     let(:mappings) { { :foo => :bar, :a => :b, :info => { :foo => :bar2, :a => :b2, :c => :c2 } } }
 
     context "one version of data" do
       let(:data) { { :foo => 2, :a => 3, :d => 4, :info => { :foo => 2, :a => 3, :d => 4 } } }
 
-      it { ATDIS::Model.map_field2(:bar, data, mappings).should == 2 }
-      it { ATDIS::Model.map_field2(:b, data, mappings).should == 3 }
-      it { ATDIS::Model.map_field2(:bar2, data, mappings).should == 2 }
-      it { ATDIS::Model.map_field2(:b2, data, mappings).should == 3 }
-      it { ATDIS::Model.map_field2(:c2, data, mappings).should be_nil }
+      it { ATDIS::Model.map_field(:bar, data, mappings).should == 2 }
+      it { ATDIS::Model.map_field(:b, data, mappings).should == 3 }
+      it { ATDIS::Model.map_field(:bar2, data, mappings).should == 2 }
+      it { ATDIS::Model.map_field(:b2, data, mappings).should == 3 }
+      it { ATDIS::Model.map_field(:c2, data, mappings).should be_nil }
     end
 
     context "another version of data" do
       let(:data) { { :foo => 2, :a => 3, :d => 4 } }
 
-      it { ATDIS::Model.map_field2(:bar, data, mappings).should == 2 }
-      it { ATDIS::Model.map_field2(:b, data, mappings).should == 3 }
-      it { ATDIS::Model.map_field2(:bar2, data, mappings).should be_nil }
-      it { ATDIS::Model.map_field2(:b2, data, mappings).should be_nil }
-      it { ATDIS::Model.map_field2(:c2, data, mappings).should be_nil }
+      it { ATDIS::Model.map_field(:bar, data, mappings).should == 2 }
+      it { ATDIS::Model.map_field(:b, data, mappings).should == 3 }
+      it { ATDIS::Model.map_field(:bar2, data, mappings).should be_nil }
+      it { ATDIS::Model.map_field(:b2, data, mappings).should be_nil }
+      it { ATDIS::Model.map_field(:c2, data, mappings).should be_nil }
     end
   end
 
