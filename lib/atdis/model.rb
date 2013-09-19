@@ -51,7 +51,7 @@ module ATDIS
     end
   end
 
-  ErrorMessage = Struct.new :message do
+  ErrorMessage = Struct.new :message, :spec_section do
     def empty?
       message.empty?
     end

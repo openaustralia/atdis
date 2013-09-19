@@ -54,7 +54,7 @@ describe ATDIS::Page do
 
           it do
             page.should_not be_valid
-            page.errors.messages.should == {:count => [ATDIS::ErrorMessage["should be present if pagination is being used"]]}
+            page.errors.messages.should == {:count => [ATDIS::ErrorMessage["should be present if pagination is being used", "6.5"]]}
           end
         end
 
