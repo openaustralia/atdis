@@ -43,7 +43,7 @@ module ATDIS
     validates :last_modified_date, :lodgement_date, :date_time => {:spec_section => "4.3.8"}
     validates :determination_date, :notification_start_date, :notification_end_date, :date_time_or_none => {:spec_section => "4.3.1"}
     validates :more_info_url, :http_url => {:spec_section => "4.3.2"}
-    validates :location, :valid => true
+    validates :location, :events, :documents, :people, :valid => true
     validates :events, :documents, :array => {:spec_section => "4.3.4"}
     # TODO people should be an array if it's included
 

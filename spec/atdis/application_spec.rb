@@ -516,6 +516,7 @@ describe ATDIS::Application do
 
     describe "events" do
       it "has to be an array" do
+        ATDIS::Event.should_receive(:interpret).with(:foo => "bar").and_return(double(:valid? => true))
         a.events = {:foo => "bar"}
         #a.events.should be_nil
         a.should_not be_valid
