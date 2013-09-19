@@ -24,7 +24,7 @@ module ATDIS
 
     def json_loaded_correctly!
       if json_load_error
-        errors.add(:json, "Invalid JSON: #{json_load_error}")
+        errors.add(:json, ErrorMessage["Invalid JSON: #{json_load_error}", nil])
       end
     end
 
