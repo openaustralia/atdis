@@ -14,7 +14,7 @@ module ATDIS
     # Mandatory parameters
     validates :address, :lot, :section, :dpsp_id, :presence_before_type_cast => {:spec_section => "4.3.3"}
 
-    validates :geometry, :geo_json => true
+    validates :geometry, :geo_json => {:spec_section => "4.3.3"}
 
     # TODO: Provide warning if dpsp_id doesn't start with "DP" or "SP"
   end

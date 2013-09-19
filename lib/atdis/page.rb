@@ -16,7 +16,7 @@ module ATDIS
     ]
 
     # Mandatory parameters
-    validates :results, :presence_before_type_cast => true
+    validates :results, :presence_before_type_cast => {:spec_section => "4.3"}
     validates :results, :valid => true
     validate :count_is_consistent, :all_pagination_is_present, :previous_page_no_is_consistent, :next_page_no_is_consistent
     validate :current_page_no_is_consistent, :total_no_results_is_consistent
@@ -33,10 +33,10 @@ module ATDIS
       if count || previous_page_no || next_page_no || current_page_no || no_results_per_page ||
         total_no_results || total_no_pages
         errors.add(:count, ErrorMessage["should be present if pagination is being used", "6.5"]) if count.nil?
-        errors.add(:current_page_no, "should be present if pagination is being used") if current_page_no.nil?
-        errors.add(:no_results_per_page, "should be present if pagination is being used") if no_results_per_page.nil?
-        errors.add(:total_no_results, "should be present if pagination is being used") if total_no_results.nil?
-        errors.add(:total_no_pages, "should be present if pagination is being used") if total_no_pages.nil?
+        errors.add(:current_page_no, ErrorMessage["should be present if pagination is being used", "6.5"]) if current_page_no.nil?
+        errors.add(:no_results_per_page, ErrorMessage["should be present if pagination is being used", "6.5"]) if no_results_per_page.nil?
+        errors.add(:total_no_results, ErrorMessage["should be present if pagination is being used", "6.5"]) if total_no_results.nil?
+        errors.add(:total_no_pages, ErrorMessage["should be present if pagination is being used", "6.5"]) if total_no_pages.nil?
       end
     end
 

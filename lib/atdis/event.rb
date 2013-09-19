@@ -9,7 +9,7 @@ module ATDIS
     ]
     
     # Mandatory parameters
-    validates :id, :date, :description, :presence_before_type_cast => true
+    validates :id, :date, :description, :presence_before_type_cast => {:spec_section => "4.3.4"}
   end
 
   # TODO Check that :id is unique within an authority

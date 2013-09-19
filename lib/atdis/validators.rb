@@ -6,7 +6,9 @@ module ATDIS
       def validate_each(record, attribute, value)
         raw_value = record.send("#{attribute}_before_type_cast")
         if raw_value.present? && value.nil?
-          record.errors.add(attribute, "is not valid GeoJSON")
+          message = "is not valid GeoJSON"
+          message = ErrorMessage[message, options[:spec_section]] if options[:spec_section]
+          record.errors.add(attribute, message)
         end
       end
     end
@@ -15,7 +17,7 @@ module ATDIS
       def validate_each(record, attribute, value)
         raw_value = record.send("#{attribute}_before_type_cast")
         if raw_value.present? && !value.kind_of?(DateTime)
-          record.errors.add(attribute, ErrorMessage["is not a valid date", "4.3.8"])
+          record.errors.add(attribute, ErrorMessage["is not a valid date", options[:spec_section]])
         end
       end
     end

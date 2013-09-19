@@ -35,13 +35,12 @@ module ATDIS
     validates :dat_id, :last_modified_date, :description, :authority, :lodgement_date, :determination_date, :status,
       :presence_before_type_cast => {:spec_section => "4.3.1"}
     validates :more_info_url, :presence_before_type_cast => {:spec_section => "4.3.2"}
-    validates :location, :presence_before_type_cast => true
+    validates :location, :presence_before_type_cast => {:spec_section => "4.3.3"}
     validates :events, :presence_before_type_cast => {:spec_section => "4.3.4"}
-    validates :documents, :presence_before_type_cast => true
+    validates :documents, :presence_before_type_cast => {:spec_section => "4.3.5"}
 
     # Other validations
-    validates :last_modified_date, :date_time => true
-    validates :lodgement_date, :date_time => true
+    validates :last_modified_date, :lodgement_date, :date_time => {:spec_section => "4.3.8"}
     validates :determination_date, :notification_start_date, :notification_end_date, :date_time_or_none => {:spec_section => "4.3.1"}
     validates :more_info_url, :http_url => {:spec_section => "4.3.2"}
     validates :location, :valid => true

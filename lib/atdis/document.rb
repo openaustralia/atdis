@@ -7,8 +7,8 @@ module ATDIS
     ]
 
     # Mandatory parameters
-    validates :ref, :title, :document_url, :presence_before_type_cast => true
+    validates :ref, :title, :document_url, :presence_before_type_cast => {:spec_section => "4.3.5"}
     # Other validations
-    validates :document_url, :http_url => true
+    validates :document_url, :http_url => {:spec_section => "4.3.5"}
   end
 end
