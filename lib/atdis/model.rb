@@ -51,6 +51,17 @@ module ATDIS
     end
   end
 
+  ErrorMessage = Struct.new :message do
+    def empty?
+      message.empty?
+    end
+
+    # Make this behave pretty much like a string
+    def to_s
+      message
+    end
+  end
+
   class Model
     include ActiveModel::Validations
     include Validators

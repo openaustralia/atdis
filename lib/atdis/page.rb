@@ -32,7 +32,7 @@ module ATDIS
     def all_pagination_is_present
       if count || previous_page_no || next_page_no || current_page_no || no_results_per_page ||
         total_no_results || total_no_pages
-        errors.add(:count, "should be present if pagination is being used") if count.nil?
+        errors.add(:count, ErrorMessage["should be present if pagination is being used"]) if count.nil?
         errors.add(:current_page_no, "should be present if pagination is being used") if current_page_no.nil?
         errors.add(:no_results_per_page, "should be present if pagination is being used") if no_results_per_page.nil?
         errors.add(:total_no_results, "should be present if pagination is being used") if total_no_results.nil?
