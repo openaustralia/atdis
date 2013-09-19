@@ -12,7 +12,7 @@ module ATDIS
       [:geometry, [:geometry, RGeo::GeoJSON, {:level => 1}]]
     ]
     # Mandatory parameters
-    validates :address, :lot, :section, :dpsp_id, :presence_before_type_cast => true
+    validates :address, :lot, :section, :dpsp_id, :presence_before_type_cast => {:spec_section => "4.3.3"}
 
     validates :geometry, :geo_json => true
 

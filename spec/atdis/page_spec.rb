@@ -32,7 +32,7 @@ describe ATDIS::Page do
           end
           it do
             page.should_not be_valid
-            page.errors.messages.should == {:count => ["is not the same as the number of applications returned"]}
+            page.errors.messages.should == {:count => [ATDIS::ErrorMessage["is not the same as the number of applications returned", "6.5"]]}
           end
         end
 
@@ -43,7 +43,7 @@ describe ATDIS::Page do
           end
           it do
             page.should_not be_valid
-            page.errors.messages.should == {:count => ["should not be larger than the number of results per page"]}
+            page.errors.messages.should == {:count => [ATDIS::ErrorMessage["should not be larger than the number of results per page", "6.5"]]}
           end
         end
 
@@ -67,8 +67,8 @@ describe ATDIS::Page do
           end
           it do
             page.should_not be_valid
-            page.errors.messages.should == {:previous_page_no => ["should be one less than current page number or null if first page"]}
-            page.json_errors.should == [[{:pagination => {:previous => 5}}, ["should be one less than current page number or null if first page"]]]
+            page.errors.messages.should == {:previous_page_no => [ATDIS::ErrorMessage["should be one less than current page number or null if first page", "6.5"]]}
+            page.json_errors.should == [[{:pagination => {:previous => 5}}, [ATDIS::ErrorMessage["should be one less than current page number or null if first page", "6.5"]]]]
           end
         end
 
@@ -82,7 +82,7 @@ describe ATDIS::Page do
           end
           it do
             page.should_not be_valid
-            page.errors.messages.should == {:previous_page_no => ["can't be null if not on the first page"]}
+            page.errors.messages.should == {:previous_page_no => [ATDIS::ErrorMessage["can't be null if not on the first page", "6.5"]]}
           end
         end
 
@@ -96,7 +96,7 @@ describe ATDIS::Page do
           end
           it do
             page.should_not be_valid
-            page.errors.messages.should == {:previous_page_no => ["should be null if on the first page"]}
+            page.errors.messages.should == {:previous_page_no => [ATDIS::ErrorMessage["should be null if on the first page", "6.5"]]}
           end
         end
 
@@ -108,7 +108,7 @@ describe ATDIS::Page do
           end
           it do
             page.should_not be_valid
-            page.errors.messages.should == {:next_page_no => ["should be one greater than current page number or null if last page"]}
+            page.errors.messages.should == {:next_page_no => [ATDIS::ErrorMessage["should be one greater than current page number or null if last page", "6.5"]]}
           end          
         end
 
@@ -122,7 +122,7 @@ describe ATDIS::Page do
           end
           it do
             page.should_not be_valid
-            page.errors.messages.should == {:next_page_no => ["can't be null if not on the last page"]}
+            page.errors.messages.should == {:next_page_no => [ATDIS::ErrorMessage["can't be null if not on the last page", "6.5"]]}
           end
         end
 
@@ -136,7 +136,7 @@ describe ATDIS::Page do
           end
           it do
             page.should_not be_valid
-            page.errors.messages.should == {:next_page_no => ["should be null if on the last page"]}
+            page.errors.messages.should == {:next_page_no => [ATDIS::ErrorMessage["should be null if on the last page", "6.5"]]}
           end
         end
 
@@ -149,7 +149,7 @@ describe ATDIS::Page do
           end
           it do
             page.should_not be_valid
-            page.errors.messages.should == {:current_page_no => ["is larger than the number of pages"]}
+            page.errors.messages.should == {:current_page_no => [ATDIS::ErrorMessage["is larger than the number of pages", "6.5"]]}
           end
         end
 
@@ -160,7 +160,7 @@ describe ATDIS::Page do
           end
           it do
             page.should_not be_valid
-            page.errors.messages.should == {:current_page_no => ["can not be less than 1"]}
+            page.errors.messages.should == {:current_page_no => [ATDIS::ErrorMessage["can not be less than 1", "6.5"]]}
           end          
         end
 
@@ -174,7 +174,7 @@ describe ATDIS::Page do
           end
           it do
             page.should_not be_valid
-            page.errors.messages.should == {:total_no_results => ["is larger than can be retrieved through paging"]}
+            page.errors.messages.should == {:total_no_results => [ATDIS::ErrorMessage["is larger than can be retrieved through paging", "6.5"]]}
           end          
         end
 
@@ -188,7 +188,7 @@ describe ATDIS::Page do
           end
           it do
             page.should_not be_valid
-            page.errors.messages.should == {:total_no_results => ["could fit into a smaller number of pages"]}
+            page.errors.messages.should == {:total_no_results => [ATDIS::ErrorMessage["could fit into a smaller number of pages", "6.5"]]}
           end          
         end
       end
@@ -203,7 +203,7 @@ describe ATDIS::Page do
 
       it do
         page.should_not be_valid
-        page.errors.messages.should == {:results => ["is not valid"]}
+        page.errors.messages.should == {:results => [ATDIS::ErrorMessage["is not valid", nil]]}
       end
     end
 
@@ -218,7 +218,7 @@ describe ATDIS::Page do
 
       it do
         page.should_not be_valid
-        page.errors.messages.should == {:results => ["is not valid"]}
+        page.errors.messages.should == {:results => [ATDIS::ErrorMessage["is not valid", nil]]}
       end
 
       it "the errors from the first errored application should be here" do

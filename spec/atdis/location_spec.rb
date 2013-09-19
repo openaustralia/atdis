@@ -29,7 +29,7 @@ describe ATDIS::Location do
       it "address" do
         l.address = ""
         l.should_not be_valid
-        l.errors.messages.should == {:address => ["can't be blank"]}
+        l.errors.messages.should == {:address => [ATDIS::ErrorMessage["can't be blank", "4.3.3"]]}
       end
 
       it "geometry" do
@@ -42,7 +42,7 @@ describe ATDIS::Location do
         it "can not be blank" do
           l.lot = ""
           l.should_not be_valid
-          l.errors.messages.should == {:lot => ["can't be blank"]}
+          l.errors.messages.should == {:lot => [ATDIS::ErrorMessage["can't be blank", "4.3.3"]]}
         end
 
         it "can be none but is not interpreted in any special way" do
@@ -56,7 +56,7 @@ describe ATDIS::Location do
         it "can not be blank" do
           l.section = ""
           l.should_not be_valid
-          l.errors.messages.should == {:section => ["can't be blank"]}
+          l.errors.messages.should == {:section => [ATDIS::ErrorMessage["can't be blank", "4.3.3"]]}
         end
 
         it "can be none" do
@@ -70,7 +70,7 @@ describe ATDIS::Location do
         it "can not be blank" do
           l.dpsp_id = ""
           l.should_not be_valid
-          l.errors.messages.should == {:dpsp_id => ["can't be blank"]}
+          l.errors.messages.should == {:dpsp_id => [ATDIS::ErrorMessage["can't be blank", "4.3.3"]]}
         end
 
         it "can be none but is not interpreted in any special way" do

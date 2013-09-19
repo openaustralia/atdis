@@ -37,7 +37,7 @@ describe ATDIS::Application do
         :documents => []
       })
       a.should_not be_valid
-      a.errors.messages.should == {:json => ['Unexpected parameters in json data: {"application":{"reference":{"foo":"bar"}}}']}
+      a.errors.messages.should == {:json => [ATDIS::ErrorMessage['Unexpected parameters in json data: {"application":{"reference":{"foo":"bar"}}}', "4"]]}
     end
   end
 
@@ -357,19 +357,19 @@ describe ATDIS::Application do
     it ".dat_id" do
       a.dat_id = nil
       a.should_not be_valid
-      a.errors.messages.should == {:dat_id => ["can't be blank"]}
+      a.errors.messages.should == {:dat_id => [ATDIS::ErrorMessage["can't be blank", "4.3.1"]]}
     end
 
     describe ".last_modified_date" do
       it do
         a.last_modified_date = nil
         a.should_not be_valid
-        a.errors.messages.should == {:last_modified_date => ["can't be blank"]}
+        a.errors.messages.should == {:last_modified_date => [ATDIS::ErrorMessage["can't be blank", "4.3.1"]]}
       end
       it do
         a.last_modified_date = "18 January 2013"
         a.should_not be_valid
-        a.errors.messages.should == {:last_modified_date => ["is not a valid date"]}
+        a.errors.messages.should == {:last_modified_date => [ATDIS::ErrorMessage["is not a valid date", "4.3.8"]]}
       end
     end
 
@@ -377,7 +377,7 @@ describe ATDIS::Application do
       it do
         a.description = ""
         a.should_not be_valid
-        a.errors.messages.should == {:description => ["can't be blank"]}
+        a.errors.messages.should == {:description => [ATDIS::ErrorMessage["can't be blank", "4.3.1"]]}
       end
     end
 
@@ -385,7 +385,7 @@ describe ATDIS::Application do
       it do
         a.authority = nil
         a.should_not be_valid
-        a.errors.messages.should == {:authority => ["can't be blank"]}
+        a.errors.messages.should == {:authority => [ATDIS::ErrorMessage["can't be blank", "4.3.1"]]}
       end
     end
 
@@ -393,12 +393,12 @@ describe ATDIS::Application do
       it do
         a.lodgement_date = nil
         a.should_not be_valid
-        a.errors.messages.should == {:lodgement_date => ["can't be blank"]}
+        a.errors.messages.should == {:lodgement_date => [ATDIS::ErrorMessage["can't be blank", "4.3.1"]]}
       end
       it do
         a.lodgement_date = "18 January 2013"
         a.should_not be_valid
-        a.errors.messages.should == {:lodgement_date => ["is not a valid date"]}
+        a.errors.messages.should == {:lodgement_date => [ATDIS::ErrorMessage["is not a valid date", "4.3.8"]]}
       end
     end
 
@@ -406,12 +406,12 @@ describe ATDIS::Application do
       it do
         a.determination_date = nil
         a.should_not be_valid
-        a.errors.messages.should == {:determination_date => ["can't be blank"]}
+        a.errors.messages.should == {:determination_date => [ATDIS::ErrorMessage["can't be blank", "4.3.1"]]}
       end
       it do
         a.determination_date = "18 January 2013"
         a.should_not be_valid
-        a.errors.messages.should == {:determination_date => ["is not a valid date or none"]}
+        a.errors.messages.should == {:determination_date => [ATDIS::ErrorMessage["is not a valid date or none", "4.3.1"]]}
       end
       it "none should be allowed if the application is not yet determined" do
         a.determination_date = "none"
@@ -424,7 +424,7 @@ describe ATDIS::Application do
       it do
         a.status = nil
         a.should_not be_valid
-        a.errors.messages.should == {:status => ["can't be blank"]}
+        a.errors.messages.should == {:status => [ATDIS::ErrorMessage["can't be blank", "4.3.1"]]}
       end
     end
 
@@ -439,33 +439,33 @@ describe ATDIS::Application do
         a.notification_start_date = "18 January 2013"
         a.notification_end_date = DateTime.new(2013,2,1,0,0,0)
         a.should_not be_valid
-        a.errors.messages.should == {:notification_start_date => ["is not a valid date or none"]}
+        a.errors.messages.should == {:notification_start_date => [ATDIS::ErrorMessage["is not a valid date or none", "4.3.1"]]}
       end
 
       it "invalid end date" do
         a.notification_start_date = DateTime.new(2013,1,10,0,0,0)
         a.notification_end_date = "18 January 2013"
         a.should_not be_valid
-        a.errors.messages.should == {:notification_end_date => ["is not a valid date or none"]}
+        a.errors.messages.should == {:notification_end_date => [ATDIS::ErrorMessage["is not a valid date or none", "4.3.1"]]}
       end
 
       it "only start date set" do
         a.notification_start_date = DateTime.new(2013,4,20,2,1,7)
         a.should_not be_valid
-        a.errors.messages.should == {:notification_end_date => ["can not be blank if notification_start_date is set"]}
+        a.errors.messages.should == {:notification_end_date => [ATDIS::ErrorMessage["can not be blank if notification_start_date is set", "4.3.1"]]}
       end
 
       it "only end date set" do
         a.notification_end_date = DateTime.new(2013,4,20,2,1,7)
         a.should_not be_valid
-        a.errors.messages.should == {:notification_start_date => ["can not be blank if notification_end_date is set"]}
+        a.errors.messages.should == {:notification_start_date => [ATDIS::ErrorMessage["can not be blank if notification_end_date is set", "4.3.1"]]}
       end
 
       it "end date is before start date" do
         a.notification_start_date = DateTime.new(2013,5,20,0,0,0)
         a.notification_end_date = DateTime.new(2013,4,20,2,1,7)
         a.should_not be_valid        
-        a.errors.messages.should == {:notification_end_date => ["can not be earlier than notification_start_date"]}
+        a.errors.messages.should == {:notification_end_date => [ATDIS::ErrorMessage["can not be earlier than notification_start_date", "4.3.1"]]}
       end
 
       it "both dates set to none" do
@@ -480,14 +480,14 @@ describe ATDIS::Application do
         a.notification_start_date = "none"
         a.notification_end_date = DateTime.new(2013,2,1,0,0,0)
         a.should_not be_valid
-        a.errors.messages.should == {:notification_start_date => ["can't be none unless notification_end_date is none as well"]}
+        a.errors.messages.should == {:notification_start_date => [ATDIS::ErrorMessage["can't be none unless notification_end_date is none as well", "4.3.1"]]}
       end
 
       it "only end date set to none" do
         a.notification_start_date = DateTime.new(2013,2,1,0,0,0)
         a.notification_end_date = "none"
         a.should_not be_valid
-        a.errors.messages.should == {:notification_end_date => ["can't be none unless notification_start_date is none as well"]}
+        a.errors.messages.should == {:notification_end_date => [ATDIS::ErrorMessage["can't be none unless notification_start_date is none as well", "4.3.1"]]}
       end
     end
 
@@ -495,22 +495,22 @@ describe ATDIS::Application do
       it do
         a.more_info_url = nil
         a.should_not be_valid
-        a.errors.messages.should == {:more_info_url => ["can't be blank"]}
+        a.errors.messages.should == {:more_info_url => [ATDIS::ErrorMessage["can't be blank", "4.3.2"]]}
       end
       it do
         a.more_info_url = "This is not a valid url"
         a.should_not be_valid
-        a.errors.messages.should == {:more_info_url => ["is not a valid URL"]}
+        a.errors.messages.should == {:more_info_url => [ATDIS::ErrorMessage["is not a valid URL", "4.3.2"]]}
       end
       it do
         a.more_info_url = "foo.com"
         a.should_not be_valid
-        a.errors.messages.should == {:more_info_url => ["is not a valid URL"]}
+        a.errors.messages.should == {:more_info_url => [ATDIS::ErrorMessage["is not a valid URL", "4.3.2"]]}
       end
       it do
         a.more_info_url = "httpss://foo.com"
         a.should_not be_valid
-        a.errors.messages.should == {:more_info_url => ["is not a valid URL"]}
+        a.errors.messages.should == {:more_info_url => [ATDIS::ErrorMessage["is not a valid URL", "4.3.2"]]}
       end
     end
 
@@ -519,7 +519,7 @@ describe ATDIS::Application do
         a.events = {:foo => "bar"}
         #a.events.should be_nil
         a.should_not be_valid
-        a.errors.messages.should == {:events => ["should be an array"]}
+        a.errors.messages.should == {:events => [ATDIS::ErrorMessage["should be an array", "4.3.4"]]}
       end
 
       it "can be an empty array" do
@@ -531,7 +531,7 @@ describe ATDIS::Application do
       it "can not be empty" do
         a.events = nil
         a.should_not be_valid
-        a.errors.messages.should == {:events => ["can't be blank"]}
+        a.errors.messages.should == {:events => [ATDIS::ErrorMessage["can't be blank", "4.3.4"]]}
       end
     end
   end

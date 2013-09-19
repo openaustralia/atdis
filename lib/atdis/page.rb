@@ -42,8 +42,8 @@ module ATDIS
 
     def count_is_consistent
       if count
-        errors.add(:count, "is not the same as the number of applications returned") if count != results.count        
-        errors.add(:count, "should not be larger than the number of results per page") if count > no_results_per_page
+        errors.add(:count, ErrorMessage["is not the same as the number of applications returned", "6.5"]) if count != results.count        
+        errors.add(:count, ErrorMessage["should not be larger than the number of results per page", "6.5"]) if count > no_results_per_page
       end
     end
 
@@ -51,14 +51,14 @@ module ATDIS
       if current_page_no
         if previous_page_no
           if previous_page_no != current_page_no - 1
-            errors.add(:previous_page_no, "should be one less than current page number or null if first page")
+            errors.add(:previous_page_no, ErrorMessage["should be one less than current page number or null if first page", "6.5"])
           end
           if current_page_no == 1
-            errors.add(:previous_page_no, "should be null if on the first page")
+            errors.add(:previous_page_no, ErrorMessage["should be null if on the first page", "6.5"])
           end            
         else
           if current_page_no > 1
-            errors.add(:previous_page_no, "can't be null if not on the first page")
+            errors.add(:previous_page_no, ErrorMessage["can't be null if not on the first page", "6.5"])
           end
         end
       end 
@@ -66,29 +66,29 @@ module ATDIS
 
     def next_page_no_is_consistent
       if next_page_no && next_page_no != current_page_no + 1
-        errors.add(:next_page_no, "should be one greater than current page number or null if last page")
+        errors.add(:next_page_no, ErrorMessage["should be one greater than current page number or null if last page", "6.5"])
       end
       if next_page_no.nil? && current_page_no != total_no_pages
-        errors.add(:next_page_no, "can't be null if not on the last page")
+        errors.add(:next_page_no, ErrorMessage["can't be null if not on the last page", "6.5"])
       end
       if next_page_no && current_page_no == total_no_pages
-        errors.add(:next_page_no, "should be null if on the last page")
+        errors.add(:next_page_no, ErrorMessage["should be null if on the last page", "6.5"])
       end
     end
 
     def current_page_no_is_consistent
       if current_page_no
-        errors.add(:current_page_no, "is larger than the number of pages") if current_page_no > total_no_pages        
-        errors.add(:current_page_no, "can not be less than 1") if current_page_no < 1
+        errors.add(:current_page_no, ErrorMessage["is larger than the number of pages", "6.5"]) if current_page_no > total_no_pages        
+        errors.add(:current_page_no, ErrorMessage["can not be less than 1", "6.5"]) if current_page_no < 1
       end
     end
 
     def total_no_results_is_consistent
       if total_no_pages && total_no_results > total_no_pages * no_results_per_page
-        errors.add(:total_no_results, "is larger than can be retrieved through paging")
+        errors.add(:total_no_results, ErrorMessage["is larger than can be retrieved through paging", "6.5"])
       end
       if total_no_pages && total_no_results <= (total_no_pages - 1) * no_results_per_page
-        errors.add(:total_no_results, "could fit into a smaller number of pages")
+        errors.add(:total_no_results, ErrorMessage["could fit into a smaller number of pages", "6.5"])
       end
     end
 

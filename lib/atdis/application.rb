@@ -32,34 +32,39 @@ module ATDIS
     ]
 
     # Mandatory parameters
-    validates :dat_id, :last_modified_date, :description, :authority, :lodgement_date, :determination_date, :status, 
-      :more_info_url, :location, :events, :documents, :presence_before_type_cast => true
+    validates :dat_id, :last_modified_date, :description, :authority, :lodgement_date, :determination_date, :status,
+      :presence_before_type_cast => {:spec_section => "4.3.1"}
+    validates :more_info_url, :presence_before_type_cast => {:spec_section => "4.3.2"}
+    validates :location, :presence_before_type_cast => true
+    validates :events, :presence_before_type_cast => {:spec_section => "4.3.4"}
+    validates :documents, :presence_before_type_cast => true
 
     # Other validations
-    validates :last_modified_date, :lodgement_date, :date_time => true
-    validates :determination_date, :notification_start_date, :notification_end_date, :date_time_or_none => true
-    validates :more_info_url, :http_url => true
+    validates :last_modified_date, :date_time => true
+    validates :lodgement_date, :date_time => true
+    validates :determination_date, :notification_start_date, :notification_end_date, :date_time_or_none => {:spec_section => "4.3.1"}
+    validates :more_info_url, :http_url => {:spec_section => "4.3.2"}
     validates :location, :valid => true
-    validates :events, :documents, :array => true
+    validates :events, :documents, :array => {:spec_section => "4.3.4"}
     # TODO people should be an array if it's included
 
     validate :notification_dates_consistent!
 
     def notification_dates_consistent!
       if notification_start_date_before_type_cast == "none" && notification_end_date_before_type_cast != "none"
-        errors.add(:notification_start_date, "can't be none unless notification_end_date is none as well")
+        errors.add(:notification_start_date, ErrorMessage["can't be none unless notification_end_date is none as well", "4.3.1"])
       end
       if notification_start_date_before_type_cast != "none" && notification_end_date_before_type_cast == "none"
-        errors.add(:notification_end_date, "can't be none unless notification_start_date is none as well")
+        errors.add(:notification_end_date, ErrorMessage["can't be none unless notification_start_date is none as well", "4.3.1"])
       end
       if notification_start_date_before_type_cast && notification_end_date_before_type_cast.blank?
-        errors.add(:notification_end_date, "can not be blank if notification_start_date is set")
+        errors.add(:notification_end_date, ErrorMessage["can not be blank if notification_start_date is set", "4.3.1"])
       end
       if notification_start_date_before_type_cast.blank? && notification_end_date_before_type_cast
-        errors.add(:notification_start_date, "can not be blank if notification_end_date is set")
+        errors.add(:notification_start_date, ErrorMessage["can not be blank if notification_end_date is set", "4.3.1"])
       end
       if notification_start_date && notification_end_date && notification_start_date > notification_end_date
-        errors.add(:notification_end_date, "can not be earlier than notification_start_date")
+        errors.add(:notification_end_date, ErrorMessage["can not be earlier than notification_start_date", "4.3.1"])
       end
     end
 

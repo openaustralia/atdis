@@ -15,7 +15,7 @@ module ATDIS
       def validate_each(record, attribute, value)
         raw_value = record.send("#{attribute}_before_type_cast")
         if raw_value.present? && !value.kind_of?(DateTime)
-          record.errors.add(attribute, "is not a valid date")
+          record.errors.add(attribute, ErrorMessage["is not a valid date", "4.3.8"])
         end
       end
     end
@@ -24,7 +24,9 @@ module ATDIS
       def validate_each(record, attribute, value)
         raw_value = record.send("#{attribute}_before_type_cast")
         if raw_value.present? && raw_value != "none" && !value.kind_of?(DateTime)
-          record.errors.add(attribute, "is not a valid date or none")
+          message = "is not a valid date or none"
+          message = ErrorMessage[message, options[:spec_section]] if options[:spec_section]
+          record.errors.add(attribute, message)
         end
       end
     end
@@ -33,7 +35,9 @@ module ATDIS
       def validate_each(record, attribute, value)
         raw_value = record.send("#{attribute}_before_type_cast")
         if raw_value.present? && !value.kind_of?(URI::HTTP) && !value.kind_of?(URI::HTTPS) 
-          record.errors.add(attribute, "is not a valid URL")
+          message = "is not a valid URL"
+          message = ErrorMessage[message, options[:spec_section]] if options[:spec_section]
+          record.errors.add(attribute, message)
         end
       end
     end
@@ -41,7 +45,9 @@ module ATDIS
     class ArrayValidator < ActiveModel::EachValidator
       def validate_each(record, attribute, value)
         if value && !value.kind_of?(Array)
-          record.errors.add(attribute, "should be an array")
+          message = "should be an array"
+          message = ErrorMessage[message, options[:spec_section]] if options[:spec_section]
+          record.errors.add(attribute, message)
         end
       end
     end
@@ -51,7 +57,9 @@ module ATDIS
       def validate_each(record, attribute, value)
         raw_value = record.send("#{attribute}_before_type_cast")
         if !raw_value.kind_of?(Array) && !raw_value.present?
-          record.errors.add(attribute, "can't be blank")
+          message = "can't be blank"          
+          message = ErrorMessage[message, options[:spec_section]] if options[:spec_section]
+          record.errors.add(attribute, message)
         end
       end
     end
@@ -60,7 +68,7 @@ module ATDIS
     class ValidValidator < ActiveModel::EachValidator
       def validate_each(record, attribute, value)
         if (value.respond_to?(:valid?) && !value.valid?) || (value && !value.respond_to?(:valid?) && !value.all?{|v| v.valid?})
-          record.errors.add(attribute, "is not valid")
+          record.errors.add(attribute, ErrorMessage["is not valid", nil])
         end
       end
     end
