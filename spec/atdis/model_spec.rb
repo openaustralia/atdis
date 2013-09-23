@@ -42,6 +42,12 @@ describe ATDIS::Model do
     end
   end
 
+  describe ".json_top_level_attribute" do
+    it { ModelA.json_top_level_attribute(:a).should == :bar }
+    it { ModelA.json_top_level_attribute(:b).should == :hello }
+    it { ModelB.json_top_level_attribute(:c).should == :bar }
+  end
+
   describe ".cast" do 
     it {ATDIS::Model.cast("2013-04-20T02:01:07Z", DateTime).should == DateTime.new(2013,4,20,2,1,7)}
     it {ATDIS::Model.cast("2013-04-20", DateTime).should == DateTime.new(2013,4,20)}

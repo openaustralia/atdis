@@ -81,6 +81,21 @@ module ATDIS
       attribute_types.find_all{|k,v| (v[1] || {})[:level] == level }.map{|k,v| k.to_s}
     end
 
+    def self.json_top_level_attribute(a, mappings = field_mappings)
+      mappings.each do |attribute, v|
+        if v == a
+          return attribute
+        end
+        if v.kind_of?(Hash)
+          r = json_top_level_attribute(a, v)
+          if r
+            return r
+          end
+        end
+      end
+      nil
+    end
+
     def json_attribute(a, new_value, mappings = field_mappings)
       mappings.each do |attribute, v|
         if v == a
