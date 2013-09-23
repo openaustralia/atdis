@@ -203,7 +203,7 @@ describe ATDIS::Page do
 
       it do
         page.should_not be_valid
-        page.errors.messages.should == {:results => [ATDIS::ErrorMessage["is not valid", nil]]}
+        page.errors.messages.should == {:results => [ATDIS::ErrorMessage["is not valid (see further errors for details)", nil]]}
       end
     end
 
@@ -218,12 +218,12 @@ describe ATDIS::Page do
 
       it do
         page.should_not be_valid
-        page.errors.messages.should == {:results => [ATDIS::ErrorMessage["is not valid", nil]]}
+        page.errors.messages.should == {:results => [ATDIS::ErrorMessage["is not valid (see further errors for details)", nil]]}
       end
 
       it "the errors from the first errored application should be here" do
         page.should_not be_valid
-        page.json_errors.should == [[{:response => [{:description => "application1"}, {:description => "application2"}]}, [ATDIS::ErrorMessage["response is not valid"]]], [{:response => [{:dat_id => "null"}]} , ["can not be empty"]]]
+        page.json_errors.should == [[{:response => [{:description => "application1"}, {:description => "application2"}]}, [ATDIS::ErrorMessage["response is not valid (see further errors for details)"]]], [{:response => [{:dat_id => "null"}]} , ["can not be empty"]]]
       end
 
     end
