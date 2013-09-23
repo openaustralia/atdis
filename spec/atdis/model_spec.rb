@@ -42,6 +42,12 @@ describe ATDIS::Model do
       a.b[1].errors.add(:c, ATDIS::ErrorMessage["can't be a name", "1.2"])
       a.json_errors.should == [[{:foo => {:hello => [{:bar => "Kat"}]}}, [ATDIS::ErrorMessage["bar can't be a name", "1.2"]]]]   
     end
+
+    it "should show json parsing errors" do
+      a = ModelA.interpret(:invalid => {:parameter => "foo"})
+      a.should_not be_valid
+      a.json_errors.should == [[nil, [ATDIS::ErrorMessage['Unexpected parameters in json data: {"invalid":{"parameter":"foo"}}', "4"]]]]
+    end
   end
 
   describe ".json_top_level_attribute" do

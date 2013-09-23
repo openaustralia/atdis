@@ -163,6 +163,10 @@ module ATDIS
 
     def json_errors_local
       r = []
+      # First show special json error
+      if !errors[:json].empty?
+        r << [nil, errors[:json]]
+      end
       attributes.each do |attribute_as_string, value|
         attribute = attribute_as_string.to_sym
         e = errors[attribute]
