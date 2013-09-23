@@ -146,21 +146,33 @@ module ATDIS
       values
     end
 
-    def json_errors
+    def json_errors_local
+      r = []
+      attributes.each do |attribute_as_string, value|
+        attribute = attribute_as_string.to_sym
+        e = errors[attribute]
+        r << [json_attribute(attribute, attributes_before_type_cast[attribute.to_s]), e] unless e.empty?
+      end
+      r
+    end
+
+    def json_errors_in_children
       r = []
       attributes.each do |attribute_as_string, value|
         attribute = attribute_as_string.to_sym
         e = errors[attribute]
         if value.respond_to?(:json_errors)
            r += value.json_errors.map{|a, b| [json_attribute(attribute, a), b]}
-        elsif !value.respond_to?(:json_errors) && value.kind_of?(Array)
+        elsif value.kind_of?(Array)
           f = value.find{|v| v.respond_to?(:json_errors) && !v.json_errors.empty?}
           r += f.json_errors.map{|a, b| [json_attribute(attribute, [a]), b]} if f
-        else
-          r << [json_attribute(attribute, attributes_before_type_cast[attribute.to_s]), e] unless e.empty?
         end
       end
       r
+    end
+
+    def json_errors
+      json_errors_local + json_errors_in_children
     end
 
     # TODO This is doing a similar stepping down into the children that json_errors is doing. Would be nice
