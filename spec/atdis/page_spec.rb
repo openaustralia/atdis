@@ -223,7 +223,7 @@ describe ATDIS::Page do
 
       it "the errors from the first errored application should be here" do
         page.should_not be_valid
-        page.json_errors.should == [[{:response => {:dat_id => "null"}} , ["can not be empty"]]]
+        page.json_errors.should == [[{:response => [{:dat_id => "null"}]} , ["can not be empty"]]]
       end
 
     end

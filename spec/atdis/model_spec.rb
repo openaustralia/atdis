@@ -1,6 +1,47 @@
 require File.expand_path(File.dirname(__FILE__) + '/../spec_helper')
 
+class ModelB < ATDIS::Model
+  set_field_mappings [
+    [:bar, [:c, String]]
+  ]
+end
+
+class ModelA < ATDIS::Model
+  set_field_mappings [
+    [:foo, [
+      [:bar, [:a, String]],
+      [:hello, [:b, ModelB]]
+      ]]
+  ]
+end
+
 describe ATDIS::Model do
+  describe ".json_errors" do
+    it "should return the json attribute with the errors" do
+      a = ModelA.interpret(:foo => {:bar => "Hello"})
+      a.errors.add(:a, "Can not be so friendly")
+      a.errors.add(:a, "and something else")
+      a.json_errors.should == [[{:foo => {:bar => "Hello"}}, ["Can not be so friendly", "and something else"]]]
+    end
+
+    it "should include the errors from child objects" do
+      a = ModelA.interpret(:foo => {:hello => {:bar => "Kat"}})
+      a.b.errors.add(:c, "can't be a name")
+      a.b.json_errors.should == [[{:bar => "Kat"}, ["can't be a name"]]]
+      a.json_errors.should == [[{:foo => {:hello => {:bar => "Kat"}}}, ["can't be a name"]]]
+    end
+
+    it "should include the errors from only the first child object in an array" do
+      a = ModelA.interpret(:foo => {:hello => [{:bar => "Kat"}, {:bar => "Mat"}]})
+      a.b[0].c.should == "Kat"
+      a.b[1].c.should == "Mat"
+      a.json_errors.should == []
+      a.b[0].errors.add(:c, "can't be a name")
+      a.b[1].errors.add(:c, "can't be a name")
+      a.json_errors.should == [[{:foo => {:hello => [{:bar => "Kat"}]}}, ["can't be a name"]]]      
+    end
+  end
+
   describe ".cast" do 
     it {ATDIS::Model.cast("2013-04-20T02:01:07Z", DateTime).should == DateTime.new(2013,4,20,2,1,7)}
     it {ATDIS::Model.cast("2013-04-20", DateTime).should == DateTime.new(2013,4,20)}

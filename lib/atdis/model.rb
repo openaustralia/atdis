@@ -148,15 +148,16 @@ module ATDIS
 
     def json_errors
       r = []
-      errors.messages.each do |attribute, e|
-        value = attributes[attribute.to_s]
-        if (value.respond_to?(:valid?) && !value.valid?)
-          r += value.json_errors.map{|a, b| [json_attribute(attribute, a), b]}
-        elsif (value && !value.respond_to?(:valid?) && value.respond_to?(:all?) && !value.all?{|v| v.valid?})
-          f = value.find{|v| !v.valid?}
-          r += f.json_errors.map{|a, b| [json_attribute(attribute, a), b]}
+      attributes.each do |attribute_as_string, value|
+        attribute = attribute_as_string.to_sym
+        e = errors[attribute]
+        if value.respond_to?(:json_errors)
+           r += value.json_errors.map{|a, b| [json_attribute(attribute, a), b]}
+        elsif !value.respond_to?(:json_errors) && value.kind_of?(Array)
+          f = value.find{|v| v.respond_to?(:json_errors) && !v.json_errors.empty?}
+          r += f.json_errors.map{|a, b| [json_attribute(attribute, [a]), b]} if f
         else
-          r << [json_attribute(attribute, attributes_before_type_cast[attribute.to_s]), e]
+          r << [json_attribute(attribute, attributes_before_type_cast[attribute.to_s]), e] unless e.empty?
         end
       end
       r
