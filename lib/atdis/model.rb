@@ -166,7 +166,7 @@ module ATDIS
       attributes.each do |attribute_as_string, value|
         attribute = attribute_as_string.to_sym
         e = errors[attribute]
-        r << [json_attribute(attribute, attributes_before_type_cast[attribute.to_s]), e] unless e.empty?
+        r << [json_attribute(attribute, attributes_before_type_cast[attribute.to_s]), e.map{|m| ErrorMessage["#{self.class.json_top_level_attribute(attribute)} #{m}", m.spec_section]}] unless e.empty?
       end
       r
     end

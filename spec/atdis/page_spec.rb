@@ -68,7 +68,7 @@ describe ATDIS::Page do
           it do
             page.should_not be_valid
             page.errors.messages.should == {:previous_page_no => [ATDIS::ErrorMessage["should be one less than current page number or null if first page", "6.5"]]}
-            page.json_errors.should == [[{:pagination => {:previous => 5}}, [ATDIS::ErrorMessage["should be one less than current page number or null if first page", "6.5"]]]]
+            page.json_errors.should == [[{:pagination => {:previous => 5}}, [ATDIS::ErrorMessage["previous should be one less than current page number or null if first page", "6.5"]]]]
           end
         end
 
@@ -223,7 +223,7 @@ describe ATDIS::Page do
 
       it "the errors from the first errored application should be here" do
         page.should_not be_valid
-        page.json_errors.should == [[{:response => [{:description => "application1"}, {:description => "application2"}]}, [ATDIS::ErrorMessage["is not valid"]]], [{:response => [{:dat_id => "null"}]} , ["can not be empty"]]]
+        page.json_errors.should == [[{:response => [{:description => "application1"}, {:description => "application2"}]}, [ATDIS::ErrorMessage["response is not valid"]]], [{:response => [{:dat_id => "null"}]} , ["can not be empty"]]]
       end
 
     end
