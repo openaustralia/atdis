@@ -6,7 +6,7 @@ A ruby interface to the application tracking data interchange specification (ATD
 
 We're developing this against version ATDIS 1.0.7.
 
-This is **highly alpha** software that probably doesn't yet do what it says on the tin. It is very much a work in progress.
+This is **beta** software and is a work in progress.
 
 Source code is available on GitHub at https://github.com/openaustralia/atdis
 
@@ -26,7 +26,30 @@ Or install it yourself as:
 
 ## Usage
 
-TODO: Write usage instructions here
+### Basic usage
+
+    require 'atdis'
+    f = ATDIS::Feed.new("http://www.planningalerts.org.au/atdis/feed/1/")
+
+    # Get the first application in the first page of results for all the applications
+    page = f.applications
+    app = page.results.first
+
+    puts "#{app.dat_id}: #{app.description} at #{app.location.address}"
+
+    DA2013-0381: New pool plus deck at 123 Fourfivesix Street Neutral Bay NSW 2089
+
+### Paging
+    
+    page.next
+
+and
+
+    page.previous
+
+### Validation
+
+    page.valid?
 
 ## Contributing
 
