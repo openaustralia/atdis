@@ -20,6 +20,12 @@ module ATDIS
         postcode = postcode.join(",") if postcode.respond_to?(:join)
         url += "?postcode=#{postcode}"
       end
+      if options[:lodgement_date_start]
+        url += "?lodgement_date_start=#{options[:lodgement_date_start]}"
+      end
+      if options[:lodgement_date_end]
+        url += "&lodgement_date_end=#{options[:lodgement_date_end]}"
+      end
       Page.read_url(url)
     end
   end
