@@ -5,15 +5,14 @@ module ATDIS
     attr_reader :base_url
 
     # base_url - the base url from which the urls for all atdis urls are made
-    # It is the concatenation of the protocol and web address as defined in section 4.2 of specification
-    # For example if the base_url is "http://www.council.nsw.gov.au" then the url for listing all the
-    # applications is "http://www.council.nsw.gov.au/atdis/1.0/applications.json"
+    # It should be of the form:
+    # http://www.council.nsw.gov.au/atdis/1.0/applications.json
     def initialize(base_url)
       @base_url = base_url.kind_of?(URI) ? base_url : URI.parse(base_url)
     end
 
     def applications(page = 1)
-      url = base_url + "atdis/1.0/applications.json"
+      url = base_url
       url += "?page=#{page}" if page > 1
       Page.read_url(url)
     end

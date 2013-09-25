@@ -1,7 +1,7 @@
 require File.expand_path(File.dirname(__FILE__) + '/../spec_helper')
 
 describe ATDIS::Feed do
-  let (:base_url_string) { "http://www.council.nsw.gov.au" }
+  let (:base_url_string) { "http://www.council.nsw.gov.au/atdis/1.0/applications.json" }
   let (:base_url) { URI.parse(base_url_string) }
 
   context "base_url passed as string" do

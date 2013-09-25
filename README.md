@@ -29,7 +29,7 @@ Or install it yourself as:
 ### Basic usage
 
     require 'atdis'
-    f = ATDIS::Feed.new("http://www.planningalerts.org.au/atdis/feed/1/")
+    f = ATDIS::Feed.new("http://www.planningalerts.org.au/atdis/feed/1/atdis/1.0/applications.json")
 
     # Get the first application in the first page of results for all the applications
     page = f.applications
