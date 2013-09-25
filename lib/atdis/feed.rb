@@ -11,7 +11,7 @@ module ATDIS
       @base_url = base_url
     end
 
-    def applications(options = {})
+    def url(options = {})
       valid_options = [:page, :postcode, :lodgement_date_start, :lodgement_date_end, :last_modified_date_start, :last_modified_date_end]
       invalid_options = options.keys - valid_options
       if !invalid_options.empty?
@@ -23,7 +23,11 @@ module ATDIS
       unless options.empty?
         url += "?" + options.sort{|a,b| a.first.to_s <=> b.first.to_s}.map{|k,v| "#{k}=#{v}"}.join("&")
       end
-      Page.read_url(url)
+      url
+    end
+
+    def applications(options = {})
+      Page.read_url(url(options))
     end
   end
 end
