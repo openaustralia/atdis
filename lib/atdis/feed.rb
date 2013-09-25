@@ -14,17 +14,11 @@ module ATDIS
     # Always return the first page. We can use the in-built paging from Page to return
     # the following pages
     def applications(options = {})
+      options[:postcode] = options[:postcode].join(",") if options[:postcode].respond_to?(:join)
+
       url = base_url
-      if options[:postcode]
-        postcode = options[:postcode]
-        postcode = postcode.join(",") if postcode.respond_to?(:join)
-        url += "?postcode=#{postcode}"
-      end
-      if options[:lodgement_date_start]
-        url += "?lodgement_date_start=#{options[:lodgement_date_start]}"
-      end
-      if options[:lodgement_date_end]
-        url += "&lodgement_date_end=#{options[:lodgement_date_end]}"
+      unless options.empty?
+        url += "?" + options.map{|k,v| "#{k}=#{v}"}.join("&")
       end
       Page.read_url(url)
     end
