@@ -8,7 +8,7 @@ module ATDIS
     # It should be of the form:
     # http://www.council.nsw.gov.au/atdis/1.0/applications.json
     def initialize(base_url)
-      @base_url = base_url.kind_of?(URI) ? base_url : URI.parse(base_url)
+      @base_url = base_url
     end
 
     # Always return the first page. We can use the in-built paging from Page to return
