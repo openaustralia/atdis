@@ -58,4 +58,19 @@ describe ATDIS::Feed do
   it "passing an invalid option" do
     expect {feed.url(:foo => 1)}.to raise_error "Unexpected options used: foo"
   end
+
+  describe ".base_url_from_url" do
+    it { ATDIS::Feed.base_url_from_url("http://www.council.nsw.gov.au/atdis/1.0/applications.json?postcode=2000").should == "http://www.council.nsw.gov.au/atdis/1.0/applications.json" }
+    it { ATDIS::Feed.base_url_from_url("http://www.foo.nsw.gov.au/prefix/atdis/1.0/applications.json?postcode=2000#bar").should == "http://www.foo.nsw.gov.au/prefix/atdis/1.0/applications.json" }
+  end
+
+  describe ".options_from_url" do
+    it { ATDIS::Feed.options_from_url("http://www.council.nsw.gov.au/atdis/1.0/applications.json").should == {} }
+    it { ATDIS::Feed.options_from_url("http://www.council.nsw.gov.au/atdis/1.0/applications.json?page=2").should == {:page => 2} }
+    it { ATDIS::Feed.options_from_url("http://www.council.nsw.gov.au/atdis/1.0/applications.json?postcode=2000,2001").should == {:postcode => "2000,2001"} }
+    it { ATDIS::Feed.options_from_url("http://www.council.nsw.gov.au/atdis/1.0/applications.json?lodgement_date_end=2001-03-01&lodgement_date_start=2001-02-01").should ==
+      {:lodgement_date_start => Date.new(2001,2,1), :lodgement_date_end => Date.new(2001,3,1)} }
+    it { ATDIS::Feed.options_from_url("http://www.council.nsw.gov.au/atdis/1.0/applications.json?last_modified_date_end=2001-03-01&last_modified_date_start=2001-02-01").should ==
+      {:last_modified_date_start => Date.new(2001,2,1), :last_modified_date_end => Date.new(2001,3,1)} }
+  end
 end

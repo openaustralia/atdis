@@ -26,6 +26,29 @@ module ATDIS
       url
     end
 
+    def self.base_url_from_url(url)
+      u = URI.parse(url)
+      u.query = nil
+      u.fragment = nil
+      u.to_s
+    end
+
+    def self.options_from_url(url)
+      u = URI.parse(url)
+      options = {}
+      if u.query
+        u.query.split("&").each do |t|
+          key, value = t.split("=")
+          options[key.to_sym] = value
+        end
+      end
+      [:lodgement_date_start, :lodgement_date_end, :last_modified_date_start, :last_modified_date_end].each do |k|
+        options[k] = Date.parse(options[k]) if options[k]
+      end
+      options[:page] = options[:page].to_i if options[:page]
+      options
+    end
+
     def applications(options = {})
       Page.read_url(url(options))
     end
