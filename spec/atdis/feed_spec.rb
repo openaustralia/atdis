@@ -43,6 +43,18 @@ describe ATDIS::Feed do
     end
   end
 
+  describe "search by last modified date" do
+    it "just a last modified start date" do
+      ATDIS::Page.should_receive(:read_url).with("http://www.council.nsw.gov.au/atdis/1.0/applications.json?last_modified_date_start=2001-02-01").and_return(page)
+      feed.applications(:last_modified_date_start => Date.new(2001,2,1)).should == page
+    end
+
+    it "a last modified start date and end date" do
+      ATDIS::Page.should_receive(:read_url).with("http://www.council.nsw.gov.au/atdis/1.0/applications.json?last_modified_date_start=2001-02-01&last_modified_date_end=2001-03-01").and_return(page)
+      feed.applications(:last_modified_date_start => Date.new(2001,2,1), :last_modified_date_end => Date.new(2001,3,1)).should == page
+    end
+  end
+
   it "passing an invalid option" do
     expect {feed.applications(:foo => 1)}.to raise_error "Unexpected options used: foo"
   end
