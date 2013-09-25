@@ -11,10 +11,10 @@ module ATDIS
       @base_url = base_url.kind_of?(URI) ? base_url : URI.parse(base_url)
     end
 
-    def applications(page = 1)
-      url = base_url
-      url += "?page=#{page}" if page > 1
-      Page.read_url(url)
+    # Always return the first page. We can use the in-built paging from Page to return
+    # the following pages
+    def applications
+      Page.read_url(base_url)
     end
   end
 end
