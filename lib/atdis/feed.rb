@@ -13,8 +13,12 @@ module ATDIS
 
     # Always return the first page. We can use the in-built paging from Page to return
     # the following pages
-    def applications
-      Page.read_url(base_url)
+    def applications(options = {})
+      url = base_url
+      if options[:postcode]
+        url += "?postcode=#{options[:postcode]}"
+      end
+      Page.read_url(url)
     end
   end
 end
