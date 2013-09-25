@@ -42,4 +42,8 @@ describe ATDIS::Feed do
       feed.applications(:lodgement_date_start => Date.new(2001,2,1), :lodgement_date_end => Date.new(2001,3,1)).should == page
     end
   end
+
+  it "passing an invalid option" do
+    expect {feed.applications(:foo => 1)}.to raise_error "Unexpected options used: foo"
+  end
 end
