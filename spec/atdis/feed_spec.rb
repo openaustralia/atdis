@@ -55,6 +55,11 @@ describe ATDIS::Feed do
     end
   end
 
+  it "jump straight to the second page" do
+    ATDIS::Page.should_receive(:read_url).with("http://www.council.nsw.gov.au/atdis/1.0/applications.json?page=2").and_return(page)
+    feed.applications(:page => 2).should == page    
+  end
+
   it "passing an invalid option" do
     expect {feed.applications(:foo => 1)}.to raise_error "Unexpected options used: foo"
   end

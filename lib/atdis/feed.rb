@@ -11,10 +11,8 @@ module ATDIS
       @base_url = base_url
     end
 
-    # Always return the first page. We can use the in-built paging from Page to return
-    # the following pages
     def applications(options = {})
-      valid_options = [:postcode, :lodgement_date_start, :lodgement_date_end, :last_modified_date_start, :last_modified_date_end]
+      valid_options = [:page, :postcode, :lodgement_date_start, :lodgement_date_end, :last_modified_date_start, :last_modified_date_end]
       invalid_options = options.keys - valid_options
       if !invalid_options.empty?
         raise "Unexpected options used: #{invalid_options.join(',')}"
