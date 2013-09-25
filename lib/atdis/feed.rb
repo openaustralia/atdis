@@ -16,7 +16,9 @@ module ATDIS
     def applications(options = {})
       url = base_url
       if options[:postcode]
-        url += "?postcode=#{options[:postcode]}"
+        postcode = options[:postcode]
+        postcode = postcode.join(",") if postcode.respond_to?(:join)
+        url += "?postcode=#{postcode}"
       end
       Page.read_url(url)
     end
