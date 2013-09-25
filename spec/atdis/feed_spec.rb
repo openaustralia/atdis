@@ -38,7 +38,7 @@ describe ATDIS::Feed do
     end
 
     it "a lodgement start date and end date" do
-      ATDIS::Page.should_receive(:read_url).with("http://www.council.nsw.gov.au/atdis/1.0/applications.json?lodgement_date_start=2001-02-01&lodgement_date_end=2001-03-01").and_return(page)
+      ATDIS::Page.should_receive(:read_url).with("http://www.council.nsw.gov.au/atdis/1.0/applications.json?lodgement_date_end=2001-03-01&lodgement_date_start=2001-02-01").and_return(page)
       feed.applications(:lodgement_date_start => Date.new(2001,2,1), :lodgement_date_end => Date.new(2001,3,1)).should == page
     end
   end
@@ -50,7 +50,7 @@ describe ATDIS::Feed do
     end
 
     it "a last modified start date and end date" do
-      ATDIS::Page.should_receive(:read_url).with("http://www.council.nsw.gov.au/atdis/1.0/applications.json?last_modified_date_start=2001-02-01&last_modified_date_end=2001-03-01").and_return(page)
+      ATDIS::Page.should_receive(:read_url).with("http://www.council.nsw.gov.au/atdis/1.0/applications.json?last_modified_date_end=2001-03-01&last_modified_date_start=2001-02-01").and_return(page)
       feed.applications(:last_modified_date_start => Date.new(2001,2,1), :last_modified_date_end => Date.new(2001,3,1)).should == page
     end
   end

@@ -21,7 +21,7 @@ module ATDIS
 
       url = base_url
       unless options.empty?
-        url += "?" + options.map{|k,v| "#{k}=#{v}"}.join("&")
+        url += "?" + options.sort{|a,b| a.first.to_s <=> b.first.to_s}.map{|k,v| "#{k}=#{v}"}.join("&")
       end
       Page.read_url(url)
     end
