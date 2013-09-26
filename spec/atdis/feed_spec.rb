@@ -62,6 +62,9 @@ describe ATDIS::Feed do
   describe ".base_url_from_url" do
     it { ATDIS::Feed.base_url_from_url("http://www.council.nsw.gov.au/atdis/1.0/applications.json?postcode=2000").should == "http://www.council.nsw.gov.au/atdis/1.0/applications.json" }
     it { ATDIS::Feed.base_url_from_url("http://www.foo.nsw.gov.au/prefix/atdis/1.0/applications.json?postcode=2000#bar").should == "http://www.foo.nsw.gov.au/prefix/atdis/1.0/applications.json" }
+    it "should assume that any query parameters that are not recognised are part of the base_url" do
+      ATDIS::Feed.base_url_from_url("http://www.foo.nsw.gov.au/prefix/atdis/1.0/applications.json?postcode=2000&foo=bar").should == "http://www.foo.nsw.gov.au/prefix/atdis/1.0/applications.json?foo=bar"
+    end
   end
 
   describe ".options_from_url" do
@@ -72,5 +75,8 @@ describe ATDIS::Feed do
       {:lodgement_date_start => Date.new(2001,2,1), :lodgement_date_end => Date.new(2001,3,1)} }
     it { ATDIS::Feed.options_from_url("http://www.council.nsw.gov.au/atdis/1.0/applications.json?last_modified_date_end=2001-03-01&last_modified_date_start=2001-02-01").should ==
       {:last_modified_date_start => Date.new(2001,2,1), :last_modified_date_end => Date.new(2001,3,1)} }
+    it "should assume that any query parameters that are not recognised are part of the base_url" do
+      ATDIS::Feed.options_from_url("http://www.foo.nsw.gov.au/prefix/atdis/1.0/applications.json?postcode=2000&foo=bar").should == {:postcode => "2000"}
+    end
   end
 end

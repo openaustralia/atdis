@@ -21,12 +21,16 @@ module ATDIS
       options[:postcode] = options[:postcode].join(",") if options[:postcode].respond_to?(:join)
 
       q = Feed.options_to_query(options)  
-      q == "" ? base_url : "#{base_url}?#{q}"
+      q.nil? ? base_url : "#{base_url}?#{q}"
     end
 
     def self.base_url_from_url(url)
       u = URI.parse(url)
-      u.query = nil
+      options = query_to_options(u.query)
+      VALID_OPTIONS.each do |o|
+        options.delete(o)
+      end
+      u.query = options_to_query(options)
       u.fragment = nil
       u.to_s
     end
@@ -38,6 +42,12 @@ module ATDIS
         options[k] = Date.parse(options[k]) if options[k]
       end
       options[:page] = options[:page].to_i if options[:page]
+      # Remove invalid options
+      options.keys.each do |key|
+        if !VALID_OPTIONS.include?(key)
+          options.delete(key)
+        end
+      end
       options
     end
 
@@ -62,7 +72,11 @@ module ATDIS
     # Turn an options hash of the form {:foo => "bar", :hello => "sir"} into a query
     # string of the form "foo=bar&hello=sir"
     def self.options_to_query(options)
-      options.sort{|a,b| a.first.to_s <=> b.first.to_s}.map{|k,v| "#{k}=#{v}"}.join("&")
+      if options.empty?
+        nil
+      else
+        options.sort{|a,b| a.first.to_s <=> b.first.to_s}.map{|k,v| "#{k}=#{v}"}.join("&")
+      end
     end
   end
 end
