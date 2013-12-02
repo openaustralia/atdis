@@ -7,6 +7,18 @@ describe ATDIS::Page do
   end
 
   describe "validations" do
+    context "results block that is a hash" do
+      before :each do
+        ATDIS::Application.should_receive(:interpret).with(:description => "application1").and_return(double(:valid? => true))
+      end
+      let(:page) { ATDIS::Page.new(:results => {:description => "application1"}) }
+
+      it do
+        page.should_not be_valid
+        page.errors.messages.should == {:results => [ATDIS::ErrorMessage["should be an array", "6.5"]]}
+      end
+    end
+
     context "two valid applications no paging" do
       before :each do
         ATDIS::Application.should_receive(:interpret).with(:description => "application1").and_return(double(:valid? => true))

@@ -18,6 +18,8 @@ module ATDIS
     # Mandatory parameters
     validates :results, :presence_before_type_cast => {:spec_section => "4.3"}
     validates :results, :valid => true
+    # section 6.5 is not explicitly about this but it does contain an example which should be helpful
+    validates :results, :array => {:spec_section => "6.5"}
     validate :count_is_consistent, :all_pagination_is_present, :previous_page_no_is_consistent, :next_page_no_is_consistent
     validate :current_page_no_is_consistent, :total_no_results_is_consistent
     validate :json_loaded_correctly!
