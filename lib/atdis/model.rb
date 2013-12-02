@@ -112,13 +112,15 @@ module ATDIS
     end
 
     def self.map_field(key, data, mappings)
-      mappings.each do |k, v|
-        if v == key
-          return data[k]
-        elsif v.kind_of?(Hash) && data.has_key?(k)
-          r = map_field(key, data[k], mappings[k])
-          if r
-            return r
+      if data.kind_of?(Hash)
+        mappings.each do |k, v|
+          if v == key
+            return data[k]
+          elsif v.kind_of?(Hash) && data.has_key?(k)
+            r = map_field(key, data[k], mappings[k])
+            if r
+              return r
+            end
           end
         end
       end
