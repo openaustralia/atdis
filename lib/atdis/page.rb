@@ -44,7 +44,7 @@ module ATDIS
 
     def count_is_consistent
       if count
-        errors.add(:count, ErrorMessage["is not the same as the number of applications returned", "6.5"]) if count != results.count        
+        errors.add(:count, ErrorMessage["is not the same as the number of applications returned", "6.5"]) if count != results.count
         errors.add(:count, ErrorMessage["should not be larger than the number of results per page", "6.5"]) if count > no_results_per_page
       end
     end
@@ -57,13 +57,13 @@ module ATDIS
           end
           if current_page_no == 1
             errors.add(:previous_page_no, ErrorMessage["should be null if on the first page", "6.5"])
-          end            
+          end
         else
           if current_page_no > 1
             errors.add(:previous_page_no, ErrorMessage["can't be null if not on the first page", "6.5"])
           end
         end
-      end 
+      end
     end
 
     def next_page_no_is_consistent
@@ -80,7 +80,7 @@ module ATDIS
 
     def current_page_no_is_consistent
       if current_page_no
-        errors.add(:current_page_no, ErrorMessage["is larger than the number of pages", "6.5"]) if current_page_no > total_no_pages        
+        errors.add(:current_page_no, ErrorMessage["is larger than the number of pages", "6.5"]) if current_page_no > total_no_pages
         errors.add(:current_page_no, ErrorMessage["can not be less than 1", "6.5"]) if current_page_no < 1
       end
     end
