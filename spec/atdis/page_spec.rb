@@ -121,7 +121,7 @@ describe ATDIS::Page do
           it do
             page.should_not be_valid
             page.errors.messages.should == {:next_page_no => [ATDIS::ErrorMessage["should be one greater than current page number or null if last page", "6.5"]]}
-          end          
+          end
         end
 
         context "next page number is nil but not on last page" do
@@ -173,7 +173,7 @@ describe ATDIS::Page do
           it do
             page.should_not be_valid
             page.errors.messages.should == {:current_page_no => [ATDIS::ErrorMessage["can not be less than 1", "6.5"]]}
-          end          
+          end
         end
 
         context "total_no_results is larger than would be expected" do
@@ -187,7 +187,7 @@ describe ATDIS::Page do
           it do
             page.should_not be_valid
             page.errors.messages.should == {:total_no_results => [ATDIS::ErrorMessage["is larger than can be retrieved through paging", "6.5"]]}
-          end          
+          end
         end
 
         context "total no_results is less than would be expected" do
@@ -201,7 +201,7 @@ describe ATDIS::Page do
           it do
             page.should_not be_valid
             page.errors.messages.should == {:total_no_results => [ATDIS::ErrorMessage["could fit into a smaller number of pages", "6.5"]]}
-          end          
+          end
         end
       end
     end
@@ -249,10 +249,10 @@ describe ATDIS::Page do
     {
       "application": {
         "description": "application2"
-      }      
+      }
     }
   ],
-}        
+}
        EOF
         )}
 
@@ -277,12 +277,12 @@ describe ATDIS::Page do
     {
       "application": {
         "description": "application1"
-      }     
+      }
     },
     {
       "application": {
         "description": "application2"
-      }      
+      }
     }
   ],
   "count": 2,
@@ -294,7 +294,7 @@ describe ATDIS::Page do
     "count": 50,
     "pages": 25
   }
-}        
+}
        EOF
         )}
       it ".results" do
@@ -320,12 +320,12 @@ describe ATDIS::Page do
       {
         "application": {
           "description": "application1"
-        }     
+        }
       },
       {
         "application": {
           "description": "application2"
-        }      
+        }
       }
     ]
   }
@@ -382,12 +382,12 @@ describe ATDIS::Page do
     {
       "application": {
         "description": "application1"
-      }     
+      }
     },
     {
       "application": {
         "description": "application2"
-      }      
+      }
     }
   ],
   "count": 2,
@@ -399,7 +399,7 @@ describe ATDIS::Page do
     "count": 50,
     "pages": 25
   }
-}        
+}
       EOF
       ))
     end

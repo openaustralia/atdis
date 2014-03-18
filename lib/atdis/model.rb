@@ -32,7 +32,7 @@ module ATDIS
         end
         v.all?{|a| !a.kind_of?(Array)}
       end
-      
+
       def translate_field_mappings(p)
         f = ActiveSupport::OrderedHash.new
         ca = ActiveSupport::OrderedHash.new
@@ -74,7 +74,7 @@ module ATDIS
     # Stores any part of the json that could not be interpreted. Usually
     # signals an error if it isn't empty.
     attr_accessor :json_left_overs, :json_load_error
-    
+
     validate :json_left_overs_is_empty
 
     def self.level_attribute_names(level)

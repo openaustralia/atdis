@@ -217,7 +217,7 @@ describe ATDIS::Application do
       before :each do
         a.more_info_url = "This is not a url"
       end
-      it "should be nil" do      
+      it "should be nil" do
         a.more_info_url.should be_nil
       end
       it "should keep the original string" do
@@ -323,7 +323,7 @@ describe ATDIS::Application do
       :description => "New pool plus deck",
       :authority => "Example Council Shire Council",
       :lodgement_date => DateTime.new(2013,4,20,2,1,7),
-      :determination_date => DateTime.new(2013,6,20),  
+      :determination_date => DateTime.new(2013,6,20),
       :status => "OPEN",
       :more_info_url => URI.parse("http://foo.com/bar"),
       :location => {:address => "123 Fourfivesix Street Neutral Bay NSW 2089"},
@@ -452,7 +452,7 @@ describe ATDIS::Application do
       it "end date is before start date" do
         a.notification_start_date = DateTime.new(2013,5,20,0,0,0)
         a.notification_end_date = DateTime.new(2013,4,20,2,1,7)
-        a.should_not be_valid        
+        a.should_not be_valid
         a.errors.messages.should == {:notification_end_date => [ATDIS::ErrorMessage["can not be earlier than notification_start_date", "4.3.1"]]}
       end
 
