@@ -2,7 +2,7 @@ require File.expand_path(File.dirname(__FILE__) + '/../spec_helper')
 
 describe ATDIS::Page do
   it ".attribute_names" do
-    ATDIS::Page.attribute_names.should == ["results", "count", "previous_page_no", "next_page_no", "current_page_no",
+    ATDIS::Page.attribute_names.should == ["response", "count", "previous_page_no", "next_page_no", "current_page_no",
       "no_results_per_page", "total_no_results", "total_no_pages"]
   end
 
@@ -11,11 +11,11 @@ describe ATDIS::Page do
       before :each do
         ATDIS::Application.should_receive(:interpret).with(description: "application1").and_return(double(valid?: true))
       end
-      let(:page) { ATDIS::Page.new(results: {description: "application1"}) }
+      let(:page) { ATDIS::Page.new(response: {description: "application1"}) }
 
       it do
         page.should_not be_valid
-        page.errors.messages.should == {results: [ATDIS::ErrorMessage["should be an array", "6.5"]]}
+        page.errors.messages.should == {response: [ATDIS::ErrorMessage["should be an array", "6.5"]]}
       end
     end
 
@@ -24,7 +24,7 @@ describe ATDIS::Page do
         ATDIS::Application.should_receive(:interpret).with(description: "application1").and_return(double(valid?: true))
         ATDIS::Application.should_receive(:interpret).with(description: "application2").and_return(double(valid?: true))
       end
-      let(:page) { ATDIS::Page.new(results: [{description: "application1"}, {description: "application2"}]) }
+      let(:page) { ATDIS::Page.new(response: [{description: "application1"}, {description: "application2"}]) }
 
       it {page.should be_valid}
 
@@ -211,11 +211,11 @@ describe ATDIS::Page do
         ATDIS::Application.should_receive(:interpret).with(description: "application1").and_return(double(valid?: true))
         ATDIS::Application.should_receive(:interpret).with(description: "application2").and_return(double(valid?: false))
       end
-      let(:page) { ATDIS::Page.new(results: [{description: "application1"}, {description: "application2"}]) }
+      let(:page) { ATDIS::Page.new(response: [{description: "application1"}, {description: "application2"}]) }
 
       it do
         page.should_not be_valid
-        page.errors.messages.should == {results: [ATDIS::ErrorMessage["is not valid (see further errors for details)", nil]]}
+        page.errors.messages.should == {response: [ATDIS::ErrorMessage["is not valid (see further errors for details)", nil]]}
       end
     end
 
@@ -226,11 +226,11 @@ describe ATDIS::Page do
         ATDIS::Application.should_receive(:interpret).with(description: "application1").and_return(a1)
         ATDIS::Application.should_receive(:interpret).with(description: "application2").and_return(a2)
       end
-      let(:page) { ATDIS::Page.new(results: [{description: "application1"}, {description: "application2"}]) }
+      let(:page) { ATDIS::Page.new(response: [{description: "application1"}, {description: "application2"}]) }
 
       it do
         page.should_not be_valid
-        page.errors.messages.should == {results: [ATDIS::ErrorMessage["is not valid (see further errors for details)", nil]]}
+        page.errors.messages.should == {response: [ATDIS::ErrorMessage["is not valid (see further errors for details)", nil]]}
       end
 
       it "the errors from the first errored application should be here" do
@@ -302,7 +302,7 @@ describe ATDIS::Page do
         ATDIS::Application.should_receive(:interpret).with(application: {description: "application1"}).and_return(application1)
         ATDIS::Application.should_receive(:interpret).with(application: {description: "application2"}).and_return(application2)
 
-        page.results.should == [application1, application2]
+        page.response.should == [application1, application2]
       end
 
       it ".next" do
@@ -334,13 +334,13 @@ describe ATDIS::Page do
 
       let(:applications_results) { ATDIS::Page.read_url("http://www.council.nsw.gov.au/atdis/1.0/applications.json") }
 
-      it ".results" do
+      it ".response" do
         application1 = double("Application")
         application2 = double("Application")
         ATDIS::Application.should_receive(:interpret).with(application: {description: "application1"}).and_return(application1)
         ATDIS::Application.should_receive(:interpret).with(application: {description: "application2"}).and_return(application2)
 
-        applications_results.results.should == [application1, application2]
+        applications_results.response.should == [application1, application2]
       end
 
       it ".next" do

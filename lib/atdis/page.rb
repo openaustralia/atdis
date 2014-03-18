@@ -3,7 +3,7 @@ module ATDIS
     attr_accessor :url
 
     set_field_mappings [
-      [:response, [:results, Application]],
+      [:response, [:response, Application]],
       [:count, [:count, Fixnum]],
       [:pagination, [
         [:previous, [:previous_page_no, Fixnum]],
@@ -16,10 +16,10 @@ module ATDIS
     ]
 
     # Mandatory parameters
-    validates :results, presence_before_type_cast: {spec_section: "4.3"}
-    validates :results, valid: true
+    validates :response, presence_before_type_cast: {spec_section: "4.3"}
+    validates :response, valid: true
     # section 6.5 is not explicitly about this but it does contain an example which should be helpful
-    validates :results, array: {spec_section: "6.5"}
+    validates :response, array: {spec_section: "6.5"}
     validate :count_is_consistent, :all_pagination_is_present, :previous_page_no_is_consistent, :next_page_no_is_consistent
     validate :current_page_no_is_consistent, :total_no_results_is_consistent
     validate :json_loaded_correctly!
@@ -44,7 +44,7 @@ module ATDIS
 
     def count_is_consistent
       if count
-        errors.add(:count, ErrorMessage["is not the same as the number of applications returned", "6.5"]) if count != results.count
+        errors.add(:count, ErrorMessage["is not the same as the number of applications returned", "6.5"]) if count != response.count
         errors.add(:count, ErrorMessage["should not be larger than the number of results per page", "6.5"]) if count > no_results_per_page
       end
     end

@@ -33,7 +33,7 @@ Or install it yourself as:
 
     # Get the first application in the first page of results for all the applications
     page = f.applications
-    app = page.results.first
+    app = page.response.first
 
     puts "#{app.dat_id}: #{app.description} at #{app.location.address}"
 
