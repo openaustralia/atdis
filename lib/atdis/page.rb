@@ -16,10 +16,10 @@ module ATDIS
     ]
 
     # Mandatory parameters
-    validates :results, :presence_before_type_cast => {:spec_section => "4.3"}
-    validates :results, :valid => true
+    validates :results, presence_before_type_cast: {spec_section: "4.3"}
+    validates :results, valid: true
     # section 6.5 is not explicitly about this but it does contain an example which should be helpful
-    validates :results, :array => {:spec_section => "6.5"}
+    validates :results, array: {spec_section: "6.5"}
     validate :count_is_consistent, :all_pagination_is_present, :previous_page_no_is_consistent, :next_page_no_is_consistent
     validate :current_page_no_is_consistent, :total_no_results_is_consistent
     validate :json_loaded_correctly!
@@ -102,10 +102,10 @@ module ATDIS
 
     def self.read_json(text)
       begin
-        data = MultiJson.load(text, :symbolize_keys => true)
+        data = MultiJson.load(text, symbolize_keys: true)
         interpret(data)
       rescue MultiJson::LoadError => e
-        a = interpret({:response => []})
+        a = interpret({response: []})
         a.json_load_error = e.to_s
         a
       end
@@ -113,12 +113,12 @@ module ATDIS
 
     def previous_url
       raise "Can't use previous_url when loaded with read_json" if url.nil?
-      ATDIS::SeparatedURL.merge(url, :page => previous_page_no) if previous_page_no
+      ATDIS::SeparatedURL.merge(url, page: previous_page_no) if previous_page_no
     end
 
     def next_url
       raise "Can't use next_url when loaded with read_json" if url.nil?
-      ATDIS::SeparatedURL.merge(url, :page => next_page_no) if next_page_no
+      ATDIS::SeparatedURL.merge(url, page: next_page_no) if next_page_no
     end
 
     def previous

@@ -34,18 +34,18 @@ module ATDIS
 
     # Mandatory parameters
     validates :dat_id, :development_type, :last_modified_date, :description, :authority, :lodgement_date, :determination_date, :status,
-      :presence_before_type_cast => {:spec_section => "4.3.1"}
-    validates :more_info_url, :presence_before_type_cast => {:spec_section => "4.3.2"}
-    validates :location, :presence_before_type_cast => {:spec_section => "4.3.3"}
-    validates :events, :presence_before_type_cast => {:spec_section => "4.3.4"}
-    validates :documents, :presence_before_type_cast => {:spec_section => "4.3.5"}
+      presence_before_type_cast: {spec_section: "4.3.1"}
+    validates :more_info_url, presence_before_type_cast: {spec_section: "4.3.2"}
+    validates :location, presence_before_type_cast: {spec_section: "4.3.3"}
+    validates :events, presence_before_type_cast: {spec_section: "4.3.4"}
+    validates :documents, presence_before_type_cast: {spec_section: "4.3.5"}
 
     # Other validations
-    validates :last_modified_date, :lodgement_date, :date_time => {:spec_section => "4.3.8"}
-    validates :determination_date, :notification_start_date, :notification_end_date, :date_time_or_none => {:spec_section => "4.3.1"}
-    validates :more_info_url, :http_url => {:spec_section => "4.3.2"}
-    validates :location, :events, :documents, :people, :valid => true
-    validates :events, :documents, :array => {:spec_section => "4.3.4"}
+    validates :last_modified_date, :lodgement_date, date_time: {spec_section: "4.3.8"}
+    validates :determination_date, :notification_start_date, :notification_end_date, date_time_or_none: {spec_section: "4.3.1"}
+    validates :more_info_url, http_url: {spec_section: "4.3.2"}
+    validates :location, :events, :documents, :people, valid: true
+    validates :events, :documents, array: {spec_section: "4.3.4"}
     # TODO people should be an array if it's included
 
     validate :notification_dates_consistent!

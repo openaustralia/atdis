@@ -18,33 +18,33 @@ end
 describe ATDIS::Model do
   describe "#json_errors" do
     it "should return the json attribute with the errors" do
-      a = ModelA.interpret(:foo => {:bar => "Hello"})
+      a = ModelA.interpret(foo: {bar: "Hello"})
       a.errors.add(:a, ATDIS::ErrorMessage["can not be so friendly", "4.5"])
       a.errors.add(:a, ATDIS::ErrorMessage["and something else", "4.6"])
-      a.json_errors.should == [[{:foo => {:bar => "Hello"}}, [
+      a.json_errors.should == [[{foo: {bar: "Hello"}}, [
         ATDIS::ErrorMessage["bar can not be so friendly", "4.5"],
         ATDIS::ErrorMessage["bar and something else", "4.6"]]]]
     end
 
     it "should include the errors from child objects" do
-      a = ModelA.interpret(:foo => {:hello => {:bar => "Kat"}})
+      a = ModelA.interpret(foo: {hello: {bar: "Kat"}})
       a.b.errors.add(:c, ATDIS::ErrorMessage["can't be a name", "2.3"])
-      a.b.json_errors.should == [[{:bar => "Kat"}, [ATDIS::ErrorMessage["bar can't be a name", "2.3"]]]]
-      a.json_errors.should == [[{:foo => {:hello => {:bar => "Kat"}}}, [ATDIS::ErrorMessage["bar can't be a name", "2.3"]]]]
+      a.b.json_errors.should == [[{bar: "Kat"}, [ATDIS::ErrorMessage["bar can't be a name", "2.3"]]]]
+      a.json_errors.should == [[{foo: {hello: {bar: "Kat"}}}, [ATDIS::ErrorMessage["bar can't be a name", "2.3"]]]]
     end
 
     it "should include the errors from only the first child object in an array" do
-      a = ModelA.interpret(:foo => {:hello => [{:bar => "Kat"}, {:bar => "Mat"}]})
+      a = ModelA.interpret(foo: {hello: [{bar: "Kat"}, {bar: "Mat"}]})
       a.b[0].c.should == "Kat"
       a.b[1].c.should == "Mat"
       a.json_errors.should == []
       a.b[0].errors.add(:c, ATDIS::ErrorMessage["can't be a name", "1.2"])
       a.b[1].errors.add(:c, ATDIS::ErrorMessage["can't be a name", "1.2"])
-      a.json_errors.should == [[{:foo => {:hello => [{:bar => "Kat"}]}}, [ATDIS::ErrorMessage["bar can't be a name", "1.2"]]]]   
+      a.json_errors.should == [[{foo: {hello: [{bar: "Kat"}]}}, [ATDIS::ErrorMessage["bar can't be a name", "1.2"]]]]
     end
 
     it "should show json parsing errors" do
-      a = ModelA.interpret(:invalid => {:parameter => "foo"})
+      a = ModelA.interpret(invalid: {parameter: "foo"})
       a.should_not be_valid
       a.json_errors.should == [[nil, [ATDIS::ErrorMessage['Unexpected parameters in json data: {"invalid":{"parameter":"foo"}}', "4"]]]]
     end
@@ -56,7 +56,7 @@ describe ATDIS::Model do
     it { ModelB.json_top_level_attribute(:c).should == :bar }
   end
 
-  describe ".cast" do 
+  describe ".cast" do
     it {ATDIS::Model.cast("2013-04-20T02:01:07Z", DateTime).should == DateTime.new(2013,4,20,2,1,7)}
     it {ATDIS::Model.cast("2013-04-20", DateTime).should == DateTime.new(2013,4,20)}
     it {ATDIS::Model.cast("2013-04-20T02:01:07+05:00", DateTime).should == DateTime.new(2013,4,20,2,1,7,"+5")}
@@ -80,10 +80,10 @@ describe ATDIS::Model do
   end
 
   describe ".map_field" do
-    let(:mappings) { { :foo => :bar, :a => :b, :info => { :foo => :bar2, :a => :b2, :c => :c2 } } }
+    let(:mappings) { { foo: :bar, a: :b, info: { foo: :bar2, a: :b2, c: :c2 } } }
 
     context "one version of data" do
-      let(:data) { { :foo => 2, :a => 3, :d => 4, :info => { :foo => 2, :a => 3, :d => 4 } } }
+      let(:data) { { foo: 2, a: 3, d: 4, info: { foo: 2, a: 3, d: 4 } } }
 
       it { ATDIS::Model.map_field(:bar, data, mappings).should == 2 }
       it { ATDIS::Model.map_field(:b, data, mappings).should == 3 }
@@ -93,7 +93,7 @@ describe ATDIS::Model do
     end
 
     context "another version of data" do
-      let(:data) { { :foo => 2, :a => 3, :d => 4 } }
+      let(:data) { { foo: 2, a: 3, d: 4 } }
 
       it { ATDIS::Model.map_field(:bar, data, mappings).should == 2 }
       it { ATDIS::Model.map_field(:b, data, mappings).should == 3 }
@@ -103,7 +103,7 @@ describe ATDIS::Model do
     end
 
     context "data is not a hash" do
-      let(:data) { [{ :foo => 2, :a => 3, :d => 4 }] }
+      let(:data) { [{ foo: 2, a: 3, d: 4 }] }
 
       it { ATDIS::Model.map_field(:bar, data, mappings).should be_nil }
     end
@@ -113,10 +113,10 @@ describe ATDIS::Model do
     it do
       ATDIS::Model.unused_data(
       {
-        :foo => 2
+        foo: 2
       },
       {
-        :foo => :bar
+        foo: :bar
       }).should ==
       {
       }
@@ -125,56 +125,56 @@ describe ATDIS::Model do
     it do
       ATDIS::Model.unused_data(
       [{
-        :foo => 2
+        foo: 2
       }],
       {
-        :foo => :bar
+        foo: :bar
       }).should ==
       [{
-        :foo => 2
+        foo: 2
       }]
     end
 
     it do
       ATDIS::Model.unused_data(
       {
-        :foo => 2,
-        :a => 3,
-        :d => 4
+        foo: 2,
+        a: 3,
+        d: 4
       },
       {
-        :foo => :bar,
-        :a => :b
+        foo: :bar,
+        a: :b
       }).should ==
       {
-        :d => 4
+        d: 4
       }
     end
 
     it do
       ATDIS::Model.unused_data(
       {
-        :foo => 2,
-        :a => 3,
-        :d => 4,
-        :info => {
-          :foo => 2,
-          :a => 3,
-          :d => 4
+        foo: 2,
+        a: 3,
+        d: 4,
+        info: {
+          foo: 2,
+          a: 3,
+          d: 4
         }
       },
       {
-        :foo => :bar,
-        :a => :b,
-        :info => {
-          :foo => :bar2,
-          :a => :b2
+        foo: :bar,
+        a: :b,
+        info: {
+          foo: :bar2,
+          a: :b2
         }
       }).should ==
       {
-        :d => 4,
-        :info => {
-          :d => 4
+        d: 4,
+        info: {
+          d: 4
         }
       }
     end
@@ -198,59 +198,59 @@ describe ATDIS::Model do
     it do
       ATDIS::Model.map_fields(
       {
-        :foo => 2,
-        :a => 3,
-        :d => 4
+        foo: 2,
+        a: 3,
+        d: 4
       },
       {
-        :foo => :bar,
-        :a => :b
+        foo: :bar,
+        a: :b
       }).should ==
       {
-        :bar => 2,
-        :b => 3,
+        bar: 2,
+        b: 3,
       }
     end
 
     it do
       ATDIS::Model.map_fields(
       {
-        :foo => 2,
-        :a => 3,
-        :d => 4,
-        :info => {
-          :foo => 2,
-          :a => 3,
-          :d => 4
+        foo: 2,
+        a: 3,
+        d: 4,
+        info: {
+          foo: 2,
+          a: 3,
+          d: 4
         }
       },
       {
-        :foo => :bar,
-        :a => :b,
-        :info => {
-          :foo => :bar2,
-          :a => :b2
+        foo: :bar,
+        a: :b,
+        info: {
+          foo: :bar2,
+          a: :b2
         }
       }).should ==
       {
-        :bar => 2,
-        :b => 3,
-        :bar2 => 2,
-        :b2 => 3
+        bar: 2,
+        b: 3,
+        bar2: 2,
+        b2: 3
       }
     end
   end
 
   describe "#json_attribute" do
     let(:model) { ATDIS::Model.new }
-    let(:mapping) { {:previous => :previous_page_no, :next => :next_page_no, :foo => {:bar => :apple, :foo => :orange}} }
+    let(:mapping) { {previous: :previous_page_no, next: :next_page_no, foo: {bar: :apple, foo: :orange}} }
 
     it "simple case" do
-      model.json_attribute(:previous_page_no, 12, mapping).should == {:previous => 12}
+      model.json_attribute(:previous_page_no, 12, mapping).should == {previous: 12}
     end
 
     it "with recursion" do
-      model.json_attribute(:apple, 12, mapping).should == {:foo => {:bar => 12}}
+      model.json_attribute(:apple, 12, mapping).should == {foo: {bar: 12}}
     end
   end
 end

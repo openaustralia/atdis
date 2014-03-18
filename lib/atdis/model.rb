@@ -11,7 +11,7 @@ module ATDIS
     end
 
     module ClassMethods
-      # of the form {:section=>[String, {:none_is_nil=>true}], :address=>[String]}
+      # of the form {section: [String, {none_is_nil: true}], address: [String]}
       def casting_attributes(p)
         define_attribute_methods(p.keys.map{|k| k.to_s})
         self.attribute_types = p
@@ -19,7 +19,7 @@ module ATDIS
 
       def set_field_mappings(p)
         a, b = translate_field_mappings(p)
-        # field_mappings is of the form {:pagination=>{:previous=>:previous_page_no, :pages=>:total_no_pages}}
+        # field_mappings is of the form {pagination: {previous: :previous_page_no, pages: :total_no_pages}}
         self.field_mappings = a
         casting_attributes(b)
       end
@@ -221,7 +221,7 @@ module ATDIS
     end
 
     def self.interpret(*params)
-      new(map_fields(*params).merge(:json_left_overs => unused_data(*params)))
+      new(map_fields(*params).merge(json_left_overs: unused_data(*params)))
     end
 
     def self.cast(value, type, options = {})
@@ -300,7 +300,7 @@ module ATDIS
       RGeo::GeoJSON.decode(hash_symbols_to_string(value))
     end
 
-    # Converts {:foo => {:bar => "yes"}} to {"foo" => {"bar" => "yes"}}
+    # Converts {foo: {bar: "yes"}} to {"foo" => {"bar" => "yes"}}
     def self.hash_symbols_to_string(hash)
       if hash.respond_to?(:each_pair)
         result = {}

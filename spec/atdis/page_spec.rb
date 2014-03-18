@@ -9,22 +9,22 @@ describe ATDIS::Page do
   describe "validations" do
     context "results block that is a hash" do
       before :each do
-        ATDIS::Application.should_receive(:interpret).with(:description => "application1").and_return(double(:valid? => true))
+        ATDIS::Application.should_receive(:interpret).with(description: "application1").and_return(double(valid?: true))
       end
-      let(:page) { ATDIS::Page.new(:results => {:description => "application1"}) }
+      let(:page) { ATDIS::Page.new(results: {description: "application1"}) }
 
       it do
         page.should_not be_valid
-        page.errors.messages.should == {:results => [ATDIS::ErrorMessage["should be an array", "6.5"]]}
+        page.errors.messages.should == {results: [ATDIS::ErrorMessage["should be an array", "6.5"]]}
       end
     end
 
     context "two valid applications no paging" do
       before :each do
-        ATDIS::Application.should_receive(:interpret).with(:description => "application1").and_return(double(:valid? => true))
-        ATDIS::Application.should_receive(:interpret).with(:description => "application2").and_return(double(:valid? => true))
+        ATDIS::Application.should_receive(:interpret).with(description: "application1").and_return(double(valid?: true))
+        ATDIS::Application.should_receive(:interpret).with(description: "application2").and_return(double(valid?: true))
       end
-      let(:page) { ATDIS::Page.new(:results => [{:description => "application1"}, {:description => "application2"}]) }
+      let(:page) { ATDIS::Page.new(results: [{description: "application1"}, {description: "application2"}]) }
 
       it {page.should be_valid}
 
@@ -44,7 +44,7 @@ describe ATDIS::Page do
           end
           it do
             page.should_not be_valid
-            page.errors.messages.should == {:count => [ATDIS::ErrorMessage["is not the same as the number of applications returned", "6.5"]]}
+            page.errors.messages.should == {count: [ATDIS::ErrorMessage["is not the same as the number of applications returned", "6.5"]]}
           end
         end
 
@@ -55,7 +55,7 @@ describe ATDIS::Page do
           end
           it do
             page.should_not be_valid
-            page.errors.messages.should == {:count => [ATDIS::ErrorMessage["should not be larger than the number of results per page", "6.5"]]}
+            page.errors.messages.should == {count: [ATDIS::ErrorMessage["should not be larger than the number of results per page", "6.5"]]}
           end
         end
 
@@ -66,7 +66,7 @@ describe ATDIS::Page do
 
           it do
             page.should_not be_valid
-            page.errors.messages.should == {:count => [ATDIS::ErrorMessage["should be present if pagination is being used", "6.5"]]}
+            page.errors.messages.should == {count: [ATDIS::ErrorMessage["should be present if pagination is being used", "6.5"]]}
           end
         end
 
@@ -79,8 +79,8 @@ describe ATDIS::Page do
           end
           it do
             page.should_not be_valid
-            page.errors.messages.should == {:previous_page_no => [ATDIS::ErrorMessage["should be one less than current page number or null if first page", "6.5"]]}
-            page.json_errors.should == [[{:pagination => {:previous => 5}}, [ATDIS::ErrorMessage["previous should be one less than current page number or null if first page", "6.5"]]]]
+            page.errors.messages.should == {previous_page_no: [ATDIS::ErrorMessage["should be one less than current page number or null if first page", "6.5"]]}
+            page.json_errors.should == [[{pagination: {previous: 5}}, [ATDIS::ErrorMessage["previous should be one less than current page number or null if first page", "6.5"]]]]
           end
         end
 
@@ -94,7 +94,7 @@ describe ATDIS::Page do
           end
           it do
             page.should_not be_valid
-            page.errors.messages.should == {:previous_page_no => [ATDIS::ErrorMessage["can't be null if not on the first page", "6.5"]]}
+            page.errors.messages.should == {previous_page_no: [ATDIS::ErrorMessage["can't be null if not on the first page", "6.5"]]}
           end
         end
 
@@ -108,7 +108,7 @@ describe ATDIS::Page do
           end
           it do
             page.should_not be_valid
-            page.errors.messages.should == {:previous_page_no => [ATDIS::ErrorMessage["should be null if on the first page", "6.5"]]}
+            page.errors.messages.should == {previous_page_no: [ATDIS::ErrorMessage["should be null if on the first page", "6.5"]]}
           end
         end
 
@@ -120,7 +120,7 @@ describe ATDIS::Page do
           end
           it do
             page.should_not be_valid
-            page.errors.messages.should == {:next_page_no => [ATDIS::ErrorMessage["should be one greater than current page number or null if last page", "6.5"]]}
+            page.errors.messages.should == {next_page_no: [ATDIS::ErrorMessage["should be one greater than current page number or null if last page", "6.5"]]}
           end
         end
 
@@ -134,7 +134,7 @@ describe ATDIS::Page do
           end
           it do
             page.should_not be_valid
-            page.errors.messages.should == {:next_page_no => [ATDIS::ErrorMessage["can't be null if not on the last page", "6.5"]]}
+            page.errors.messages.should == {next_page_no: [ATDIS::ErrorMessage["can't be null if not on the last page", "6.5"]]}
           end
         end
 
@@ -148,7 +148,7 @@ describe ATDIS::Page do
           end
           it do
             page.should_not be_valid
-            page.errors.messages.should == {:next_page_no => [ATDIS::ErrorMessage["should be null if on the last page", "6.5"]]}
+            page.errors.messages.should == {next_page_no: [ATDIS::ErrorMessage["should be null if on the last page", "6.5"]]}
           end
         end
 
@@ -161,7 +161,7 @@ describe ATDIS::Page do
           end
           it do
             page.should_not be_valid
-            page.errors.messages.should == {:current_page_no => [ATDIS::ErrorMessage["is larger than the number of pages", "6.5"]]}
+            page.errors.messages.should == {current_page_no: [ATDIS::ErrorMessage["is larger than the number of pages", "6.5"]]}
           end
         end
 
@@ -172,7 +172,7 @@ describe ATDIS::Page do
           end
           it do
             page.should_not be_valid
-            page.errors.messages.should == {:current_page_no => [ATDIS::ErrorMessage["can not be less than 1", "6.5"]]}
+            page.errors.messages.should == {current_page_no: [ATDIS::ErrorMessage["can not be less than 1", "6.5"]]}
           end
         end
 
@@ -186,7 +186,7 @@ describe ATDIS::Page do
           end
           it do
             page.should_not be_valid
-            page.errors.messages.should == {:total_no_results => [ATDIS::ErrorMessage["is larger than can be retrieved through paging", "6.5"]]}
+            page.errors.messages.should == {total_no_results: [ATDIS::ErrorMessage["is larger than can be retrieved through paging", "6.5"]]}
           end
         end
 
@@ -200,7 +200,7 @@ describe ATDIS::Page do
           end
           it do
             page.should_not be_valid
-            page.errors.messages.should == {:total_no_results => [ATDIS::ErrorMessage["could fit into a smaller number of pages", "6.5"]]}
+            page.errors.messages.should == {total_no_results: [ATDIS::ErrorMessage["could fit into a smaller number of pages", "6.5"]]}
           end
         end
       end
@@ -208,34 +208,34 @@ describe ATDIS::Page do
 
     context "one valid application out of two no paging" do
       before :each do
-        ATDIS::Application.should_receive(:interpret).with(:description => "application1").and_return(double(:valid? => true))
-        ATDIS::Application.should_receive(:interpret).with(:description => "application2").and_return(double(:valid? => false))
+        ATDIS::Application.should_receive(:interpret).with(description: "application1").and_return(double(valid?: true))
+        ATDIS::Application.should_receive(:interpret).with(description: "application2").and_return(double(valid?: false))
       end
-      let(:page) { ATDIS::Page.new(:results => [{:description => "application1"}, {:description => "application2"}]) }
+      let(:page) { ATDIS::Page.new(results: [{description: "application1"}, {description: "application2"}]) }
 
       it do
         page.should_not be_valid
-        page.errors.messages.should == {:results => [ATDIS::ErrorMessage["is not valid (see further errors for details)", nil]]}
+        page.errors.messages.should == {results: [ATDIS::ErrorMessage["is not valid (see further errors for details)", nil]]}
       end
     end
 
     context "two invalid applications no paging" do
-      let(:a1) { double(:valid? => false, :json_errors => [[{:dat_id => "null"}, ["can not be empty"]]]) }
-      let(:a2) { double(:valid? => false) }
+      let(:a1) { double(valid?: false, json_errors: [[{dat_id: "null"}, ["can not be empty"]]]) }
+      let(:a2) { double(valid?: false) }
       before :each do
-        ATDIS::Application.should_receive(:interpret).with(:description => "application1").and_return(a1)
-        ATDIS::Application.should_receive(:interpret).with(:description => "application2").and_return(a2)
+        ATDIS::Application.should_receive(:interpret).with(description: "application1").and_return(a1)
+        ATDIS::Application.should_receive(:interpret).with(description: "application2").and_return(a2)
       end
-      let(:page) { ATDIS::Page.new(:results => [{:description => "application1"}, {:description => "application2"}]) }
+      let(:page) { ATDIS::Page.new(results: [{description: "application1"}, {description: "application2"}]) }
 
       it do
         page.should_not be_valid
-        page.errors.messages.should == {:results => [ATDIS::ErrorMessage["is not valid (see further errors for details)", nil]]}
+        page.errors.messages.should == {results: [ATDIS::ErrorMessage["is not valid (see further errors for details)", nil]]}
       end
 
       it "the errors from the first errored application should be here" do
         page.should_not be_valid
-        page.json_errors.should == [[{:response => [{:description => "application1"}, {:description => "application2"}]}, [ATDIS::ErrorMessage["response is not valid (see further errors for details)"]]], [{:response => [{:dat_id => "null"}]} , ["can not be empty"]]]
+        page.json_errors.should == [[{response: [{description: "application1"}, {description: "application2"}]}, [ATDIS::ErrorMessage["response is not valid (see further errors for details)"]]], [{response: [{dat_id: "null"}]} , ["can not be empty"]]]
       end
 
     end
@@ -299,8 +299,8 @@ describe ATDIS::Page do
       it ".results" do
         application1 = double("Application")
         application2 = double("Application")
-        ATDIS::Application.should_receive(:interpret).with(:application => {:description => "application1"}).and_return(application1)
-        ATDIS::Application.should_receive(:interpret).with(:application => {:description => "application2"}).and_return(application2)
+        ATDIS::Application.should_receive(:interpret).with(application: {description: "application1"}).and_return(application1)
+        ATDIS::Application.should_receive(:interpret).with(application: {description: "application2"}).and_return(application2)
 
         page.results.should == [application1, application2]
       end
@@ -313,7 +313,7 @@ describe ATDIS::Page do
     context "read from a url" do
       before :each do
         # Mock network response
-        RestClient.should_receive(:get).with("http://www.council.nsw.gov.au/atdis/1.0/applications.json").and_return(double(:to_str => <<-EOF
+        RestClient.should_receive(:get).with("http://www.council.nsw.gov.au/atdis/1.0/applications.json").and_return(double(to_str: <<-EOF
   {
     "response": [
       {
@@ -337,8 +337,8 @@ describe ATDIS::Page do
       it ".results" do
         application1 = double("Application")
         application2 = double("Application")
-        ATDIS::Application.should_receive(:interpret).with(:application => {:description => "application1"}).and_return(application1)
-        ATDIS::Application.should_receive(:interpret).with(:application => {:description => "application2"}).and_return(application2)
+        ATDIS::Application.should_receive(:interpret).with(application: {description: "application1"}).and_return(application1)
+        ATDIS::Application.should_receive(:interpret).with(application: {description: "application2"}).and_return(application2)
 
         applications_results.results.should == [application1, application2]
       end
@@ -375,7 +375,7 @@ describe ATDIS::Page do
 
   context "paging supported by vendor" do
     before :each do
-      RestClient.should_receive(:get).with("http://www.council.nsw.gov.au/atdis/1.0/applications.json?page=2").and_return(double(:to_str => <<-EOF
+      RestClient.should_receive(:get).with("http://www.council.nsw.gov.au/atdis/1.0/applications.json?page=2").and_return(double(to_str: <<-EOF
 {
   "response": [
     {

@@ -4,29 +4,29 @@ describe ATDIS::Application do
 
   context "extra parameter in json" do
     it "should not be valid" do
-      ATDIS::Location.should_receive(:interpret).with(:foo => "Some location data").and_return(double(:valid? => true))
-      a = ATDIS::Application.interpret(:application => {
-        :info => {
-          :dat_id => "DA2013-0381",
-          :development_type => "residential",
-          :last_modified_date => "2013-04-20T02:01:07Z",
-          :description => "New pool plus deck",
-          :authority => "Example Council Shire Council",
-          :lodgement_date => "2013-04-20T02:01:07Z",
-          :determination_date => "2013-06-20",
-          :status => "OPEN"
+      ATDIS::Location.should_receive(:interpret).with(foo: "Some location data").and_return(double(valid?: true))
+      a = ATDIS::Application.interpret(application: {
+        info: {
+          dat_id: "DA2013-0381",
+          development_type: "residential",
+          last_modified_date: "2013-04-20T02:01:07Z",
+          description: "New pool plus deck",
+          authority: "Example Council Shire Council",
+          lodgement_date: "2013-04-20T02:01:07Z",
+          determination_date: "2013-06-20",
+          status: "OPEN"
         },
-        :reference => {
+        reference: {
           # This is the extra parameter that shouldn't be here
-          :foo => "bar",
-          :more_info_url => "http://foo.com/bar"
+          foo: "bar",
+          more_info_url: "http://foo.com/bar"
         },
-        :location => {:foo => "Some location data"},
-        :events => [],
-        :documents => []
+        location: {foo: "Some location data"},
+        events: [],
+        documents: []
       })
       a.should_not be_valid
-      a.errors.messages.should == {:json => [ATDIS::ErrorMessage['Unexpected parameters in json data: {"application":{"reference":{"foo":"bar"}}}', "4"]]}
+      a.errors.messages.should == {json: [ATDIS::ErrorMessage['Unexpected parameters in json data: {"application":{"reference":{"foo":"bar"}}}', "4"]]}
     end
   end
 
@@ -35,73 +35,73 @@ describe ATDIS::Application do
       application = double
 
       ATDIS::Application.should_receive(:new).with(
-        :dat_id => "DA2013-0381",
-        :development_type => "residential",
-        :last_modified_date => "2013-04-20T02:01:07Z",
-        :description => "New pool plus deck",
-        :authority => "Example Council Shire Council",
-        :lodgement_date => "2013-04-20T02:01:07Z",
-        :determination_date => "2013-06-20",
-        :notification_start_date => "2013-04-20T02:01:07Z",
-        :notification_end_date => "2013-05-20T02:01:07Z",
-        :officer => "Ms Smith",
-        :estimated_cost => "50,000",
-        :status => "OPEN",
-        :more_info_url => "http://foo.com/bar",
-        :comments_url => "http://foo.com/comment",
-        :location => { :address => "123 Fourfivesix Street" },
-        :events => [ { :id => "event1" }, { :id => "event2" } ],
-        :documents => [ { :ref => "27B/6/a" }, { :ref => "27B/6/b" } ],
-        :people => [ { :name => "Tuttle" }, { :name => "Buttle" } ],
-        :extended => {:another_parameter => "with some value", :anything => "can go here"},
-        :json_left_overs => {}
+        dat_id: "DA2013-0381",
+        development_type: "residential",
+        last_modified_date: "2013-04-20T02:01:07Z",
+        description: "New pool plus deck",
+        authority: "Example Council Shire Council",
+        lodgement_date: "2013-04-20T02:01:07Z",
+        determination_date: "2013-06-20",
+        notification_start_date: "2013-04-20T02:01:07Z",
+        notification_end_date: "2013-05-20T02:01:07Z",
+        officer: "Ms Smith",
+        estimated_cost: "50,000",
+        status: "OPEN",
+        more_info_url: "http://foo.com/bar",
+        comments_url: "http://foo.com/comment",
+        location: { address: "123 Fourfivesix Street" },
+        events: [ { id: "event1" }, { id: "event2" } ],
+        documents: [ { ref: "27B/6/a" }, { ref: "27B/6/b" } ],
+        people: [ { name: "Tuttle" }, { name: "Buttle" } ],
+        extended: {another_parameter: "with some value", anything: "can go here"},
+        json_left_overs: {}
       ).and_return(application)
 
-      ATDIS::Application.interpret(:application => {
-        :info => {
-          :dat_id => "DA2013-0381",
-          :development_type => "residential",
-          :last_modified_date => "2013-04-20T02:01:07Z",
-          :description => "New pool plus deck",
-          :authority => "Example Council Shire Council",
-          :lodgement_date => "2013-04-20T02:01:07Z",
-          :determination_date => "2013-06-20",
-          :notification_start_date => "2013-04-20T02:01:07Z",
-          :notification_end_date => "2013-05-20T02:01:07Z",
-          :officer => "Ms Smith",
+      ATDIS::Application.interpret(application: {
+        info: {
+          dat_id: "DA2013-0381",
+          development_type: "residential",
+          last_modified_date: "2013-04-20T02:01:07Z",
+          description: "New pool plus deck",
+          authority: "Example Council Shire Council",
+          lodgement_date: "2013-04-20T02:01:07Z",
+          determination_date: "2013-06-20",
+          notification_start_date: "2013-04-20T02:01:07Z",
+          notification_end_date: "2013-05-20T02:01:07Z",
+          officer: "Ms Smith",
           # TODO: In ATDIS-1.0.3 it does not specify whether this is a float or a string
           # and whether to include (or not) AUD or dollar sign. For the time being we'll
           # just assume it's a free-form string
-          :estimated_cost => "50,000",
-          :status => "OPEN"
+          estimated_cost: "50,000",
+          status: "OPEN"
         },
-        :reference => {
-          :more_info_url => "http://foo.com/bar",
-          :comments_url => "http://foo.com/comment"
+        reference: {
+          more_info_url: "http://foo.com/bar",
+          comments_url: "http://foo.com/comment"
         },
-        :location => { :address => "123 Fourfivesix Street" },
-        :events => [ { :id => "event1" }, { :id => "event2" } ],
-        :documents => [ { :ref => "27B/6/a" }, { :ref => "27B/6/b" } ],
-        :people => [ { :name => "Tuttle" }, { :name => "Buttle" } ],
-        :extended => {:another_parameter => "with some value", :anything => "can go here"}
+        location: { address: "123 Fourfivesix Street" },
+        events: [ { id: "event1" }, { id: "event2" } ],
+        documents: [ { ref: "27B/6/a" }, { ref: "27B/6/b" } ],
+        people: [ { name: "Tuttle" }, { name: "Buttle" } ],
+        extended: {another_parameter: "with some value", anything: "can go here"}
       }).should == application
     end
 
     it "should create a nil valued application when there is no information in the json" do
       application = double
-      ATDIS::Application.should_receive(:new).with({:json_left_overs => {}, :status=>nil, :determination_date=>nil, :estimated_cost=>nil,
-        :comments_url=>nil, :description=>nil, :more_info_url=>nil, :dat_id=>nil, :development_type=>nil, :notification_start_date=>nil, :location=>nil,
-        :extended=>nil, :events=>nil, :last_modified_date=>nil, :notification_end_date=>nil, :documents=>nil, :authority=>nil,
-        :lodgement_date=>nil, :officer=>nil, :people=>nil}).and_return(application)
+      ATDIS::Application.should_receive(:new).with({json_left_overs:{}, status:nil, determination_date:nil, estimated_cost:nil,
+        comments_url:nil, description:nil, more_info_url:nil, dat_id:nil, development_type:nil, notification_start_date:nil, location:nil,
+        extended:nil, events:nil, last_modified_date:nil, notification_end_date:nil, documents:nil, authority:nil,
+        lodgement_date:nil, officer:nil, people:nil}).and_return(application)
 
-      ATDIS::Application.interpret(:application => {:info => {}, :reference => {}}).should == application
+      ATDIS::Application.interpret(application: {info: {}, reference: {}}).should == application
     end
   end
 
   describe "#extended" do
     it "should do no typecasting" do
-      a = ATDIS::Application.new(:extended => {:another_parameter => "with some value", :anything => "can go here"})
-      a.extended.should == {:another_parameter => "with some value", :anything => "can go here"}
+      a = ATDIS::Application.new(extended: {another_parameter: "with some value", anything: "can go here"})
+      a.extended.should == {another_parameter: "with some value", anything: "can go here"}
     end
   end
 
@@ -109,8 +109,8 @@ describe ATDIS::Application do
     let(:a) { ATDIS::Application.new }
     it "should type cast to a location" do
       location = double
-      ATDIS::Location.should_receive(:interpret).with(:address => "123 Fourfivesix Street").and_return(location)
-      a.location = { :address => "123 Fourfivesix Street" }
+      ATDIS::Location.should_receive(:interpret).with(address: "123 Fourfivesix Street").and_return(location)
+      a.location = { address: "123 Fourfivesix Street" }
       a.location.should == location
     end
 
@@ -125,9 +125,9 @@ describe ATDIS::Application do
     let(:a) { ATDIS::Application.new }
     it "should type cast to several events" do
       event1, event2 = double, double
-      ATDIS::Event.should_receive(:interpret).with(:id => "event1").and_return(event1)
-      ATDIS::Event.should_receive(:interpret).with(:id => "event2").and_return(event2)
-      a.events = [ { :id => "event1" }, { :id => "event2" } ]
+      ATDIS::Event.should_receive(:interpret).with(id: "event1").and_return(event1)
+      ATDIS::Event.should_receive(:interpret).with(id: "event2").and_return(event2)
+      a.events = [ { id: "event1" }, { id: "event2" } ]
       a.events.should == [event1, event2]
     end
   end
@@ -136,9 +136,9 @@ describe ATDIS::Application do
     let(:a) { ATDIS::Application.new }
     it "should type cast to several documents" do
       document1, document2 = double, double
-      ATDIS::Document.should_receive(:interpret).with(:ref => "27B/6/a").and_return(document1)
-      ATDIS::Document.should_receive(:interpret).with(:ref => "27B/6/b").and_return(document2)
-      a.documents = [ { :ref => "27B/6/a" }, { :ref => "27B/6/b" } ]
+      ATDIS::Document.should_receive(:interpret).with(ref: "27B/6/a").and_return(document1)
+      ATDIS::Document.should_receive(:interpret).with(ref: "27B/6/b").and_return(document2)
+      a.documents = [ { ref: "27B/6/a" }, { ref: "27B/6/b" } ]
       a.documents.should == [document1, document2]
     end
   end
@@ -147,9 +147,9 @@ describe ATDIS::Application do
     let(:a) { ATDIS::Application.new }
     it "should type cast to several people" do
       tuttle, buttle = double, double
-      ATDIS::Person.should_receive(:interpret).with(:name => "Tuttle").and_return(tuttle)
-      ATDIS::Person.should_receive(:interpret).with(:name => "Buttle").and_return(buttle)
-      a.people = [ { :name => "Tuttle" }, { :name => "Buttle" } ]
+      ATDIS::Person.should_receive(:interpret).with(name: "Tuttle").and_return(tuttle)
+      ATDIS::Person.should_receive(:interpret).with(name: "Buttle").and_return(buttle)
+      a.people = [ { name: "Tuttle" }, { name: "Buttle" } ]
       a.people.should == [tuttle, buttle]
     end
   end
@@ -251,7 +251,7 @@ describe ATDIS::Application do
   # TODO This should really be a test on the Model base class
   describe ".attributes" do
     it do
-      a = ATDIS::Application.new(:dat_id => "DA2013-0381", :description => "New pool plus deck")
+      a = ATDIS::Application.new(dat_id: "DA2013-0381", description: "New pool plus deck")
       a.attributes.should == {"dat_id" => "DA2013-0381", "description" => "New pool plus deck"}
     end
   end
@@ -286,32 +286,32 @@ describe ATDIS::Application do
 
   describe "validations" do
     before :each do
-      l = double(:valid? => true)
-      ATDIS::Location.should_receive(:interpret).with(:address => "123 Fourfivesix Street Neutral Bay NSW 2089").and_return(l)
+      l = double(valid?: true)
+      ATDIS::Location.should_receive(:interpret).with(address: "123 Fourfivesix Street Neutral Bay NSW 2089").and_return(l)
     end
 
     let(:a) { ATDIS::Application.new(
-      :dat_id => "DA2013-0381",
-      :development_type => "residential",
-      :last_modified_date => DateTime.new(2013,4,20,2,1,7),
-      :description => "New pool plus deck",
-      :authority => "Example Council Shire Council",
-      :lodgement_date => DateTime.new(2013,4,20,2,1,7),
-      :determination_date => DateTime.new(2013,6,20),
-      :status => "OPEN",
-      :more_info_url => URI.parse("http://foo.com/bar"),
-      :location => {:address => "123 Fourfivesix Street Neutral Bay NSW 2089"},
-      :events => [],
-      :documents => []
+      dat_id: "DA2013-0381",
+      development_type: "residential",
+      last_modified_date: DateTime.new(2013,4,20,2,1,7),
+      description: "New pool plus deck",
+      authority: "Example Council Shire Council",
+      lodgement_date: DateTime.new(2013,4,20,2,1,7),
+      determination_date: DateTime.new(2013,6,20),
+      status: "OPEN",
+      more_info_url: URI.parse("http://foo.com/bar"),
+      location: {address: "123 Fourfivesix Street Neutral Bay NSW 2089"},
+      events: [],
+      documents: []
   ) }
 
     it { a.should be_valid }
 
     describe ".location" do
       it "should not be valid if the location is not valid" do
-        l = double(:valid? => false)
-        ATDIS::Location.should_receive(:interpret).with(:foo => "some location data").and_return(l)
-        a.location = {:foo => "some location data"}
+        l = double(valid?: false)
+        ATDIS::Location.should_receive(:interpret).with(foo: "some location data").and_return(l)
+        a.location = {foo: "some location data"}
         a.should_not be_valid
       end
     end
@@ -319,19 +319,19 @@ describe ATDIS::Application do
     it ".dat_id" do
       a.dat_id = nil
       a.should_not be_valid
-      a.errors.messages.should == {:dat_id => [ATDIS::ErrorMessage["can't be blank", "4.3.1"]]}
+      a.errors.messages.should == {dat_id: [ATDIS::ErrorMessage["can't be blank", "4.3.1"]]}
     end
 
     describe ".last_modified_date" do
       it do
         a.last_modified_date = nil
         a.should_not be_valid
-        a.errors.messages.should == {:last_modified_date => [ATDIS::ErrorMessage["can't be blank", "4.3.1"]]}
+        a.errors.messages.should == {last_modified_date: [ATDIS::ErrorMessage["can't be blank", "4.3.1"]]}
       end
       it do
         a.last_modified_date = "18 January 2013"
         a.should_not be_valid
-        a.errors.messages.should == {:last_modified_date => [ATDIS::ErrorMessage["is not a valid date", "4.3.8"]]}
+        a.errors.messages.should == {last_modified_date: [ATDIS::ErrorMessage["is not a valid date", "4.3.8"]]}
       end
     end
 
@@ -339,7 +339,7 @@ describe ATDIS::Application do
       it do
         a.description = ""
         a.should_not be_valid
-        a.errors.messages.should == {:description => [ATDIS::ErrorMessage["can't be blank", "4.3.1"]]}
+        a.errors.messages.should == {description: [ATDIS::ErrorMessage["can't be blank", "4.3.1"]]}
       end
     end
 
@@ -347,7 +347,7 @@ describe ATDIS::Application do
       it do
         a.authority = nil
         a.should_not be_valid
-        a.errors.messages.should == {:authority => [ATDIS::ErrorMessage["can't be blank", "4.3.1"]]}
+        a.errors.messages.should == {authority: [ATDIS::ErrorMessage["can't be blank", "4.3.1"]]}
       end
     end
 
@@ -355,12 +355,12 @@ describe ATDIS::Application do
       it do
         a.lodgement_date = nil
         a.should_not be_valid
-        a.errors.messages.should == {:lodgement_date => [ATDIS::ErrorMessage["can't be blank", "4.3.1"]]}
+        a.errors.messages.should == {lodgement_date: [ATDIS::ErrorMessage["can't be blank", "4.3.1"]]}
       end
       it do
         a.lodgement_date = "18 January 2013"
         a.should_not be_valid
-        a.errors.messages.should == {:lodgement_date => [ATDIS::ErrorMessage["is not a valid date", "4.3.8"]]}
+        a.errors.messages.should == {lodgement_date: [ATDIS::ErrorMessage["is not a valid date", "4.3.8"]]}
       end
     end
 
@@ -368,12 +368,12 @@ describe ATDIS::Application do
       it do
         a.determination_date = nil
         a.should_not be_valid
-        a.errors.messages.should == {:determination_date => [ATDIS::ErrorMessage["can't be blank", "4.3.1"]]}
+        a.errors.messages.should == {determination_date: [ATDIS::ErrorMessage["can't be blank", "4.3.1"]]}
       end
       it do
         a.determination_date = "18 January 2013"
         a.should_not be_valid
-        a.errors.messages.should == {:determination_date => [ATDIS::ErrorMessage["is not a valid date or none", "4.3.1"]]}
+        a.errors.messages.should == {determination_date: [ATDIS::ErrorMessage["is not a valid date or none", "4.3.1"]]}
       end
       it "none should be allowed if the application is not yet determined" do
         a.determination_date = "none"
@@ -386,7 +386,7 @@ describe ATDIS::Application do
       it do
         a.status = nil
         a.should_not be_valid
-        a.errors.messages.should == {:status => [ATDIS::ErrorMessage["can't be blank", "4.3.1"]]}
+        a.errors.messages.should == {status: [ATDIS::ErrorMessage["can't be blank", "4.3.1"]]}
       end
     end
 
@@ -401,33 +401,33 @@ describe ATDIS::Application do
         a.notification_start_date = "18 January 2013"
         a.notification_end_date = DateTime.new(2013,2,1,0,0,0)
         a.should_not be_valid
-        a.errors.messages.should == {:notification_start_date => [ATDIS::ErrorMessage["is not a valid date or none", "4.3.1"]]}
+        a.errors.messages.should == {notification_start_date: [ATDIS::ErrorMessage["is not a valid date or none", "4.3.1"]]}
       end
 
       it "invalid end date" do
         a.notification_start_date = DateTime.new(2013,1,10,0,0,0)
         a.notification_end_date = "18 January 2013"
         a.should_not be_valid
-        a.errors.messages.should == {:notification_end_date => [ATDIS::ErrorMessage["is not a valid date or none", "4.3.1"]]}
+        a.errors.messages.should == {notification_end_date: [ATDIS::ErrorMessage["is not a valid date or none", "4.3.1"]]}
       end
 
       it "only start date set" do
         a.notification_start_date = DateTime.new(2013,4,20,2,1,7)
         a.should_not be_valid
-        a.errors.messages.should == {:notification_end_date => [ATDIS::ErrorMessage["can not be blank if notification_start_date is set", "4.3.1"]]}
+        a.errors.messages.should == {notification_end_date: [ATDIS::ErrorMessage["can not be blank if notification_start_date is set", "4.3.1"]]}
       end
 
       it "only end date set" do
         a.notification_end_date = DateTime.new(2013,4,20,2,1,7)
         a.should_not be_valid
-        a.errors.messages.should == {:notification_start_date => [ATDIS::ErrorMessage["can not be blank if notification_end_date is set", "4.3.1"]]}
+        a.errors.messages.should == {notification_start_date: [ATDIS::ErrorMessage["can not be blank if notification_end_date is set", "4.3.1"]]}
       end
 
       it "end date is before start date" do
         a.notification_start_date = DateTime.new(2013,5,20,0,0,0)
         a.notification_end_date = DateTime.new(2013,4,20,2,1,7)
         a.should_not be_valid
-        a.errors.messages.should == {:notification_end_date => [ATDIS::ErrorMessage["can not be earlier than notification_start_date", "4.3.1"]]}
+        a.errors.messages.should == {notification_end_date: [ATDIS::ErrorMessage["can not be earlier than notification_start_date", "4.3.1"]]}
       end
 
       it "both dates set to none" do
@@ -442,14 +442,14 @@ describe ATDIS::Application do
         a.notification_start_date = "none"
         a.notification_end_date = DateTime.new(2013,2,1,0,0,0)
         a.should_not be_valid
-        a.errors.messages.should == {:notification_start_date => [ATDIS::ErrorMessage["can't be none unless notification_end_date is none as well", "4.3.1"]]}
+        a.errors.messages.should == {notification_start_date: [ATDIS::ErrorMessage["can't be none unless notification_end_date is none as well", "4.3.1"]]}
       end
 
       it "only end date set to none" do
         a.notification_start_date = DateTime.new(2013,2,1,0,0,0)
         a.notification_end_date = "none"
         a.should_not be_valid
-        a.errors.messages.should == {:notification_end_date => [ATDIS::ErrorMessage["can't be none unless notification_start_date is none as well", "4.3.1"]]}
+        a.errors.messages.should == {notification_end_date: [ATDIS::ErrorMessage["can't be none unless notification_start_date is none as well", "4.3.1"]]}
       end
     end
 
@@ -457,32 +457,32 @@ describe ATDIS::Application do
       it do
         a.more_info_url = nil
         a.should_not be_valid
-        a.errors.messages.should == {:more_info_url => [ATDIS::ErrorMessage["can't be blank", "4.3.2"]]}
+        a.errors.messages.should == {more_info_url: [ATDIS::ErrorMessage["can't be blank", "4.3.2"]]}
       end
       it do
         a.more_info_url = "This is not a valid url"
         a.should_not be_valid
-        a.errors.messages.should == {:more_info_url => [ATDIS::ErrorMessage["is not a valid URL", "4.3.2"]]}
+        a.errors.messages.should == {more_info_url: [ATDIS::ErrorMessage["is not a valid URL", "4.3.2"]]}
       end
       it do
         a.more_info_url = "foo.com"
         a.should_not be_valid
-        a.errors.messages.should == {:more_info_url => [ATDIS::ErrorMessage["is not a valid URL", "4.3.2"]]}
+        a.errors.messages.should == {more_info_url: [ATDIS::ErrorMessage["is not a valid URL", "4.3.2"]]}
       end
       it do
         a.more_info_url = "httpss://foo.com"
         a.should_not be_valid
-        a.errors.messages.should == {:more_info_url => [ATDIS::ErrorMessage["is not a valid URL", "4.3.2"]]}
+        a.errors.messages.should == {more_info_url: [ATDIS::ErrorMessage["is not a valid URL", "4.3.2"]]}
       end
     end
 
     describe "events" do
       it "has to be an array" do
-        ATDIS::Event.should_receive(:interpret).with(:foo => "bar").and_return(double(:valid? => true))
-        a.events = {:foo => "bar"}
+        ATDIS::Event.should_receive(:interpret).with(foo: "bar").and_return(double(valid?: true))
+        a.events = {foo: "bar"}
         #a.events.should be_nil
         a.should_not be_valid
-        a.errors.messages.should == {:events => [ATDIS::ErrorMessage["should be an array", "4.3.4"]]}
+        a.errors.messages.should == {events: [ATDIS::ErrorMessage["should be an array", "4.3.4"]]}
       end
 
       it "can be an empty array" do
@@ -494,7 +494,7 @@ describe ATDIS::Application do
       it "can not be empty" do
         a.events = nil
         a.should_not be_valid
-        a.errors.messages.should == {:events => [ATDIS::ErrorMessage["can't be blank", "4.3.4"]]}
+        a.errors.messages.should == {events: [ATDIS::ErrorMessage["can't be blank", "4.3.4"]]}
       end
     end
   end

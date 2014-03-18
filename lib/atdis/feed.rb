@@ -20,7 +20,7 @@ module ATDIS
       end
       options[:postcode] = options[:postcode].join(",") if options[:postcode].respond_to?(:join)
 
-      q = Feed.options_to_query(options)  
+      q = Feed.options_to_query(options)
       q.nil? ? base_url : "#{base_url}?#{q}"
     end
 
@@ -57,7 +57,7 @@ module ATDIS
 
     private
 
-    # Turn a query string of the form "foo=bar&hello=sir" to {:foo => "bar", :hello => "sir"}
+    # Turn a query string of the form "foo=bar&hello=sir" to {foo: "bar", hello: sir"}
     def self.query_to_options(query)
       options = {}
       if query
@@ -69,7 +69,7 @@ module ATDIS
       options
     end
 
-    # Turn an options hash of the form {:foo => "bar", :hello => "sir"} into a query
+    # Turn an options hash of the form {foo: "bar", hello: "sir"} into a query
     # string of the form "foo=bar&hello=sir"
     def self.options_to_query(options)
       if options.empty?
