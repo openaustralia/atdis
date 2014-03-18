@@ -280,37 +280,6 @@ describe ATDIS::Application do
     end
   end
 
-  describe ".level_attribute_names" do
-    it "L1" do
-      ATDIS::Application.level_attribute_names(1).should == [
-          "dat_id",
-          "last_modified_date",
-          "description",
-          "authority",
-          "lodgement_date",
-          "determination_date",
-          "status",
-          "notification_start_date",
-          "notification_end_date",
-          "officer",
-          "estimated_cost",
-          "more_info_url",
-          "comments_url",
-          "location",
-          "events",
-          "documents"
-      ]
-    end
-
-    it "L2" do
-      ATDIS::Application.level_attribute_names(2).should == ["people"]
-    end
-
-    it "L3" do
-      ATDIS::Application.level_attribute_names(3).should == ["extended"]
-    end
-  end
-
   describe "validations" do
     before :each do
       l = double(:valid? => true)
