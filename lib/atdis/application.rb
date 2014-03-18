@@ -7,27 +7,27 @@ module ATDIS
     set_field_mappings [
       [:application, [
         [:info, [
-          [:dat_id,                   [:dat_id, String, {:level => 1}]],
-          [:last_modified_date,       [:last_modified_date, DateTime, {:level => 1}]],
-          [:description,              [:description, String, {:level => 1}]],
-          [:authority,                [:authority, String, {:level => 1}]],
-          [:lodgement_date,           [:lodgement_date, DateTime, {:level => 1}]],
-          [:determination_date,       [:determination_date, DateTime, {:level => 1}]],
-          [:status,                   [:status, String, {:level => 1}]],
-          [:notification_start_date,  [:notification_start_date, DateTime, {:level => 1}]],
-          [:notification_end_date,    [:notification_end_date, DateTime, {:level => 1}]],
-          [:officer,                  [:officer, String, {:level => 1}]],
-          [:estimated_cost,           [:estimated_cost, String, {:level => 1}]]
+          [:dat_id,                   [:dat_id, String]],
+          [:last_modified_date,       [:last_modified_date, DateTime]],
+          [:description,              [:description, String]],
+          [:authority,                [:authority, String]],
+          [:lodgement_date,           [:lodgement_date, DateTime]],
+          [:determination_date,       [:determination_date, DateTime]],
+          [:status,                   [:status, String]],
+          [:notification_start_date,  [:notification_start_date, DateTime]],
+          [:notification_end_date,    [:notification_end_date, DateTime]],
+          [:officer,                  [:officer, String]],
+          [:estimated_cost,           [:estimated_cost, String]]
         ]],
         [:reference, [
-          [:more_info_url,            [:more_info_url, URI, {:level => 1}]],
-          [:comments_url,             [:comments_url, URI, {:level => 1}]]
+          [:more_info_url,            [:more_info_url, URI]],
+          [:comments_url,             [:comments_url, URI]]
         ]],
-        [:location,                   [:location, Location, {:level => 1}]],
-        [:events,                     [:events, Event, {:level => 1}]],
-        [:documents,                  [:documents, Document, {:level => 1}]],
-        [:people,                     [:people, Person, {:level => 2}]],
-        [:extended,                   [:extended, Object, {:level => 3}]]
+        [:location,                   [:location, Location]],
+        [:events,                     [:events, Event]],
+        [:documents,                  [:documents, Document]],
+        [:people,                     [:people, Person]],
+        [:extended,                   [:extended, Object]]
       ]]
     ]
 

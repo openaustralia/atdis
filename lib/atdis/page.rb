@@ -3,15 +3,15 @@ module ATDIS
     attr_accessor :url
 
     set_field_mappings [
-      [:response, [:results, Application, {:level => 1}]],
-      [:count, [:count, Fixnum, {:level => 2}]],
+      [:response, [:results, Application]],
+      [:count, [:count, Fixnum]],
       [:pagination, [
-        [:previous, [:previous_page_no, Fixnum, {:level => 2}]],
-        [:next, [:next_page_no, Fixnum, {:level => 2}]],
-        [:current, [:current_page_no, Fixnum, {:level => 2}]],
-        [:per_page, [:no_results_per_page, Fixnum, {:level => 2}]],
-        [:count, [:total_no_results, Fixnum, {:level => 2}]],
-        [:pages, [:total_no_pages, Fixnum, {:level => 2}]]
+        [:previous, [:previous_page_no, Fixnum]],
+        [:next, [:next_page_no, Fixnum]],
+        [:current, [:current_page_no, Fixnum]],
+        [:per_page, [:no_results_per_page, Fixnum]],
+        [:count, [:total_no_results, Fixnum]],
+        [:pages, [:total_no_pages, Fixnum]]
       ]]
     ]
 

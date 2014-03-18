@@ -1,9 +1,9 @@
 module ATDIS
   class Document < Model
     set_field_mappings [
-      [:ref, [:ref, String, {:level => 1}]],
-      [:title, [:title, String, {:level => 1}]],
-      [:document_url, [:document_url, URI, {:level => 1}]]
+      [:ref, [:ref, String]],
+      [:title, [:title, String]],
+      [:document_url, [:document_url, URI]]
     ]
 
     # Mandatory parameters
