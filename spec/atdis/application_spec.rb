@@ -8,6 +8,7 @@ describe ATDIS::Application do
       a = ATDIS::Application.interpret(:application => {
         :info => {
           :dat_id => "DA2013-0381",
+          :development_type => "residential",
           :last_modified_date => "2013-04-20T02:01:07Z",
           :description => "New pool plus deck",
           :authority => "Example Council Shire Council",
@@ -35,6 +36,7 @@ describe ATDIS::Application do
 
       ATDIS::Application.should_receive(:new).with(
         :dat_id => "DA2013-0381",
+        :development_type => "residential",
         :last_modified_date => "2013-04-20T02:01:07Z",
         :description => "New pool plus deck",
         :authority => "Example Council Shire Council",
@@ -58,6 +60,7 @@ describe ATDIS::Application do
       ATDIS::Application.interpret(:application => {
         :info => {
           :dat_id => "DA2013-0381",
+          :development_type => "residential",
           :last_modified_date => "2013-04-20T02:01:07Z",
           :description => "New pool plus deck",
           :authority => "Example Council Shire Council",
@@ -87,7 +90,7 @@ describe ATDIS::Application do
     it "should create a nil valued application when there is no information in the json" do
       application = double
       ATDIS::Application.should_receive(:new).with({:json_left_overs => {}, :status=>nil, :determination_date=>nil, :estimated_cost=>nil,
-        :comments_url=>nil, :description=>nil, :more_info_url=>nil, :dat_id=>nil, :notification_start_date=>nil, :location=>nil,
+        :comments_url=>nil, :description=>nil, :more_info_url=>nil, :dat_id=>nil, :development_type=>nil, :notification_start_date=>nil, :location=>nil,
         :extended=>nil, :events=>nil, :last_modified_date=>nil, :notification_end_date=>nil, :documents=>nil, :authority=>nil,
         :lodgement_date=>nil, :officer=>nil, :people=>nil}).and_return(application)
 
@@ -259,6 +262,7 @@ describe ATDIS::Application do
       # These are also ordered in a way that corresponds to the specification. Makes for easy reading by humans.
       ATDIS::Application.attribute_names.should == [
         "dat_id",
+        "development_type",
         "last_modified_date",
         "description",
         "authority",
@@ -288,6 +292,7 @@ describe ATDIS::Application do
 
     let(:a) { ATDIS::Application.new(
       :dat_id => "DA2013-0381",
+      :development_type => "residential",
       :last_modified_date => DateTime.new(2013,4,20,2,1,7),
       :description => "New pool plus deck",
       :authority => "Example Council Shire Council",

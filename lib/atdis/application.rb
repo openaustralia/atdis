@@ -8,6 +8,7 @@ module ATDIS
       [:application, [
         [:info, [
           [:dat_id,                   [:dat_id, String]],
+          [:development_type,         [:development_type, String]],
           [:last_modified_date,       [:last_modified_date, DateTime]],
           [:description,              [:description, String]],
           [:authority,                [:authority, String]],
@@ -32,7 +33,7 @@ module ATDIS
     ]
 
     # Mandatory parameters
-    validates :dat_id, :last_modified_date, :description, :authority, :lodgement_date, :determination_date, :status,
+    validates :dat_id, :development_type, :last_modified_date, :description, :authority, :lodgement_date, :determination_date, :status,
       :presence_before_type_cast => {:spec_section => "4.3.1"}
     validates :more_info_url, :presence_before_type_cast => {:spec_section => "4.3.2"}
     validates :location, :presence_before_type_cast => {:spec_section => "4.3.3"}
