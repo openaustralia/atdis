@@ -241,66 +241,6 @@ describe ATDIS::Page do
     end
   end
 
-  describe ".level_used?" do
-    describe "level 1" do
-      context "two applications" do
-        before :each do
-          ATDIS::Application.should_receive(:interpret).with(:description => "application1").and_return(double)
-          ATDIS::Application.should_receive(:interpret).with(:description => "application2").and_return(double)
-        end
-        let(:page) { ATDIS::Page.new(:results => [{:description => "application1"}, {:description => "application2"}]) }
-
-        it { page.level_used?(1).should be_true }
-      end
-
-      context "no L1 features used" do
-        let(:page) { ATDIS::Page.new }
-        it { page.level_used?(1).should be_false }
-      end
-    end
-
-    describe "level 2" do
-      context "two applications with only L1 features" do
-        let(:a1) { double }
-        let(:a2) { double }
-        before :each do
-          ATDIS::Application.should_receive(:interpret).with(:description => "application1").and_return(a1)
-          ATDIS::Application.should_receive(:interpret).with(:description => "application2").and_return(a2)
-        end
-        let(:page) { ATDIS::Page.new(:results => [{:description => "application1"}, {:description => "application2"}]) }
-
-        it do
-          a1.should_receive(:level_used?).with(2).and_return(false)
-          a2.should_receive(:level_used?).with(2).and_return(false)
-          page.level_used?(2).should be_false
-        end
-
-        context "L2 feature used on Page" do
-          before :each do
-            page.count = 2
-          end
-
-          it { page.level_used?(2).should be_true }
-        end
-      end
-
-      context "two applications with L2 features" do
-        let(:a1) { double }
-        let(:a2) { double }
-        before :each do
-          ATDIS::Application.should_receive(:interpret).with(:description => "application1").and_return(a1)
-          ATDIS::Application.should_receive(:interpret).with(:description => "application2").and_return(a2)
-        end
-        let(:page) { ATDIS::Page.new(:results => [{:description => "application1"}, {:description => "application2"}]) }
-
-        it "should ask the applications whether they have L2 features" do
-          a1.should_receive(:level_used?).with(2).and_return(true)
-          page.level_used?(2).should be_true
-        end
-      end
-    end
-  end
-
   context "paging supported by vendor" do
     context "read a from an invalid json string" do
       let(:page) { ATDIS::Page.read_json(<<-EOF

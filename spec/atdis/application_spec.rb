@@ -2,18 +2,6 @@ require File.expand_path(File.dirname(__FILE__) + '/../spec_helper')
 
 describe ATDIS::Application do
 
-  describe ".level_used?" do
-    it "level 3" do
-      a = ATDIS::Application.new(:extended => {:some_info => "here"})
-      a.level_used?(3).should be_true
-    end
-
-    it "level 2" do
-      a = ATDIS::Application.new(:people => [])
-      a.level_used?(2).should be_true
-    end
-  end
-
   context "extra parameter in json" do
     it "should not be valid" do
       ATDIS::Location.should_receive(:interpret).with(:foo => "Some location data").and_return(double(:valid? => true))
