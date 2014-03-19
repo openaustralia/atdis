@@ -7,7 +7,6 @@ module ATDIS
 
     included do
       class_attribute :attribute_types
-      class_attribute :field_mappings
     end
 
     module ClassMethods
@@ -18,22 +17,18 @@ module ATDIS
       end
 
       def set_field_mappings(p)
-        a, b = translate_field_mappings(p)
-        # field_mappings is of the form {pagination: {previous: :previous, pages: :pages}}
-        self.field_mappings = a
+        b = translate_field_mappings(p)
         casting_attributes(b)
       end
 
       private
 
       def translate_field_mappings(p)
-        f = {}
         ca = {}
         p.each do |k,v|
-          f[k] = k
           ca[k] = v
         end
-        [f, ca]
+        ca
       end
     end
   end
