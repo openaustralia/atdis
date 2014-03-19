@@ -71,9 +71,7 @@ module ATDIS
     end
 
     def self.map_field(key, data, mappings)
-      if mappings.has_key?(key)
-        data[key]
-      end
+      data[key]
     end
 
     def self.unused_data(data, mappings = field_mappings)
