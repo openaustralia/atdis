@@ -2,14 +2,14 @@ require File.expand_path(File.dirname(__FILE__) + '/../spec_helper')
 
 class ModelB < ATDIS::Model
   set_field_mappings [
-    [:bar, [:bar, String]]
+    [:bar, [String]]
   ]
 end
 
 class ModelA < ATDIS::Model
   set_field_mappings [
-    [:bar, [:bar, String]],
-    [:hello, [:hello, ModelB]]
+    [:bar, [String]],
+    [:hello, [ModelB]]
   ]
 end
 

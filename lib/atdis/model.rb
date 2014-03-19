@@ -30,8 +30,8 @@ module ATDIS
         f = {}
         ca = {}
         p.each do |k,v|
-          f[k] = v[0]
-          ca[v.first] = v[1..-1]
+          f[k] = k
+          ca[k] = v
         end
         [f, ca]
       end

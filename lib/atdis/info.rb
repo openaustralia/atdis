@@ -1,18 +1,18 @@
 module ATDIS
   class Info < Model
     set_field_mappings [
-      [:dat_id,                   [:dat_id, String]],
-      [:development_type,         [:development_type, String]],
-      [:last_modified_date,       [:last_modified_date, DateTime]],
-      [:description,              [:description, String]],
-      [:authority,                [:authority, String]],
-      [:lodgement_date,           [:lodgement_date, DateTime]],
-      [:determination_date,       [:determination_date, DateTime]],
-      [:status,                   [:status, String]],
-      [:notification_start_date,  [:notification_start_date, DateTime]],
-      [:notification_end_date,    [:notification_end_date, DateTime]],
-      [:officer,                  [:officer, String]],
-      [:estimated_cost,           [:estimated_cost, String]]
+      [:dat_id,                   [String]],
+      [:development_type,         [String]],
+      [:last_modified_date,       [DateTime]],
+      [:description,              [String]],
+      [:authority,                [String]],
+      [:lodgement_date,           [DateTime]],
+      [:determination_date,       [DateTime]],
+      [:status,                   [String]],
+      [:notification_start_date,  [DateTime]],
+      [:notification_end_date,    [DateTime]],
+      [:officer,                  [String]],
+      [:estimated_cost,           [String]]
     ]
 
     # Mandatory parameters

@@ -1,9 +1,9 @@
 module ATDIS
   class Person < Model
     set_field_mappings [
-      [:name, [:name, String]],
-      [:role, [:role, String]],
-      [:contact, [:contact, String]]
+      [:name, [String]],
+      [:role, [String]],
+      [:contact, [String]]
     ]
 
     # Mandatory parameters
