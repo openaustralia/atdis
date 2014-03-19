@@ -70,10 +70,6 @@ module ATDIS
       end
     end
 
-    def self.map_field(key, data, mappings)
-      data[key]
-    end
-
     def self.unused_data(data, mappings = field_mappings)
       if data.kind_of?(Hash)
         json_left_overs = {}
@@ -97,7 +93,7 @@ module ATDIS
     def self.map_fields(data, mappings = field_mappings)
       values = {}
       attribute_keys(mappings).each do |attribute|
-        values[attribute] = map_field(attribute, data, mappings)
+        values[attribute] = data[attribute]
       end
       values
     end

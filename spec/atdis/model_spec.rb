@@ -78,26 +78,6 @@ describe ATDIS::Model do
     end
   end
 
-  describe ".map_field" do
-    let(:mappings) { { foo: :foo, a: :a, info: :info } }
-
-    context "one version of data" do
-      let(:data) { { foo: 2, a: 3, d: 4, info: "eek" } }
-
-      it { ATDIS::Model.map_field(:foo, data, mappings).should == 2 }
-      it { ATDIS::Model.map_field(:a, data, mappings).should == 3 }
-      it { ATDIS::Model.map_field(:info, data, mappings).should == "eek" }
-    end
-
-    context "another version of data" do
-      let(:data) { { foo: 2, a: 3, d: 4 } }
-
-      it { ATDIS::Model.map_field(:foo, data, mappings).should == 2 }
-      it { ATDIS::Model.map_field(:a, data, mappings).should == 3 }
-      it { ATDIS::Model.map_field(:info, data, mappings).should be_nil }
-    end
-  end
-
   describe ".unused_data" do
     it do
       ATDIS::Model.unused_data(
