@@ -86,7 +86,6 @@ describe ATDIS::Model do
 
       it { ATDIS::Model.map_field(:foo, data, mappings).should == 2 }
       it { ATDIS::Model.map_field(:a, data, mappings).should == 3 }
-      it { ATDIS::Model.map_field(:d, data, mappings).should be_nil }
       it { ATDIS::Model.map_field(:info, data, mappings).should == "eek" }
     end
 
@@ -95,7 +94,6 @@ describe ATDIS::Model do
 
       it { ATDIS::Model.map_field(:foo, data, mappings).should == 2 }
       it { ATDIS::Model.map_field(:a, data, mappings).should == 3 }
-      it { ATDIS::Model.map_field(:d, data, mappings).should be_nil }
       it { ATDIS::Model.map_field(:info, data, mappings).should be_nil }
     end
   end
