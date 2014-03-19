@@ -3,7 +3,7 @@ require File.expand_path(File.dirname(__FILE__) + '/../spec_helper')
 describe ATDIS::Page do
   it ".attribute_names" do
     ATDIS::Page.attribute_names.should == ["response", "count", "previous", "next", "current",
-      "no_results_per_page", "total_no_results", "total_no_pages"]
+      "per_page", "total_no_results", "total_no_pages"]
   end
 
   describe "validations" do
@@ -31,7 +31,7 @@ describe ATDIS::Page do
       context "with pagination" do
         before :each do
           page.count = 2
-          page.no_results_per_page = 25
+          page.per_page = 25
           page.current = 1
           page.total_no_results = 2
           page.total_no_pages = 1
@@ -50,7 +50,7 @@ describe ATDIS::Page do
 
         context "count is larger than number of results per page" do
           before :each do
-            page.no_results_per_page = 1
+            page.per_page = 1
             page.total_no_results = 1
           end
           it do
@@ -180,7 +180,7 @@ describe ATDIS::Page do
           before :each do
             page.current = 1
             page.next = 2
-            page.no_results_per_page = 25
+            page.per_page = 25
             page.total_no_pages = 4
             page.total_no_results = 101
           end
@@ -194,7 +194,7 @@ describe ATDIS::Page do
           before :each do
             page.current = 1
             page.next = 2
-            page.no_results_per_page = 25
+            page.per_page = 25
             page.total_no_pages = 4
             page.total_no_results = 75
           end
@@ -359,8 +359,8 @@ describe ATDIS::Page do
         applications_results.current.should be_nil
       end
 
-      it ".no_results_per_page" do
-        applications_results.no_results_per_page.should be_nil
+      it ".per_page" do
+        applications_results.per_page.should be_nil
       end
 
       it ".total_no_results" do
@@ -417,8 +417,8 @@ describe ATDIS::Page do
       applications_results.current.should == 2
     end
 
-    it ".no_results_per_page" do
-      applications_results.no_results_per_page.should == 2
+    it ".per_page" do
+      applications_results.per_page.should == 2
     end
 
     it ".total_no_results" do

@@ -9,7 +9,7 @@ module ATDIS
         [:previous, [:previous, Fixnum]],
         [:next, [:next, Fixnum]],
         [:current, [:current, Fixnum]],
-        [:per_page, [:no_results_per_page, Fixnum]],
+        [:per_page, [:per_page, Fixnum]],
         [:count, [:total_no_results, Fixnum]],
         [:pages, [:total_no_pages, Fixnum]]
       ]]
@@ -32,11 +32,11 @@ module ATDIS
 
     # If some of the pagination fields are present all of the required ones should be present
     def all_pagination_is_present
-      if count || previous || self.next || current || no_results_per_page ||
+      if count || previous || self.next || current || per_page ||
         total_no_results || total_no_pages
         errors.add(:count, ErrorMessage["should be present if pagination is being used", "6.5"]) if count.nil?
         errors.add(:current, ErrorMessage["should be present if pagination is being used", "6.5"]) if current.nil?
-        errors.add(:no_results_per_page, ErrorMessage["should be present if pagination is being used", "6.5"]) if no_results_per_page.nil?
+        errors.add(:per_page, ErrorMessage["should be present if pagination is being used", "6.5"]) if per_page.nil?
         errors.add(:total_no_results, ErrorMessage["should be present if pagination is being used", "6.5"]) if total_no_results.nil?
         errors.add(:total_no_pages, ErrorMessage["should be present if pagination is being used", "6.5"]) if total_no_pages.nil?
       end
@@ -45,7 +45,7 @@ module ATDIS
     def count_is_consistent
       if count
         errors.add(:count, ErrorMessage["is not the same as the number of applications returned", "6.5"]) if count != response.count
-        errors.add(:count, ErrorMessage["should not be larger than the number of results per page", "6.5"]) if count > no_results_per_page
+        errors.add(:count, ErrorMessage["should not be larger than the number of results per page", "6.5"]) if count > per_page
       end
     end
 
@@ -86,10 +86,10 @@ module ATDIS
     end
 
     def total_no_results_is_consistent
-      if total_no_pages && total_no_results > total_no_pages * no_results_per_page
+      if total_no_pages && total_no_results > total_no_pages * per_page
         errors.add(:total_no_results, ErrorMessage["is larger than can be retrieved through paging", "6.5"])
       end
-      if total_no_pages && total_no_results <= (total_no_pages - 1) * no_results_per_page
+      if total_no_pages && total_no_results <= (total_no_pages - 1) * per_page
         errors.add(:total_no_results, ErrorMessage["could fit into a smaller number of pages", "6.5"])
       end
     end
