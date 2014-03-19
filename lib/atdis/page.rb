@@ -8,7 +8,7 @@ module ATDIS
       [:pagination, [
         [:previous, [:previous, Fixnum]],
         [:next, [:next, Fixnum]],
-        [:current, [:current_page_no, Fixnum]],
+        [:current, [:current, Fixnum]],
         [:per_page, [:no_results_per_page, Fixnum]],
         [:count, [:total_no_results, Fixnum]],
         [:pages, [:total_no_pages, Fixnum]]
@@ -21,7 +21,7 @@ module ATDIS
     # section 6.5 is not explicitly about this but it does contain an example which should be helpful
     validates :response, array: {spec_section: "6.5"}
     validate :count_is_consistent, :all_pagination_is_present, :previous_is_consistent, :next_is_consistent
-    validate :current_page_no_is_consistent, :total_no_results_is_consistent
+    validate :current_is_consistent, :total_no_results_is_consistent
     validate :json_loaded_correctly!
 
     def json_loaded_correctly!
@@ -32,10 +32,10 @@ module ATDIS
 
     # If some of the pagination fields are present all of the required ones should be present
     def all_pagination_is_present
-      if count || previous || self.next || current_page_no || no_results_per_page ||
+      if count || previous || self.next || current || no_results_per_page ||
         total_no_results || total_no_pages
         errors.add(:count, ErrorMessage["should be present if pagination is being used", "6.5"]) if count.nil?
-        errors.add(:current_page_no, ErrorMessage["should be present if pagination is being used", "6.5"]) if current_page_no.nil?
+        errors.add(:current, ErrorMessage["should be present if pagination is being used", "6.5"]) if current.nil?
         errors.add(:no_results_per_page, ErrorMessage["should be present if pagination is being used", "6.5"]) if no_results_per_page.nil?
         errors.add(:total_no_results, ErrorMessage["should be present if pagination is being used", "6.5"]) if total_no_results.nil?
         errors.add(:total_no_pages, ErrorMessage["should be present if pagination is being used", "6.5"]) if total_no_pages.nil?
@@ -50,16 +50,16 @@ module ATDIS
     end
 
     def previous_is_consistent
-      if current_page_no
+      if current
         if previous
-          if previous != current_page_no - 1
+          if previous != current - 1
             errors.add(:previous, ErrorMessage["should be one less than current page number or null if first page", "6.5"])
           end
-          if current_page_no == 1
+          if current == 1
             errors.add(:previous, ErrorMessage["should be null if on the first page", "6.5"])
           end
         else
-          if current_page_no > 1
+          if current > 1
             errors.add(:previous, ErrorMessage["can't be null if not on the first page", "6.5"])
           end
         end
@@ -67,21 +67,21 @@ module ATDIS
     end
 
     def next_is_consistent
-      if self.next && self.next != current_page_no + 1
+      if self.next && self.next != current + 1
         errors.add(:next, ErrorMessage["should be one greater than current page number or null if last page", "6.5"])
       end
-      if self.next.nil? && current_page_no != total_no_pages
+      if self.next.nil? && current != total_no_pages
         errors.add(:next, ErrorMessage["can't be null if not on the last page", "6.5"])
       end
-      if self.next && current_page_no == total_no_pages
+      if self.next && current == total_no_pages
         errors.add(:next, ErrorMessage["should be null if on the last page", "6.5"])
       end
     end
 
-    def current_page_no_is_consistent
-      if current_page_no
-        errors.add(:current_page_no, ErrorMessage["is larger than the number of pages", "6.5"]) if current_page_no > total_no_pages
-        errors.add(:current_page_no, ErrorMessage["can not be less than 1", "6.5"]) if current_page_no < 1
+    def current_is_consistent
+      if current
+        errors.add(:current, ErrorMessage["is larger than the number of pages", "6.5"]) if current > total_no_pages
+        errors.add(:current, ErrorMessage["can not be less than 1", "6.5"]) if current < 1
       end
     end
 

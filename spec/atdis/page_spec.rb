@@ -2,7 +2,7 @@ require File.expand_path(File.dirname(__FILE__) + '/../spec_helper')
 
 describe ATDIS::Page do
   it ".attribute_names" do
-    ATDIS::Page.attribute_names.should == ["response", "count", "previous", "next", "current_page_no",
+    ATDIS::Page.attribute_names.should == ["response", "count", "previous", "next", "current",
       "no_results_per_page", "total_no_results", "total_no_pages"]
   end
 
@@ -32,7 +32,7 @@ describe ATDIS::Page do
         before :each do
           page.count = 2
           page.no_results_per_page = 25
-          page.current_page_no = 1
+          page.current = 1
           page.total_no_results = 2
           page.total_no_pages = 1
         end
@@ -73,7 +73,7 @@ describe ATDIS::Page do
         context "previous page number is pointing to a weird page number" do
           before :each do
             page.previous = 5
-            page.current_page_no = 2
+            page.current = 2
             page.total_no_results = 50
             page.total_no_pages = 2
           end
@@ -86,7 +86,7 @@ describe ATDIS::Page do
 
         context "previous page number if nil but not on first page" do
           before :each do
-            page.current_page_no = 4
+            page.current = 4
             page.next = 5
             page.previous = nil
             page.total_no_results = 240
@@ -100,7 +100,7 @@ describe ATDIS::Page do
 
         context "previous page number not nil but on first page" do
           before :each do
-            page.current_page_no = 1
+            page.current = 1
             page.next = 2
             page.previous = 0
             page.total_no_results = 240
@@ -126,7 +126,7 @@ describe ATDIS::Page do
 
         context "next page number is nil but not on last page" do
           before :each do
-            page.current_page_no = 4
+            page.current = 4
             page.previous = 3
             page.next = nil
             page.total_no_results = 140
@@ -141,7 +141,7 @@ describe ATDIS::Page do
         context "next page number is not nil but on last page" do
           before :each do
             page.previous = 3
-            page.current_page_no = 4
+            page.current = 4
             page.next = 5
             page.total_no_results = 100
             page.total_no_pages = 4
@@ -154,31 +154,31 @@ describe ATDIS::Page do
 
         context "current page is larger than the number of pages" do
           before :each do
-            page.current_page_no = 2
+            page.current = 2
             page.previous = 1
             page.next = 3
             page.total_no_pages = 1
           end
           it do
             page.should_not be_valid
-            page.errors.messages.should == {current_page_no: [ATDIS::ErrorMessage["is larger than the number of pages", "6.5"]]}
+            page.errors.messages.should == {current: [ATDIS::ErrorMessage["is larger than the number of pages", "6.5"]]}
           end
         end
 
         context "current page is zero" do
           before :each do
-            page.current_page_no = 0
+            page.current = 0
             page.next = 1
           end
           it do
             page.should_not be_valid
-            page.errors.messages.should == {current_page_no: [ATDIS::ErrorMessage["can not be less than 1", "6.5"]]}
+            page.errors.messages.should == {current: [ATDIS::ErrorMessage["can not be less than 1", "6.5"]]}
           end
         end
 
         context "total_no_results is larger than would be expected" do
           before :each do
-            page.current_page_no = 1
+            page.current = 1
             page.next = 2
             page.no_results_per_page = 25
             page.total_no_pages = 4
@@ -192,7 +192,7 @@ describe ATDIS::Page do
 
         context "total no_results is less than would be expected" do
           before :each do
-            page.current_page_no = 1
+            page.current = 1
             page.next = 2
             page.no_results_per_page = 25
             page.total_no_pages = 4
@@ -355,8 +355,8 @@ describe ATDIS::Page do
         applications_results.next.should be_nil
       end
 
-      it ".current_page_no" do
-        applications_results.current_page_no.should be_nil
+      it ".current" do
+        applications_results.current.should be_nil
       end
 
       it ".no_results_per_page" do
@@ -413,8 +413,8 @@ describe ATDIS::Page do
       applications_results.next.should == 3
     end
 
-    it ".current_page_no" do
-      applications_results.current_page_no.should == 2
+    it ".current" do
+      applications_results.current.should == 2
     end
 
     it ".no_results_per_page" do
