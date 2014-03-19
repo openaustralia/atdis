@@ -243,10 +243,10 @@ describe ATDIS::Model do
 
   describe "#json_attribute" do
     let(:model) { ATDIS::Model.new }
-    let(:mapping) { {previous: :previous_page_no, next: :next_page_no, foo: {bar: :apple, foo: :orange}} }
+    let(:mapping) { {previous: :previous, next: :next, foo: {bar: :apple, foo: :orange}} }
 
     it "simple case" do
-      model.json_attribute(:previous_page_no, 12, mapping).should == {previous: 12}
+      model.json_attribute(:previous, 12, mapping).should == {previous: 12}
     end
 
     it "with recursion" do

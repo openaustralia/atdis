@@ -6,8 +6,8 @@ module ATDIS
       [:response, [:response, Application]],
       [:count, [:count, Fixnum]],
       [:pagination, [
-        [:previous, [:previous_page_no, Fixnum]],
-        [:next, [:next_page_no, Fixnum]],
+        [:previous, [:previous, Fixnum]],
+        [:next, [:next, Fixnum]],
         [:current, [:current_page_no, Fixnum]],
         [:per_page, [:no_results_per_page, Fixnum]],
         [:count, [:total_no_results, Fixnum]],
@@ -20,7 +20,7 @@ module ATDIS
     validates :response, valid: true
     # section 6.5 is not explicitly about this but it does contain an example which should be helpful
     validates :response, array: {spec_section: "6.5"}
-    validate :count_is_consistent, :all_pagination_is_present, :previous_page_no_is_consistent, :next_page_no_is_consistent
+    validate :count_is_consistent, :all_pagination_is_present, :previous_is_consistent, :next_is_consistent
     validate :current_page_no_is_consistent, :total_no_results_is_consistent
     validate :json_loaded_correctly!
 
@@ -32,7 +32,7 @@ module ATDIS
 
     # If some of the pagination fields are present all of the required ones should be present
     def all_pagination_is_present
-      if count || previous_page_no || next_page_no || current_page_no || no_results_per_page ||
+      if count || previous || self.next || current_page_no || no_results_per_page ||
         total_no_results || total_no_pages
         errors.add(:count, ErrorMessage["should be present if pagination is being used", "6.5"]) if count.nil?
         errors.add(:current_page_no, ErrorMessage["should be present if pagination is being used", "6.5"]) if current_page_no.nil?
@@ -49,32 +49,32 @@ module ATDIS
       end
     end
 
-    def previous_page_no_is_consistent
+    def previous_is_consistent
       if current_page_no
-        if previous_page_no
-          if previous_page_no != current_page_no - 1
-            errors.add(:previous_page_no, ErrorMessage["should be one less than current page number or null if first page", "6.5"])
+        if previous
+          if previous != current_page_no - 1
+            errors.add(:previous, ErrorMessage["should be one less than current page number or null if first page", "6.5"])
           end
           if current_page_no == 1
-            errors.add(:previous_page_no, ErrorMessage["should be null if on the first page", "6.5"])
+            errors.add(:previous, ErrorMessage["should be null if on the first page", "6.5"])
           end
         else
           if current_page_no > 1
-            errors.add(:previous_page_no, ErrorMessage["can't be null if not on the first page", "6.5"])
+            errors.add(:previous, ErrorMessage["can't be null if not on the first page", "6.5"])
           end
         end
       end
     end
 
-    def next_page_no_is_consistent
-      if next_page_no && next_page_no != current_page_no + 1
-        errors.add(:next_page_no, ErrorMessage["should be one greater than current page number or null if last page", "6.5"])
+    def next_is_consistent
+      if self.next && self.next != current_page_no + 1
+        errors.add(:next, ErrorMessage["should be one greater than current page number or null if last page", "6.5"])
       end
-      if next_page_no.nil? && current_page_no != total_no_pages
-        errors.add(:next_page_no, ErrorMessage["can't be null if not on the last page", "6.5"])
+      if self.next.nil? && current_page_no != total_no_pages
+        errors.add(:next, ErrorMessage["can't be null if not on the last page", "6.5"])
       end
-      if next_page_no && current_page_no == total_no_pages
-        errors.add(:next_page_no, ErrorMessage["should be null if on the last page", "6.5"])
+      if self.next && current_page_no == total_no_pages
+        errors.add(:next, ErrorMessage["should be null if on the last page", "6.5"])
       end
     end
 
@@ -113,12 +113,12 @@ module ATDIS
 
     def previous_url
       raise "Can't use previous_url when loaded with read_json" if url.nil?
-      ATDIS::SeparatedURL.merge(url, page: previous_page_no) if previous_page_no
+      ATDIS::SeparatedURL.merge(url, page: previous) if previous
     end
 
     def next_url
       raise "Can't use next_url when loaded with read_json" if url.nil?
-      ATDIS::SeparatedURL.merge(url, page: next_page_no) if next_page_no
+      ATDIS::SeparatedURL.merge(url, page: self.next) if self.next
     end
 
     def previous_page
