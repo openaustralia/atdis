@@ -1,14 +1,14 @@
 module ATDIS
   class Application < Model
-    set_field_mappings [
-      [:info,       [Info]],
-      [:reference,  [Reference]],
-      [:location,   [Location]],
-      [:events,     [Event]],
-      [:documents,  [Document]],
-      [:people,     [Person]],
-      [:extended,   [Object]]
-    ]
+    set_field_mappings ({
+      info:      [Info],
+      reference: [Reference],
+      location:  [Location],
+      events:    [Event],
+      documents: [Document],
+      people:    [Person],
+      extended:  [Object],
+    })
 
     validates :info, valid: true
     validates :reference, valid: true

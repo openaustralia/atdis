@@ -1,13 +1,13 @@
 module ATDIS
   class Pagination < Model
-    set_field_mappings [
-      [:previous, [Fixnum]],
-      [:next, [Fixnum]],
-      [:current, [Fixnum]],
-      [:per_page, [Fixnum]],
-      [:count, [Fixnum]],
-      [:pages, [Fixnum]]
-    ]
+    set_field_mappings ({
+      previous: [Fixnum],
+      next:     [Fixnum],
+      current:  [Fixnum],
+      per_page: [Fixnum],
+      count:    [Fixnum],
+      pages:    [Fixnum]
+    })
 
     validate :all_pagination_is_present, :previous_is_consistent,
       :next_is_consistent, :current_is_consistent,

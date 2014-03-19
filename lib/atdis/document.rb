@@ -1,10 +1,10 @@
 module ATDIS
   class Document < Model
-    set_field_mappings [
-      [:ref, [String]],
-      [:title, [String]],
-      [:document_url, [URI]]
-    ]
+    set_field_mappings ({
+      ref:          [String],
+      title:        [String],
+      document_url: [URI]    
+    })
 
     # Mandatory parameters
     validates :ref, :title, :document_url, presence_before_type_cast: {spec_section: "4.3.5"}

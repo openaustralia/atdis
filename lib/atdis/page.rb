@@ -2,11 +2,11 @@ module ATDIS
   class Page < Model
     attr_accessor :url
 
-    set_field_mappings [
-      [:response, [Response]],
-      [:count, [Fixnum]],
-      [:pagination, [Pagination]],
-    ]
+    set_field_mappings ({
+      response:   [Response],
+      count:      [Fixnum],
+      pagination: [Pagination],
+    })
 
     # Mandatory parameters
     validates :response, presence_before_type_cast: {spec_section: "4.3"}
