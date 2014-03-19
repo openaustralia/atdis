@@ -11,24 +11,9 @@ module ATDIS
 
     module ClassMethods
       # of the form {section: [String, {none_is_nil: true}], address: [String]}
-      def casting_attributes(p)
+      def set_field_mappings(p)
         define_attribute_methods(p.keys.map{|k| k.to_s})
         self.attribute_types = p
-      end
-
-      def set_field_mappings(p)
-        b = translate_field_mappings(p)
-        casting_attributes(b)
-      end
-
-      private
-
-      def translate_field_mappings(p)
-        ca = {}
-        p.each do |k,v|
-          ca[k] = v
-        end
-        ca
       end
     end
   end
