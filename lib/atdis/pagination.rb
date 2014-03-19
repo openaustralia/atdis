@@ -39,7 +39,7 @@ module ATDIS
     end
 
     def next_is_consistent
-      if self.next && self.next != current + 1
+      if self.next && current && self.next != current + 1
         errors.add(:next, ErrorMessage["should be one greater than current page number or null if last page", "6.5"])
       end
       if self.next.nil? && current != pages
@@ -51,17 +51,19 @@ module ATDIS
     end
 
     def current_is_consistent
-      if current
-        errors.add(:current, ErrorMessage["is larger than the number of pages", "6.5"]) if current > pages
-        errors.add(:current, ErrorMessage["can not be less than 1", "6.5"]) if current < 1
+      if current && pages && current > pages
+        errors.add(:current, ErrorMessage["is larger than the number of pages", "6.5"])
+      end
+      if current && current < 1
+        errors.add(:current, ErrorMessage["can not be less than 1", "6.5"])
       end
     end
 
     def total_no_results_is_consistent
-      if pages && total_no_results > pages * per_page
+      if pages && per_page && total_no_results && total_no_results > pages * per_page
         errors.add(:total_no_results, ErrorMessage["is larger than can be retrieved through paging", "6.5"])
       end
-      if pages && total_no_results <= (pages - 1) * per_page
+      if pages && per_page && total_no_results && total_no_results <= (pages - 1) * per_page
         errors.add(:total_no_results, ErrorMessage["could fit into a smaller number of pages", "6.5"])
       end
     end

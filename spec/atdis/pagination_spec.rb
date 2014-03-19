@@ -1,6 +1,55 @@
 require File.expand_path(File.dirname(__FILE__) + '/../spec_helper')
 
 describe ATDIS::Pagination do
+  context "valid pagination" do
+    let (:pagination) { ATDIS::Pagination.new(
+      previous: nil, current: 1, next: 2, per_page: 25, pages: 4, total_no_results: 90
+    )}
+    it do
+      pagination.should be_valid
+    end
+  end
+
+  context "current is not set" do
+    let (:pagination) { ATDIS::Pagination.new(
+      previous: nil, current: nil, next: 2, per_page: 25, pages: 4, total_no_results: 90
+    )}
+    it do
+      pagination.should_not be_valid
+      pagination.errors.messages.should == {current: [ATDIS::ErrorMessage["should be present if pagination is being used", "6.5"]]}
+    end
+  end
+
+  context "per_page is not set" do
+    let (:pagination) { ATDIS::Pagination.new(
+      previous: nil, current: 1, next: 2, per_page: nil, pages: 4, total_no_results: 90
+    )}
+    it do
+      pagination.should_not be_valid
+      pagination.errors.messages.should == {per_page: [ATDIS::ErrorMessage["should be present if pagination is being used", "6.5"]]}
+    end
+  end
+
+  context "total_not_results is not set" do
+    let (:pagination) { ATDIS::Pagination.new(
+      previous: nil, current: 1, next: 2, per_page: 25, pages: 4, total_no_results: nil
+    )}
+    it do
+      pagination.should_not be_valid
+      pagination.errors.messages.should == {total_no_results: [ATDIS::ErrorMessage["should be present if pagination is being used", "6.5"]]}
+    end
+  end
+
+  context "pages is not set" do
+    let (:pagination) { ATDIS::Pagination.new(
+      previous: nil, current: 1, next: 2, per_page: 25, pages: nil, total_no_results: 90
+    )}
+    it do
+      pagination.should_not be_valid
+      pagination.errors.messages.should == {pages: [ATDIS::ErrorMessage["should be present if pagination is being used", "6.5"]]}
+    end
+  end
+
   context "total no_results is less than would be expected" do
     let (:pagination) { ATDIS::Pagination.new(
       previous: nil, current: 1, next: 2, per_page: 25, pages: 4, total_no_results: 75
