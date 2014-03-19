@@ -33,7 +33,7 @@ describe ATDIS::Page do
           page.pagination = ATDIS::Pagination.new
           page.pagination.per_page = 25
           page.pagination.current = 1
-          page.pagination.total_no_results = 2
+          page.pagination.count = 2
           page.pagination.pages = 1
         end
         it { page.should be_valid }
@@ -51,7 +51,7 @@ describe ATDIS::Page do
         context "count is larger than number of results per page" do
           before :each do
             page.pagination.per_page = 1
-            page.pagination.total_no_results = 1
+            page.pagination.count = 1
           end
           it do
             page.should_not be_valid
@@ -278,8 +278,8 @@ describe ATDIS::Page do
       applications_results.pagination.per_page.should == 2
     end
 
-    it ".total_no_results" do
-      applications_results.pagination.total_no_results.should == 50
+    it ".count" do
+      applications_results.pagination.count.should == 50
     end
 
     it ".pages" do

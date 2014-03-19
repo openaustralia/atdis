@@ -3,7 +3,7 @@ require File.expand_path(File.dirname(__FILE__) + '/../spec_helper')
 describe ATDIS::Pagination do
   context "valid pagination" do
     let (:pagination) { ATDIS::Pagination.new(
-      previous: nil, current: 1, next: 2, per_page: 25, pages: 4, total_no_results: 90
+      previous: nil, current: 1, next: 2, per_page: 25, pages: 4, count: 90
     )}
     it do
       pagination.should be_valid
@@ -12,7 +12,7 @@ describe ATDIS::Pagination do
 
   context "current is not set" do
     let (:pagination) { ATDIS::Pagination.new(
-      previous: nil, current: nil, next: 2, per_page: 25, pages: 4, total_no_results: 90
+      previous: nil, current: nil, next: 2, per_page: 25, pages: 4, count: 90
     )}
     it do
       pagination.should_not be_valid
@@ -22,7 +22,7 @@ describe ATDIS::Pagination do
 
   context "per_page is not set" do
     let (:pagination) { ATDIS::Pagination.new(
-      previous: nil, current: 1, next: 2, per_page: nil, pages: 4, total_no_results: 90
+      previous: nil, current: 1, next: 2, per_page: nil, pages: 4, count: 90
     )}
     it do
       pagination.should_not be_valid
@@ -32,17 +32,17 @@ describe ATDIS::Pagination do
 
   context "total_not_results is not set" do
     let (:pagination) { ATDIS::Pagination.new(
-      previous: nil, current: 1, next: 2, per_page: 25, pages: 4, total_no_results: nil
+      previous: nil, current: 1, next: 2, per_page: 25, pages: 4, count: nil
     )}
     it do
       pagination.should_not be_valid
-      pagination.errors.messages.should == {total_no_results: [ATDIS::ErrorMessage["should be present if pagination is being used", "6.5"]]}
+      pagination.errors.messages.should == {count: [ATDIS::ErrorMessage["should be present if pagination is being used", "6.5"]]}
     end
   end
 
   context "pages is not set" do
     let (:pagination) { ATDIS::Pagination.new(
-      previous: nil, current: 1, next: 2, per_page: 25, pages: nil, total_no_results: 90
+      previous: nil, current: 1, next: 2, per_page: 25, pages: nil, count: 90
     )}
     it do
       pagination.should_not be_valid
@@ -52,27 +52,27 @@ describe ATDIS::Pagination do
 
   context "total no_results is less than would be expected" do
     let (:pagination) { ATDIS::Pagination.new(
-      previous: nil, current: 1, next: 2, per_page: 25, pages: 4, total_no_results: 75
+      previous: nil, current: 1, next: 2, per_page: 25, pages: 4, count: 75
     )}
     it do
       pagination.should_not be_valid
-      pagination.errors.messages.should == {total_no_results: [ATDIS::ErrorMessage["could fit into a smaller number of pages", "6.5"]]}
+      pagination.errors.messages.should == {count: [ATDIS::ErrorMessage["could fit into a smaller number of pages", "6.5"]]}
     end
   end
 
-  context "total_no_results is larger than would be expected" do
+  context "count is larger than would be expected" do
     let(:pagination) { ATDIS::Pagination.new(
-      previous: nil, current: 1, next: 2, per_page: 25, pages: 4, total_no_results: 101
+      previous: nil, current: 1, next: 2, per_page: 25, pages: 4, count: 101
     )}
     it do
       pagination.should_not be_valid
-      pagination.errors.messages.should == {total_no_results: [ATDIS::ErrorMessage["is larger than can be retrieved through paging", "6.5"]]}
+      pagination.errors.messages.should == {count: [ATDIS::ErrorMessage["is larger than can be retrieved through paging", "6.5"]]}
     end
   end
 
   context "current page is zero" do
     let(:pagination) { ATDIS::Pagination.new(
-      previous: nil, current: 0, next: 1, pages: 1, per_page: 25, total_no_results: 2
+      previous: nil, current: 0, next: 1, pages: 1, per_page: 25, count: 2
     ) }
     it do
       pagination.should_not be_valid
@@ -82,7 +82,7 @@ describe ATDIS::Pagination do
 
   context "current page is larger than the number of pages" do
     let(:pagination) { ATDIS::Pagination.new(
-      previous: nil, previous: 1, current: 2, next: 3, pages: 1, per_page: 25, total_no_results: 2
+      previous: nil, previous: 1, current: 2, next: 3, pages: 1, per_page: 25, count: 2
     ) }
     it do
       pagination.should_not be_valid
@@ -92,7 +92,7 @@ describe ATDIS::Pagination do
 
   context "next page number is not nil but on last page" do
     let(:pagination) { ATDIS::Pagination.new(
-      previous: 3, current: 4, next: 5, pages: 4, per_page: 25, total_no_results: 100
+      previous: 3, current: 4, next: 5, pages: 4, per_page: 25, count: 100
     ) }
     it do
       pagination.should_not be_valid
@@ -102,7 +102,7 @@ describe ATDIS::Pagination do
 
   context "next page number is nil but not on last page" do
     let(:pagination) { ATDIS::Pagination.new(
-      previous: 3, current: 4, next: nil, pages: 6, per_page: 25, total_no_results: 140
+      previous: 3, current: 4, next: nil, pages: 6, per_page: 25, count: 140
     ) }
     it do
       pagination.should_not be_valid
@@ -112,7 +112,7 @@ describe ATDIS::Pagination do
 
   context "next page number is pointing to a weird page number" do
     let(:pagination) { ATDIS::Pagination.new(
-      previous: nil, current: 1, next: 5, pages: 2, per_page: 25, total_no_results: 50
+      previous: nil, current: 1, next: 5, pages: 2, per_page: 25, count: 50
     ) }
     it do
       pagination.should_not be_valid
@@ -122,7 +122,7 @@ describe ATDIS::Pagination do
 
   context "previous page number not nil but on first page" do
     let(:pagination) { ATDIS::Pagination.new(
-      previous: 0, current: 1, next: 2, pages: 10, per_page: 25, total_no_results: 240
+      previous: 0, current: 1, next: 2, pages: 10, per_page: 25, count: 240
     ) }
     it do
       pagination.should_not be_valid
@@ -132,7 +132,7 @@ describe ATDIS::Pagination do
 
   context "previous page number if nil but not on first page" do
     let(:pagination) { ATDIS::Pagination.new(
-      previous: nil, current: 4, next: 5, pages: 10, per_page: 25, total_no_results: 240
+      previous: nil, current: 4, next: 5, pages: 10, per_page: 25, count: 240
     ) }
     it do
       pagination.should_not be_valid
@@ -142,7 +142,7 @@ describe ATDIS::Pagination do
 
   context "previous page number is pointing to a weird page number" do
     let(:pagination) { ATDIS::Pagination.new(
-      previous: 5, current: 2, next: nil, pages: 2, per_page: 25, total_no_results: 50
+      previous: 5, current: 2, next: nil, pages: 2, per_page: 25, count: 50
     ) }
     it do
       pagination.should_not be_valid

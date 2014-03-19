@@ -5,19 +5,19 @@ module ATDIS
       [:next, [:next, Fixnum]],
       [:current, [:current, Fixnum]],
       [:per_page, [:per_page, Fixnum]],
-      [:count, [:total_no_results, Fixnum]],
+      [:count, [:count, Fixnum]],
       [:pages, [:pages, Fixnum]]
     ]
 
     validate :all_pagination_is_present, :previous_is_consistent,
       :next_is_consistent, :current_is_consistent,
-      :total_no_results_is_consistent
+      :count_is_consistent
 
     # If some of the pagination fields are present all of the required ones should be present
     def all_pagination_is_present
       errors.add(:current, ErrorMessage["should be present if pagination is being used", "6.5"]) if current.nil?
       errors.add(:per_page, ErrorMessage["should be present if pagination is being used", "6.5"]) if per_page.nil?
-      errors.add(:total_no_results, ErrorMessage["should be present if pagination is being used", "6.5"]) if total_no_results.nil?
+      errors.add(:count, ErrorMessage["should be present if pagination is being used", "6.5"]) if count.nil?
       errors.add(:pages, ErrorMessage["should be present if pagination is being used", "6.5"]) if pages.nil?
     end
 
@@ -54,12 +54,12 @@ module ATDIS
       end
     end
 
-    def total_no_results_is_consistent
-      if pages && per_page && total_no_results && total_no_results > pages * per_page
-        errors.add(:total_no_results, ErrorMessage["is larger than can be retrieved through paging", "6.5"])
+    def count_is_consistent
+      if pages && per_page && count && count > pages * per_page
+        errors.add(:count, ErrorMessage["is larger than can be retrieved through paging", "6.5"])
       end
-      if pages && per_page && total_no_results && total_no_results <= (pages - 1) * per_page
-        errors.add(:total_no_results, ErrorMessage["could fit into a smaller number of pages", "6.5"])
+      if pages && per_page && count && count <= (pages - 1) * per_page
+        errors.add(:count, ErrorMessage["could fit into a smaller number of pages", "6.5"])
       end
     end
   end
