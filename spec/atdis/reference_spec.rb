@@ -1,0 +1,55 @@
+require File.expand_path(File.dirname(__FILE__) + '/../spec_helper')
+
+describe ATDIS::Reference do
+  let(:a) { ATDIS::Reference.new(
+    more_info_url: URI.parse("http://foo.com/bar"),
+  )}
+
+  describe ".more_info_url" do
+    it do
+      a.more_info_url = nil
+      a.should_not be_valid
+      a.errors.messages.should == {more_info_url: [ATDIS::ErrorMessage["can't be blank", "4.3.2"]]}
+    end
+    it do
+      a.more_info_url = "This is not a valid url"
+      a.should_not be_valid
+      a.errors.messages.should == {more_info_url: [ATDIS::ErrorMessage["is not a valid URL", "4.3.2"]]}
+    end
+    it do
+      a.more_info_url = "foo.com"
+      a.should_not be_valid
+      a.errors.messages.should == {more_info_url: [ATDIS::ErrorMessage["is not a valid URL", "4.3.2"]]}
+    end
+    it do
+      a.more_info_url = "httpss://foo.com"
+      a.should_not be_valid
+      a.errors.messages.should == {more_info_url: [ATDIS::ErrorMessage["is not a valid URL", "4.3.2"]]}
+    end
+  end
+
+  describe "#more_info_url=" do
+    let(:a) { ATDIS::Reference.new }
+    it "should do no type casting when it's already a URI" do
+      a.more_info_url = URI.parse("http://foo.com/bar")
+      a.more_info_url.should == URI.parse("http://foo.com/bar")
+    end
+
+    it "should cast a string to a URI when it's a valid url" do
+      a.more_info_url = "http://foo.com/bar"
+      a.more_info_url.should == URI.parse("http://foo.com/bar")
+    end
+
+    context "not a valid url" do
+      before :each do
+        a.more_info_url = "This is not a url"
+      end
+      it "should be nil" do
+        a.more_info_url.should be_nil
+      end
+      it "should keep the original string" do
+        a.more_info_url_before_type_cast.should == "This is not a url"
+      end
+    end
+  end
+end

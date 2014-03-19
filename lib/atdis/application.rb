@@ -6,26 +6,22 @@ module ATDIS
     # which is much more readable
     set_field_mappings [
       [:application, [
-        [:info,                       [:info, Info]],
-        [:reference, [
-          [:more_info_url,            [:more_info_url, URI]],
-          [:comments_url,             [:comments_url, URI]]
-        ]],
-        [:location,                   [:location, Location]],
-        [:events,                     [:events, Event]],
-        [:documents,                  [:documents, Document]],
-        [:people,                     [:people, Person]],
-        [:extended,                   [:extended, Object]]
+        [:info,       [:info, Info]],
+        [:reference,  [:reference, Reference]],
+        [:location,   [:location, Location]],
+        [:events,     [:events, Event]],
+        [:documents,  [:documents, Document]],
+        [:people,     [:people, Person]],
+        [:extended,   [:extended, Object]]
       ]]
     ]
 
     validates :info, valid: true
-    validates :more_info_url, presence_before_type_cast: {spec_section: "4.3.2"}
+    validates :reference, valid: true
     validates :location, presence_before_type_cast: {spec_section: "4.3.3"}
     validates :events, presence_before_type_cast: {spec_section: "4.3.4"}
     validates :documents, presence_before_type_cast: {spec_section: "4.3.5"}
 
-    validates :more_info_url, http_url: {spec_section: "4.3.2"}
     validates :location, :events, :documents, :people, valid: true
     validates :events, :documents, array: {spec_section: "4.3.4"}
     # TODO people should be an array if it's included

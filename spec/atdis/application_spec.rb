@@ -17,16 +17,16 @@ describe ATDIS::Application do
           status: "OPEN"
         },
         reference: {
-          # This is the extra parameter that shouldn't be here
-          foo: "bar",
           more_info_url: "http://foo.com/bar"
         },
+        # This is the extra parameter that shouldn't be here
+        foo: "bar",
         location: {foo: "Some location data"},
         events: [],
         documents: []
       })
       a.should_not be_valid
-      a.errors.messages.should == {json: [ATDIS::ErrorMessage['Unexpected parameters in json data: {"application":{"reference":{"foo":"bar"}}}', "4"]]}
+      a.errors.messages.should == {json: [ATDIS::ErrorMessage['Unexpected parameters in json data: {"application":{"foo":"bar"}}', "4"]]}
     end
   end
 
@@ -49,8 +49,10 @@ describe ATDIS::Application do
           estimated_cost: "50,000",
           status: "OPEN",
         },
-        more_info_url: "http://foo.com/bar",
-        comments_url: "http://foo.com/comment",
+        reference: {
+          more_info_url: "http://foo.com/bar",
+          comments_url: "http://foo.com/comment",
+        },
         location: { address: "123 Fourfivesix Street" },
         events: [ { id: "event1" }, { id: "event2" } ],
         documents: [ { ref: "27B/6/a" }, { ref: "27B/6/b" } ],
@@ -92,7 +94,7 @@ describe ATDIS::Application do
     it "should create a nil valued application when there is no information in the json" do
       application = double
       ATDIS::Application.should_receive(:new).with({json_left_overs:{}, info: {},
-        comments_url:nil, more_info_url:nil, location:nil, extended:nil,
+        reference: {}, location:nil, extended:nil,
         events:nil, documents:nil, people:nil}).and_return(application)
 
       ATDIS::Application.interpret(application: {info: {}, reference: {}}).should == application
@@ -155,39 +157,13 @@ describe ATDIS::Application do
     end
   end
 
-  describe "#more_info_url=" do
-    let(:a) { ATDIS::Application.new }
-    it "should do no type casting when it's already a URI" do
-      a.more_info_url = URI.parse("http://foo.com/bar")
-      a.more_info_url.should == URI.parse("http://foo.com/bar")
-    end
-
-    it "should cast a string to a URI when it's a valid url" do
-      a.more_info_url = "http://foo.com/bar"
-      a.more_info_url.should == URI.parse("http://foo.com/bar")
-    end
-
-    context "not a valid url" do
-      before :each do
-        a.more_info_url = "This is not a url"
-      end
-      it "should be nil" do
-        a.more_info_url.should be_nil
-      end
-      it "should keep the original string" do
-        a.more_info_url_before_type_cast.should == "This is not a url"
-      end
-    end
-  end
-
   # TODO This should really be a test on the Model base class
   describe "#attribute_names" do
     it do
       # These are also ordered in a way that corresponds to the specification. Makes for easy reading by humans.
       ATDIS::Application.attribute_names.should == [
         "info",
-        "more_info_url",
-        "comments_url",
+        "reference",
         "location",
         "events",
         "documents",
@@ -214,7 +190,9 @@ describe ATDIS::Application do
         determination_date: DateTime.new(2013,6,20),
         status: "OPEN",
       ),
-      more_info_url: URI.parse("http://foo.com/bar"),
+      reference: ATDIS::Reference.new(
+        more_info_url: URI.parse("http://foo.com/bar"),
+      ),
       location: {address: "123 Fourfivesix Street Neutral Bay NSW 2089"},
       events: [],
       documents: []
@@ -228,29 +206,6 @@ describe ATDIS::Application do
         ATDIS::Location.should_receive(:interpret).with(foo: "some location data").and_return(l)
         a.location = {foo: "some location data"}
         a.should_not be_valid
-      end
-    end
-
-    describe ".more_info_url" do
-      it do
-        a.more_info_url = nil
-        a.should_not be_valid
-        a.errors.messages.should == {more_info_url: [ATDIS::ErrorMessage["can't be blank", "4.3.2"]]}
-      end
-      it do
-        a.more_info_url = "This is not a valid url"
-        a.should_not be_valid
-        a.errors.messages.should == {more_info_url: [ATDIS::ErrorMessage["is not a valid URL", "4.3.2"]]}
-      end
-      it do
-        a.more_info_url = "foo.com"
-        a.should_not be_valid
-        a.errors.messages.should == {more_info_url: [ATDIS::ErrorMessage["is not a valid URL", "4.3.2"]]}
-      end
-      it do
-        a.more_info_url = "httpss://foo.com"
-        a.should_not be_valid
-        a.errors.messages.should == {more_info_url: [ATDIS::ErrorMessage["is not a valid URL", "4.3.2"]]}
       end
     end
 
