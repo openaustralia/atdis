@@ -64,10 +64,10 @@ module ATDIS
 
     validate :json_left_overs_is_empty
 
-    def self.unused_data(data, mappings = field_mappings)
+    def self.unused_data(data)
       json_left_overs = {}
       data.each_key do |key|
-        if !mappings[key]
+        if !attribute_keys.include?(key)
           json_left_overs[key] = data[key]
         end
       end

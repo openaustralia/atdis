@@ -80,27 +80,22 @@ describe ATDIS::Model do
 
   describe ".unused_data" do
     it do
+      ATDIS::Model.stub(:attribute_keys).and_return([:foo])
       ATDIS::Model.unused_data(
       {
         foo: 2
-      },
-      {
-        foo: :bar
       }).should ==
       {
       }
     end
 
     it do
+      ATDIS::Model.stub(:attribute_keys).and_return([:foo, :a])
       ATDIS::Model.unused_data(
       {
         foo: 2,
         a: 3,
         d: 4
-      },
-      {
-        foo: :bar,
-        a: :b
       }).should ==
       {
         d: 4
@@ -108,15 +103,12 @@ describe ATDIS::Model do
     end
 
     it do
+      ATDIS::Model.stub(:attribute_keys).and_return([:foo, :a])
       ATDIS::Model.unused_data(
       {
         foo: 2,
         a: 3,
         d: 4,
-      },
-      {
-        foo: :bar,
-        a: :b,
       }).should ==
       {
         d: 4
