@@ -30,11 +30,7 @@ describe ATDIS::Page do
       context "with pagination" do
         before :each do
           page.count = 2
-          page.pagination = ATDIS::Pagination.new
-          page.pagination.per_page = 25
-          page.pagination.current = 1
-          page.pagination.count = 2
-          page.pagination.pages = 1
+          page.pagination = ATDIS::Pagination.new(per_page: 25, current: 1, count: 2, pages: 1)
         end
         it { page.should be_valid }
 
