@@ -85,24 +85,24 @@ describe ATDIS::Model do
   end
 
   describe ".map_field" do
-    let(:mappings) { { foo: :bar, a: :b, info: :info } }
+    let(:mappings) { { foo: :foo, a: :a, info: :info } }
 
     context "one version of data" do
       let(:data) { { foo: 2, a: 3, d: 4, info: "eek" } }
 
-      it { ATDIS::Model.map_field(:bar, data, mappings).should == 2 }
-      it { ATDIS::Model.map_field(:b, data, mappings).should == 3 }
+      it { ATDIS::Model.map_field(:foo, data, mappings).should == 2 }
+      it { ATDIS::Model.map_field(:a, data, mappings).should == 3 }
+      it { ATDIS::Model.map_field(:d, data, mappings).should be_nil }
       it { ATDIS::Model.map_field(:info, data, mappings).should == "eek" }
     end
 
     context "another version of data" do
       let(:data) { { foo: 2, a: 3, d: 4 } }
 
-      it { ATDIS::Model.map_field(:bar, data, mappings).should == 2 }
-      it { ATDIS::Model.map_field(:b, data, mappings).should == 3 }
-      it { ATDIS::Model.map_field(:bar2, data, mappings).should be_nil }
-      it { ATDIS::Model.map_field(:b2, data, mappings).should be_nil }
-      it { ATDIS::Model.map_field(:c2, data, mappings).should be_nil }
+      it { ATDIS::Model.map_field(:foo, data, mappings).should == 2 }
+      it { ATDIS::Model.map_field(:a, data, mappings).should == 3 }
+      it { ATDIS::Model.map_field(:d, data, mappings).should be_nil }
+      it { ATDIS::Model.map_field(:info, data, mappings).should be_nil }
     end
 
     context "data is not a hash" do
@@ -199,12 +199,12 @@ describe ATDIS::Model do
         d: 4
       },
       {
-        foo: :bar,
-        a: :b
+        foo: :foo,
+        a: :a
       }).should ==
       {
-        bar: 2,
-        b: 3,
+        foo: 2,
+        a: 3,
       }
     end
 
@@ -216,12 +216,12 @@ describe ATDIS::Model do
         d: 4,
       },
       {
-        foo: :bar,
-        a: :b,
+        foo: :foo,
+        a: :a,
       }).should ==
       {
-        bar: 2,
-        b: 3,
+        foo: 2,
+        a: 3,
       }
     end
   end
