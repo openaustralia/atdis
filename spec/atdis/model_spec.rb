@@ -8,10 +8,8 @@ end
 
 class ModelA < ATDIS::Model
   set_field_mappings [
-    [:foo, [
-      [:bar, [:a, String]],
-      [:hello, [:b, ModelB]]
-      ]]
+    [:bar, [:a, String]],
+    [:hello, [:b, ModelB]]
   ]
 end
 
@@ -25,29 +23,29 @@ describe ATDIS::Model do
 
   describe "#json_errors" do
     it "should return the json attribute with the errors" do
-      a = ModelA.interpret(foo: {bar: "Hello"})
+      a = ModelA.interpret(bar: "Hello")
       a.errors.add(:a, ATDIS::ErrorMessage["can not be so friendly", "4.5"])
       a.errors.add(:a, ATDIS::ErrorMessage["and something else", "4.6"])
-      a.json_errors.should == [[{foo: {bar: "Hello"}}, [
+      a.json_errors.should == [[{bar: "Hello"}, [
         ATDIS::ErrorMessage["bar can not be so friendly", "4.5"],
         ATDIS::ErrorMessage["bar and something else", "4.6"]]]]
     end
 
     it "should include the errors from child objects" do
-      a = ModelA.interpret(foo: {hello: {bar: "Kat"}})
+      a = ModelA.interpret(hello: {bar: "Kat"})
       a.b.errors.add(:c, ATDIS::ErrorMessage["can't be a name", "2.3"])
       a.b.json_errors.should == [[{bar: "Kat"}, [ATDIS::ErrorMessage["bar can't be a name", "2.3"]]]]
-      a.json_errors.should == [[{foo: {hello: {bar: "Kat"}}}, [ATDIS::ErrorMessage["bar can't be a name", "2.3"]]]]
+      a.json_errors.should == [[{hello: {bar: "Kat"}}, [ATDIS::ErrorMessage["bar can't be a name", "2.3"]]]]
     end
 
     it "should include the errors from only the first child object in an array" do
-      a = ModelA.interpret(foo: {hello: [{bar: "Kat"}, {bar: "Mat"}]})
+      a = ModelA.interpret(hello: [{bar: "Kat"}, {bar: "Mat"}])
       a.b[0].c.should == "Kat"
       a.b[1].c.should == "Mat"
       a.json_errors.should == []
       a.b[0].errors.add(:c, ATDIS::ErrorMessage["can't be a name", "1.2"])
       a.b[1].errors.add(:c, ATDIS::ErrorMessage["can't be a name", "1.2"])
-      a.json_errors.should == [[{foo: {hello: [{bar: "Kat"}]}}, [ATDIS::ErrorMessage["bar can't be a name", "1.2"]]]]
+      a.json_errors.should == [[{hello: [{bar: "Kat"}]}, [ATDIS::ErrorMessage["bar can't be a name", "1.2"]]]]
     end
 
     it "should show json parsing errors" do
