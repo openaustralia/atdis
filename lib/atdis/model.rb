@@ -75,14 +75,9 @@ module ATDIS
     end
 
     def self.map_field(key, data, mappings)
-      if data.kind_of?(Hash)
-        mappings.each do |k, v|
-          if v == key
-            return data[k]
-          end
-        end
+      if data.kind_of?(Hash) && mappings.has_key?(key)
+        data[key]
       end
-      nil
     end
 
     def self.unused_data(data, mappings = field_mappings)
