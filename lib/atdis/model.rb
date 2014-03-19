@@ -71,7 +71,7 @@ module ATDIS
     end
 
     def self.map_field(key, data, mappings)
-      if data.kind_of?(Hash) && mappings.has_key?(key)
+      if mappings.has_key?(key)
         data[key]
       end
     end

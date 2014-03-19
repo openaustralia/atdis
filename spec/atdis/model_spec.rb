@@ -98,12 +98,6 @@ describe ATDIS::Model do
       it { ATDIS::Model.map_field(:d, data, mappings).should be_nil }
       it { ATDIS::Model.map_field(:info, data, mappings).should be_nil }
     end
-
-    context "data is not a hash" do
-      let(:data) { [{ foo: 2, a: 3, d: 4 }] }
-
-      it { ATDIS::Model.map_field(:bar, data, mappings).should be_nil }
-    end
   end
 
   describe ".unused_data" do
