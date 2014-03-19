@@ -93,19 +93,6 @@ describe ATDIS::Model do
 
     it do
       ATDIS::Model.unused_data(
-      [{
-        foo: 2
-      }],
-      {
-        foo: :bar
-      }).should ==
-      [{
-        foo: 2
-      }]
-    end
-
-    it do
-      ATDIS::Model.unused_data(
       {
         foo: 2,
         a: 3,

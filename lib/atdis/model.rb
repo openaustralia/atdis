@@ -65,22 +65,13 @@ module ATDIS
     validate :json_left_overs_is_empty
 
     def self.unused_data(data, mappings = field_mappings)
-      if data.kind_of?(Hash)
-        json_left_overs = {}
-        data.each_key do |key|
-          if mappings[key]
-            if mappings[key].kind_of?(Hash)
-              l2 = unused_data(data[key], mappings[key])
-              json_left_overs[key] = l2 unless l2.empty?
-            end
-          else
-            json_left_overs[key] = data[key]
-          end
+      json_left_overs = {}
+      data.each_key do |key|
+        if !mappings[key]
+          json_left_overs[key] = data[key]
         end
-        json_left_overs
-      else
-        data
       end
+      json_left_overs
     end
 
     # Map json structure to our values
