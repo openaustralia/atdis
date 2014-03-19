@@ -22,19 +22,14 @@ module ATDIS
     end
 
     def previous_is_consistent
-      if current
-        if previous
-          if previous != current - 1
-            errors.add(:previous, ErrorMessage["should be one less than current page number or null if first page", "6.5"])
-          end
-          if current == 1
-            errors.add(:previous, ErrorMessage["should be null if on the first page", "6.5"])
-          end
-        else
-          if current > 1
-            errors.add(:previous, ErrorMessage["can't be null if not on the first page", "6.5"])
-          end
-        end
+      if previous && current && previous != current - 1
+        errors.add(:previous, ErrorMessage["should be one less than current page number or null if first page", "6.5"])
+      end
+      if previous && current && current == 1
+        errors.add(:previous, ErrorMessage["should be null if on the first page", "6.5"])
+      end
+      if previous.nil? && current && current > 1
+        errors.add(:previous, ErrorMessage["can't be null if not on the first page", "6.5"])
       end
     end
 
