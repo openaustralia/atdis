@@ -19,7 +19,7 @@ module ATDIS
 
       def set_field_mappings(p)
         a, b = translate_field_mappings(p)
-        # field_mappings is of the form {pagination: {previous: :previous, pages: :total_no_pages}}
+        # field_mappings is of the form {pagination: {previous: :previous, pages: :pages}}
         self.field_mappings = a
         casting_attributes(b)
       end

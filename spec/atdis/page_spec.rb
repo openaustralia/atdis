@@ -3,7 +3,7 @@ require File.expand_path(File.dirname(__FILE__) + '/../spec_helper')
 describe ATDIS::Page do
   it ".attribute_names" do
     ATDIS::Page.attribute_names.should == ["response", "count", "previous", "next", "current",
-      "per_page", "total_no_results", "total_no_pages"]
+      "per_page", "total_no_results", "pages"]
   end
 
   describe "validations" do
@@ -34,7 +34,7 @@ describe ATDIS::Page do
           page.per_page = 25
           page.current = 1
           page.total_no_results = 2
-          page.total_no_pages = 1
+          page.pages = 1
         end
         it { page.should be_valid }
 
@@ -75,7 +75,7 @@ describe ATDIS::Page do
             page.previous = 5
             page.current = 2
             page.total_no_results = 50
-            page.total_no_pages = 2
+            page.pages = 2
           end
           it do
             page.should_not be_valid
@@ -90,7 +90,7 @@ describe ATDIS::Page do
             page.next = 5
             page.previous = nil
             page.total_no_results = 240
-            page.total_no_pages = 10
+            page.pages = 10
           end
           it do
             page.should_not be_valid
@@ -104,7 +104,7 @@ describe ATDIS::Page do
             page.next = 2
             page.previous = 0
             page.total_no_results = 240
-            page.total_no_pages = 10
+            page.pages = 10
           end
           it do
             page.should_not be_valid
@@ -116,7 +116,7 @@ describe ATDIS::Page do
           before :each do
             page.next = 5
             page.total_no_results = 50
-            page.total_no_pages = 2
+            page.pages = 2
           end
           it do
             page.should_not be_valid
@@ -130,7 +130,7 @@ describe ATDIS::Page do
             page.previous = 3
             page.next = nil
             page.total_no_results = 140
-            page.total_no_pages = 6
+            page.pages = 6
           end
           it do
             page.should_not be_valid
@@ -144,7 +144,7 @@ describe ATDIS::Page do
             page.current = 4
             page.next = 5
             page.total_no_results = 100
-            page.total_no_pages = 4
+            page.pages = 4
           end
           it do
             page.should_not be_valid
@@ -157,7 +157,7 @@ describe ATDIS::Page do
             page.current = 2
             page.previous = 1
             page.next = 3
-            page.total_no_pages = 1
+            page.pages = 1
           end
           it do
             page.should_not be_valid
@@ -181,7 +181,7 @@ describe ATDIS::Page do
             page.current = 1
             page.next = 2
             page.per_page = 25
-            page.total_no_pages = 4
+            page.pages = 4
             page.total_no_results = 101
           end
           it do
@@ -195,7 +195,7 @@ describe ATDIS::Page do
             page.current = 1
             page.next = 2
             page.per_page = 25
-            page.total_no_pages = 4
+            page.pages = 4
             page.total_no_results = 75
           end
           it do
@@ -367,8 +367,8 @@ describe ATDIS::Page do
         applications_results.total_no_results.should be_nil
       end
 
-      it ".total_no_pages" do
-        applications_results.total_no_pages.should be_nil
+      it ".pages" do
+        applications_results.pages.should be_nil
       end
       end
   end
@@ -425,8 +425,8 @@ describe ATDIS::Page do
       applications_results.total_no_results.should == 50
     end
 
-    it ".total_no_pages" do
-      applications_results.total_no_pages.should == 25
+    it ".pages" do
+      applications_results.pages.should == 25
     end
 
     it ".next_url" do

@@ -11,7 +11,7 @@ module ATDIS
         [:current, [:current, Fixnum]],
         [:per_page, [:per_page, Fixnum]],
         [:count, [:total_no_results, Fixnum]],
-        [:pages, [:total_no_pages, Fixnum]]
+        [:pages, [:pages, Fixnum]]
       ]]
     ]
 
@@ -33,12 +33,12 @@ module ATDIS
     # If some of the pagination fields are present all of the required ones should be present
     def all_pagination_is_present
       if count || previous || self.next || current || per_page ||
-        total_no_results || total_no_pages
+        total_no_results || pages
         errors.add(:count, ErrorMessage["should be present if pagination is being used", "6.5"]) if count.nil?
         errors.add(:current, ErrorMessage["should be present if pagination is being used", "6.5"]) if current.nil?
         errors.add(:per_page, ErrorMessage["should be present if pagination is being used", "6.5"]) if per_page.nil?
         errors.add(:total_no_results, ErrorMessage["should be present if pagination is being used", "6.5"]) if total_no_results.nil?
-        errors.add(:total_no_pages, ErrorMessage["should be present if pagination is being used", "6.5"]) if total_no_pages.nil?
+        errors.add(:pages, ErrorMessage["should be present if pagination is being used", "6.5"]) if pages.nil?
       end
     end
 
@@ -70,26 +70,26 @@ module ATDIS
       if self.next && self.next != current + 1
         errors.add(:next, ErrorMessage["should be one greater than current page number or null if last page", "6.5"])
       end
-      if self.next.nil? && current != total_no_pages
+      if self.next.nil? && current != pages
         errors.add(:next, ErrorMessage["can't be null if not on the last page", "6.5"])
       end
-      if self.next && current == total_no_pages
+      if self.next && current == pages
         errors.add(:next, ErrorMessage["should be null if on the last page", "6.5"])
       end
     end
 
     def current_is_consistent
       if current
-        errors.add(:current, ErrorMessage["is larger than the number of pages", "6.5"]) if current > total_no_pages
+        errors.add(:current, ErrorMessage["is larger than the number of pages", "6.5"]) if current > pages
         errors.add(:current, ErrorMessage["can not be less than 1", "6.5"]) if current < 1
       end
     end
 
     def total_no_results_is_consistent
-      if total_no_pages && total_no_results > total_no_pages * per_page
+      if pages && total_no_results > pages * per_page
         errors.add(:total_no_results, ErrorMessage["is larger than can be retrieved through paging", "6.5"])
       end
-      if total_no_pages && total_no_results <= (total_no_pages - 1) * per_page
+      if pages && total_no_results <= (pages - 1) * per_page
         errors.add(:total_no_results, ErrorMessage["could fit into a smaller number of pages", "6.5"])
       end
     end
