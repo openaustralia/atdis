@@ -2,30 +2,30 @@ require File.expand_path(File.dirname(__FILE__) + '/../spec_helper')
 
 class ModelB < ATDIS::Model
   set_field_mappings [
-    [:bar, [:c, String]]
+    [:bar, [:bar, String]]
   ]
 end
 
 class ModelA < ATDIS::Model
   set_field_mappings [
-    [:bar, [:a, String]],
-    [:hello, [:b, ModelB]]
+    [:bar, [:bar, String]],
+    [:hello, [:hello, ModelB]]
   ]
 end
 
 describe ATDIS::Model do
   describe ".attributes" do
     it do
-      a = ModelA.new(a: "foo")
-      a.attributes.should == {"a" => "foo"}
+      a = ModelA.new(bar: "foo")
+      a.attributes.should == {"bar" => "foo"}
     end
   end
 
   describe "#json_errors" do
     it "should return the json attribute with the errors" do
       a = ModelA.interpret(bar: "Hello")
-      a.errors.add(:a, ATDIS::ErrorMessage["can not be so friendly", "4.5"])
-      a.errors.add(:a, ATDIS::ErrorMessage["and something else", "4.6"])
+      a.errors.add(:bar, ATDIS::ErrorMessage["can not be so friendly", "4.5"])
+      a.errors.add(:bar, ATDIS::ErrorMessage["and something else", "4.6"])
       a.json_errors.should == [[{bar: "Hello"}, [
         ATDIS::ErrorMessage["bar can not be so friendly", "4.5"],
         ATDIS::ErrorMessage["bar and something else", "4.6"]]]]
@@ -33,18 +33,18 @@ describe ATDIS::Model do
 
     it "should include the errors from child objects" do
       a = ModelA.interpret(hello: {bar: "Kat"})
-      a.b.errors.add(:c, ATDIS::ErrorMessage["can't be a name", "2.3"])
-      a.b.json_errors.should == [[{bar: "Kat"}, [ATDIS::ErrorMessage["bar can't be a name", "2.3"]]]]
+      a.hello.errors.add(:bar, ATDIS::ErrorMessage["can't be a name", "2.3"])
+      a.hello.json_errors.should == [[{bar: "Kat"}, [ATDIS::ErrorMessage["bar can't be a name", "2.3"]]]]
       a.json_errors.should == [[{hello: {bar: "Kat"}}, [ATDIS::ErrorMessage["bar can't be a name", "2.3"]]]]
     end
 
     it "should include the errors from only the first child object in an array" do
       a = ModelA.interpret(hello: [{bar: "Kat"}, {bar: "Mat"}])
-      a.b[0].c.should == "Kat"
-      a.b[1].c.should == "Mat"
+      a.hello[0].bar.should == "Kat"
+      a.hello[1].bar.should == "Mat"
       a.json_errors.should == []
-      a.b[0].errors.add(:c, ATDIS::ErrorMessage["can't be a name", "1.2"])
-      a.b[1].errors.add(:c, ATDIS::ErrorMessage["can't be a name", "1.2"])
+      a.hello[0].errors.add(:bar, ATDIS::ErrorMessage["can't be a name", "1.2"])
+      a.hello[1].errors.add(:bar, ATDIS::ErrorMessage["can't be a name", "1.2"])
       a.json_errors.should == [[{hello: [{bar: "Kat"}]}, [ATDIS::ErrorMessage["bar can't be a name", "1.2"]]]]
     end
 
@@ -56,9 +56,9 @@ describe ATDIS::Model do
   end
 
   describe ".json_top_level_attribute" do
-    it { ModelA.json_top_level_attribute(:a).should == :bar }
-    it { ModelA.json_top_level_attribute(:b).should == :hello }
-    it { ModelB.json_top_level_attribute(:c).should == :bar }
+    it { ModelA.json_top_level_attribute(:bar).should == :bar }
+    it { ModelA.json_top_level_attribute(:hello).should == :hello }
+    it { ModelB.json_top_level_attribute(:bar).should == :bar }
   end
 
   describe ".cast" do
