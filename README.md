@@ -40,12 +40,12 @@ Or install it yourself as:
     DA2013-0381: New pool plus deck at 123 Fourfivesix Street Neutral Bay NSW 2089
 
 ### Paging
-    
-    page.next
+
+    page.next_page
 
 and
 
-    page.previous
+    page.previous_page
 
 ### Validation
 

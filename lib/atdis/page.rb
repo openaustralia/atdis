@@ -121,11 +121,11 @@ module ATDIS
       ATDIS::SeparatedURL.merge(url, page: next_page_no) if next_page_no
     end
 
-    def previous
+    def previous_page
       Page.read_url(previous_url) if previous_url
     end
 
-    def next
+    def next_page
       Page.read_url(next_url) if next_url
     end
   end

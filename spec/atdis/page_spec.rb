@@ -305,8 +305,8 @@ describe ATDIS::Page do
         page.response.should == [application1, application2]
       end
 
-      it ".next" do
-        expect { page.next }.to raise_error "Can't use next_url when loaded with read_json"
+      it ".next_page" do
+        expect { page.next_page }.to raise_error "Can't use next_url when loaded with read_json"
       end
     end
 
@@ -343,8 +343,8 @@ describe ATDIS::Page do
         applications_results.response.should == [application1, application2]
       end
 
-      it ".next" do
-        applications_results.next.should be_nil
+      it ".next_page" do
+        applications_results.next_page.should be_nil
       end
 
       it ".previous_page_no" do
@@ -433,11 +433,11 @@ describe ATDIS::Page do
       applications_results.next_url.should == "http://www.council.nsw.gov.au/atdis/1.0/applications.json?page=3"
     end
 
-    it ".next" do
+    it ".next_page" do
       n = double("Page")
       applications_results
       ATDIS::Page.should_receive(:read_url).with("http://www.council.nsw.gov.au/atdis/1.0/applications.json?page=3").and_return(n)
-      applications_results.next.should == n
+      applications_results.next_page.should == n
     end
   end
 end
