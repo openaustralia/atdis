@@ -231,7 +231,8 @@ describe ATDIS::Model do
     let(:mapping) { {previous: :previous, next: :next, foo: :foo} }
 
     it "simple case" do
-      model.json_attribute(:previous, 12, mapping).should == {previous: 12}
+      model.field_mappings = mapping
+      model.json_attribute(:previous, 12).should == {previous: 12}
     end
   end
 end

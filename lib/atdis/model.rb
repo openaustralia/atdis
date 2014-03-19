@@ -68,13 +68,10 @@ module ATDIS
       field_mappings[a]
     end
 
-    def json_attribute(a, new_value, mappings = field_mappings)
-      mappings.each do |attribute, v|
-        if v == a
-          return {attribute => new_value}
-        end
+    def json_attribute(a, new_value)
+      if field_mappings.has_key?(a)
+        {a => new_value}
       end
-      nil
     end
 
     def self.map_field(key, data, mappings)
