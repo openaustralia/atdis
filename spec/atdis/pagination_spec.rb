@@ -18,11 +18,7 @@ describe ATDIS::Pagination do
   end
 
   context "current page is zero" do
-    let(:pagination) { ATDIS::Pagination.new(pages: 1, per_page: 25, total_no_results: 2) }
-    before :each do
-      pagination.current = 0
-      pagination.next = 1
-    end
+    let(:pagination) { ATDIS::Pagination.new(current: 0, next: 1, pages: 1, per_page: 25, total_no_results: 2) }
     it do
       pagination.should_not be_valid
       pagination.errors.messages.should == {current: [ATDIS::ErrorMessage["can not be less than 1", "6.5"]]}
@@ -30,13 +26,7 @@ describe ATDIS::Pagination do
   end
 
   context "current page is larger than the number of pages" do
-    let(:pagination) { ATDIS::Pagination.new(pages: 1, per_page: 25, total_no_results: 2) }
-    before :each do
-      pagination.current = 2
-      pagination.previous = 1
-      pagination.next = 3
-      pagination.pages = 1
-    end
+    let(:pagination) { ATDIS::Pagination.new(previous: 1, current: 2, next: 3, pages: 1, per_page: 25, total_no_results: 2) }
     it do
       pagination.should_not be_valid
       pagination.errors.messages.should == {current: [ATDIS::ErrorMessage["is larger than the number of pages", "6.5"]]}
@@ -44,14 +34,7 @@ describe ATDIS::Pagination do
   end
 
   context "next page number is not nil but on last page" do
-    let(:pagination) { ATDIS::Pagination.new(pages: 1, per_page: 25, total_no_results: 2) }
-    before :each do
-      pagination.previous = 3
-      pagination.current = 4
-      pagination.next = 5
-      pagination.total_no_results = 100
-      pagination.pages = 4
-    end
+    let(:pagination) { ATDIS::Pagination.new(previous: 3, current: 4, next: 5, pages: 4, per_page: 25, total_no_results: 100) }
     it do
       pagination.should_not be_valid
       pagination.errors.messages.should == {next: [ATDIS::ErrorMessage["should be null if on the last page", "6.5"]]}
@@ -59,14 +42,7 @@ describe ATDIS::Pagination do
   end
 
   context "next page number is nil but not on last page" do
-    let(:pagination) { ATDIS::Pagination.new(pages: 1, per_page: 25, total_no_results: 2) }
-    before :each do
-      pagination.current = 4
-      pagination.previous = 3
-      pagination.next = nil
-      pagination.total_no_results = 140
-      pagination.pages = 6
-    end
+    let(:pagination) { ATDIS::Pagination.new(previous: 3, current: 4, next: nil, pages: 6, per_page: 25, total_no_results: 140) }
     it do
       pagination.should_not be_valid
       pagination.errors.messages.should == {next: [ATDIS::ErrorMessage["can't be null if not on the last page", "6.5"]]}
@@ -74,12 +50,7 @@ describe ATDIS::Pagination do
   end
 
   context "next page number is pointing to a weird page number" do
-    let(:pagination) { ATDIS::Pagination.new(pages: 1, per_page: 25, total_no_results: 2, current: 1) }
-    before :each do
-      pagination.next = 5
-      pagination.total_no_results = 50
-      pagination.pages = 2
-    end
+    let(:pagination) { ATDIS::Pagination.new(next: 5, pages: 2, per_page: 25, total_no_results: 50, current: 1) }
     it do
       pagination.should_not be_valid
       pagination.errors.messages.should == {next: [ATDIS::ErrorMessage["should be one greater than current page number or null if last page", "6.5"]]}
@@ -87,14 +58,7 @@ describe ATDIS::Pagination do
   end
 
   context "previous page number not nil but on first page" do
-    let(:pagination) { ATDIS::Pagination.new(pages: 1, per_page: 25, total_no_results: 2, current: 1) }
-    before :each do
-      pagination.current = 1
-      pagination.next = 2
-      pagination.previous = 0
-      pagination.total_no_results = 240
-      pagination.pages = 10
-    end
+    let(:pagination) { ATDIS::Pagination.new(previous: 0, current: 1, next: 2, pages: 10, per_page: 25, total_no_results: 240, current: 1) }
     it do
       pagination.should_not be_valid
       pagination.errors.messages.should == {previous: [ATDIS::ErrorMessage["should be null if on the first page", "6.5"]]}
@@ -102,14 +66,7 @@ describe ATDIS::Pagination do
   end
 
   context "previous page number if nil but not on first page" do
-    let(:pagination) { ATDIS::Pagination.new(pages: 1, per_page: 25, total_no_results: 2, current: 1) }
-    before :each do
-      pagination.current = 4
-      pagination.next = 5
-      pagination.previous = nil
-      pagination.total_no_results = 240
-      pagination.pages = 10
-    end
+    let(:pagination) { ATDIS::Pagination.new(previous: nil, current: 4, next: 5, pages: 10, per_page: 25, total_no_results: 240) }
     it do
       pagination.should_not be_valid
       pagination.errors.messages.should == {previous: [ATDIS::ErrorMessage["can't be null if not on the first page", "6.5"]]}
@@ -117,19 +74,11 @@ describe ATDIS::Pagination do
   end
 
   context "previous page number is pointing to a weird page number" do
-    let(:pagination) { ATDIS::Pagination.new(pages: 1, per_page: 25, total_no_results: 2, current: 1) }
-    before :each do
-      pagination.previous = 5
-      pagination.current = 2
-      pagination.total_no_results = 50
-      pagination.pages = 2
-    end
+    let(:pagination) { ATDIS::Pagination.new(previous: 5, current: 2, pages: 2, per_page: 25, total_no_results: 50) }
     it do
       pagination.should_not be_valid
       pagination.errors.messages.should == {previous: [ATDIS::ErrorMessage["should be one less than current page number or null if first page", "6.5"]]}
       pagination.json_errors.should == [[{previous: 5}, [ATDIS::ErrorMessage["previous should be one less than current page number or null if first page", "6.5"]]]]
     end
   end
-
-
 end
