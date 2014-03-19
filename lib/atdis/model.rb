@@ -100,11 +100,7 @@ module ATDIS
     end
 
     def self.attribute_names_from_mappings(mappings)
-      result = []
-      mappings.each do |k, v|
-        result << v
-      end
-      result
+      mappings.keys
     end
 
     # Map json structure to our values
