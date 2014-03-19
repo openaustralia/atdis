@@ -185,8 +185,8 @@ describe ATDIS::Model do
 
   describe ".attribute_names_from_mappings" do
     it do
-      h = {foo: :bar, a: :b, info: :info}
-      ATDIS::Model.attribute_names_from_mappings(h).should == [:bar, :b, :info]
+      h = {foo: :foo, a: :a, info: :info}
+      ATDIS::Model.attribute_names_from_mappings(h).should == [:foo, :a, :info]
     end
   end
 
