@@ -3,7 +3,7 @@ module ATDIS
     attr_accessor :url
 
     set_field_mappings [
-      [:response, [:response, Application]],
+      [:response, [:response, Response]],
       [:count, [:count, Fixnum]],
       [:pagination, [:pagination, Pagination]],
     ]

@@ -1,11 +1,11 @@
 require File.expand_path(File.dirname(__FILE__) + '/../spec_helper')
 
-describe ATDIS::Application do
+describe ATDIS::Response do
 
   context "extra parameter in json" do
     it "should not be valid" do
       ATDIS::Location.should_receive(:interpret).with(foo: "Some location data").and_return(double(valid?: true))
-      a = ATDIS::Application.interpret(application: {
+      a = ATDIS::Response.interpret(application: {
         info: {
           dat_id: "DA2013-0381",
           development_type: "residential",
@@ -34,7 +34,7 @@ describe ATDIS::Application do
     it "should parse the json and create an application object" do
       application = double
 
-      ATDIS::Application.should_receive(:new).with(
+      ATDIS::Response.should_receive(:new).with(
         info: {
           dat_id: "DA2013-0381",
           development_type: "residential",
@@ -61,7 +61,7 @@ describe ATDIS::Application do
         json_left_overs: {}
       ).and_return(application)
 
-      ATDIS::Application.interpret(application: {
+      ATDIS::Response.interpret(application: {
         info: {
           dat_id: "DA2013-0381",
           development_type: "residential",
@@ -93,23 +93,23 @@ describe ATDIS::Application do
 
     it "should create a nil valued application when there is no information in the json" do
       application = double
-      ATDIS::Application.should_receive(:new).with({json_left_overs:{}, info: {},
+      ATDIS::Response.should_receive(:new).with({json_left_overs:{}, info: {},
         reference: {}, location:nil, extended:nil,
         events:nil, documents:nil, people:nil}).and_return(application)
 
-      ATDIS::Application.interpret(application: {info: {}, reference: {}}).should == application
+      ATDIS::Response.interpret(application: {info: {}, reference: {}}).should == application
     end
   end
 
   describe "#extended" do
     it "should do no typecasting" do
-      a = ATDIS::Application.new(extended: {another_parameter: "with some value", anything: "can go here"})
+      a = ATDIS::Response.new(extended: {another_parameter: "with some value", anything: "can go here"})
       a.extended.should == {another_parameter: "with some value", anything: "can go here"}
     end
   end
 
   describe "#location=" do
-    let(:a) { ATDIS::Application.new }
+    let(:a) { ATDIS::Response.new }
     it "should type cast to a location" do
       location = double
       ATDIS::Location.should_receive(:interpret).with(address: "123 Fourfivesix Street").and_return(location)
@@ -125,7 +125,7 @@ describe ATDIS::Application do
   end
 
   describe "#events" do
-    let(:a) { ATDIS::Application.new }
+    let(:a) { ATDIS::Response.new }
     it "should type cast to several events" do
       event1, event2 = double, double
       ATDIS::Event.should_receive(:interpret).with(id: "event1").and_return(event1)
@@ -136,7 +136,7 @@ describe ATDIS::Application do
   end
 
   describe "#documents" do
-    let(:a) { ATDIS::Application.new }
+    let(:a) { ATDIS::Response.new }
     it "should type cast to several documents" do
       document1, document2 = double, double
       ATDIS::Document.should_receive(:interpret).with(ref: "27B/6/a").and_return(document1)
@@ -147,7 +147,7 @@ describe ATDIS::Application do
   end
 
   describe "#people" do
-    let(:a) { ATDIS::Application.new }
+    let(:a) { ATDIS::Response.new }
     it "should type cast to several people" do
       tuttle, buttle = double, double
       ATDIS::Person.should_receive(:interpret).with(name: "Tuttle").and_return(tuttle)
@@ -161,7 +161,7 @@ describe ATDIS::Application do
   describe "#attribute_names" do
     it do
       # These are also ordered in a way that corresponds to the specification. Makes for easy reading by humans.
-      ATDIS::Application.attribute_names.should == [
+      ATDIS::Response.attribute_names.should == [
         "info",
         "reference",
         "location",
@@ -179,7 +179,7 @@ describe ATDIS::Application do
       ATDIS::Location.should_receive(:interpret).with(address: "123 Fourfivesix Street Neutral Bay NSW 2089").and_return(l)
     end
 
-    let(:a) { ATDIS::Application.new(
+    let(:a) { ATDIS::Response.new(
       info: ATDIS::Info.new(
         dat_id: "DA2013-0381",
         development_type: "residential",

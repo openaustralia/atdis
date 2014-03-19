@@ -8,7 +8,7 @@ describe ATDIS::Page do
   describe "validations" do
     context "results block that is a hash" do
       before :each do
-        ATDIS::Application.should_receive(:interpret).with(description: "application1").and_return(double(valid?: true))
+        ATDIS::Response.should_receive(:interpret).with(description: "application1").and_return(double(valid?: true))
       end
       let(:page) { ATDIS::Page.new(response: {description: "application1"}) }
 
@@ -20,8 +20,8 @@ describe ATDIS::Page do
 
     context "two valid applications no paging" do
       before :each do
-        ATDIS::Application.should_receive(:interpret).with(description: "application1").and_return(double(valid?: true))
-        ATDIS::Application.should_receive(:interpret).with(description: "application2").and_return(double(valid?: true))
+        ATDIS::Response.should_receive(:interpret).with(description: "application1").and_return(double(valid?: true))
+        ATDIS::Response.should_receive(:interpret).with(description: "application2").and_return(double(valid?: true))
       end
       let(:page) { ATDIS::Page.new(response: [{description: "application1"}, {description: "application2"}]) }
 
@@ -81,8 +81,8 @@ describe ATDIS::Page do
 
     context "one valid application out of two no paging" do
       before :each do
-        ATDIS::Application.should_receive(:interpret).with(description: "application1").and_return(double(valid?: true))
-        ATDIS::Application.should_receive(:interpret).with(description: "application2").and_return(double(valid?: false))
+        ATDIS::Response.should_receive(:interpret).with(description: "application1").and_return(double(valid?: true))
+        ATDIS::Response.should_receive(:interpret).with(description: "application2").and_return(double(valid?: false))
       end
       let(:page) { ATDIS::Page.new(response: [{description: "application1"}, {description: "application2"}]) }
 
@@ -96,8 +96,8 @@ describe ATDIS::Page do
       let(:a1) { double(valid?: false, json_errors: [[{dat_id: "null"}, ["can not be empty"]]]) }
       let(:a2) { double(valid?: false) }
       before :each do
-        ATDIS::Application.should_receive(:interpret).with(description: "application1").and_return(a1)
-        ATDIS::Application.should_receive(:interpret).with(description: "application2").and_return(a2)
+        ATDIS::Response.should_receive(:interpret).with(description: "application1").and_return(a1)
+        ATDIS::Response.should_receive(:interpret).with(description: "application2").and_return(a2)
       end
       let(:page) { ATDIS::Page.new(response: [{description: "application1"}, {description: "application2"}]) }
 
@@ -172,8 +172,8 @@ describe ATDIS::Page do
       it ".results" do
         application1 = double("Application")
         application2 = double("Application")
-        ATDIS::Application.should_receive(:interpret).with(application: {description: "application1"}).and_return(application1)
-        ATDIS::Application.should_receive(:interpret).with(application: {description: "application2"}).and_return(application2)
+        ATDIS::Response.should_receive(:interpret).with(application: {description: "application1"}).and_return(application1)
+        ATDIS::Response.should_receive(:interpret).with(application: {description: "application2"}).and_return(application2)
 
         page.response.should == [application1, application2]
       end
@@ -210,8 +210,8 @@ describe ATDIS::Page do
       it ".response" do
         application1 = double("Application")
         application2 = double("Application")
-        ATDIS::Application.should_receive(:interpret).with(application: {description: "application1"}).and_return(application1)
-        ATDIS::Application.should_receive(:interpret).with(application: {description: "application2"}).and_return(application2)
+        ATDIS::Response.should_receive(:interpret).with(application: {description: "application1"}).and_return(application1)
+        ATDIS::Response.should_receive(:interpret).with(application: {description: "application2"}).and_return(application2)
 
         applications_results.response.should == [application1, application2]
       end
