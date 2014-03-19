@@ -151,22 +151,19 @@ describe ATDIS::Model do
 
   describe ".attribute_keys" do
     it do
-      h = {foo: :foo, a: :a, info: :info}
-      ATDIS::Model.attribute_keys(h).should == [:foo, :a, :info]
+      ATDIS::Model.attribute_types = {foo: String, a: Fixnum, info: String}
+      ATDIS::Model.attribute_keys.should == [:foo, :a, :info]
     end
   end
 
   describe ".map_fields" do
     it do
+      ATDIS::Model.stub(:attribute_keys).and_return([:foo, :a])
       ATDIS::Model.map_fields(
       {
         foo: 2,
         a: 3,
         d: 4
-      },
-      {
-        foo: :foo,
-        a: :a
       }).should ==
       {
         foo: 2,
@@ -175,15 +172,12 @@ describe ATDIS::Model do
     end
 
     it do
+      ATDIS::Model.stub(:attribute_keys).and_return([:foo, :a])
       ATDIS::Model.map_fields(
       {
         foo: 2,
         a: 3,
         d: 4,
-      },
-      {
-        foo: :foo,
-        a: :a,
       }).should ==
       {
         foo: 2,
