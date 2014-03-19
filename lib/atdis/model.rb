@@ -64,10 +64,6 @@ module ATDIS
 
     validate :json_left_overs_is_empty
 
-    def self.json_top_level_attribute(a)
-      field_mappings[a]
-    end
-
     def json_attribute(a, new_value)
       if field_mappings.has_key?(a)
         {a => new_value}
@@ -117,7 +113,7 @@ module ATDIS
       attributes.each do |attribute_as_string, value|
         attribute = attribute_as_string.to_sym
         e = errors[attribute]
-        r << [json_attribute(attribute, attributes_before_type_cast[attribute.to_s]), e.map{|m| ErrorMessage["#{self.class.json_top_level_attribute(attribute)} #{m}", m.spec_section]}] unless e.empty?
+        r << [json_attribute(attribute, attributes_before_type_cast[attribute.to_s]), e.map{|m| ErrorMessage["#{attribute} #{m}", m.spec_section]}] unless e.empty?
       end
       r
     end
