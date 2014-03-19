@@ -85,16 +85,14 @@ describe ATDIS::Model do
   end
 
   describe ".map_field" do
-    let(:mappings) { { foo: :bar, a: :b, info: { foo: :bar2, a: :b2, c: :c2 } } }
+    let(:mappings) { { foo: :bar, a: :b, info: :info } }
 
     context "one version of data" do
-      let(:data) { { foo: 2, a: 3, d: 4, info: { foo: 2, a: 3, d: 4 } } }
+      let(:data) { { foo: 2, a: 3, d: 4, info: "eek" } }
 
       it { ATDIS::Model.map_field(:bar, data, mappings).should == 2 }
       it { ATDIS::Model.map_field(:b, data, mappings).should == 3 }
-      it { ATDIS::Model.map_field(:bar2, data, mappings).should == 2 }
-      it { ATDIS::Model.map_field(:b2, data, mappings).should == 3 }
-      it { ATDIS::Model.map_field(:c2, data, mappings).should be_nil }
+      it { ATDIS::Model.map_field(:info, data, mappings).should == "eek" }
     end
 
     context "another version of data" do
@@ -187,8 +185,8 @@ describe ATDIS::Model do
 
   describe ".attribute_names_from_mappings" do
     it do
-      h = {foo: :bar, a: :b, info: {foo: :bar2, a: :b2}}
-      ATDIS::Model.attribute_names_from_mappings(h).should == [:bar, :b, :bar2, :b2]
+      h = {foo: :bar, a: :b, info: :info}
+      ATDIS::Model.attribute_names_from_mappings(h).should == [:bar, :b, :info]
     end
   end
 
@@ -216,39 +214,24 @@ describe ATDIS::Model do
         foo: 2,
         a: 3,
         d: 4,
-        info: {
-          foo: 2,
-          a: 3,
-          d: 4
-        }
       },
       {
         foo: :bar,
         a: :b,
-        info: {
-          foo: :bar2,
-          a: :b2
-        }
       }).should ==
       {
         bar: 2,
         b: 3,
-        bar2: 2,
-        b2: 3
       }
     end
   end
 
   describe "#json_attribute" do
     let(:model) { ATDIS::Model.new }
-    let(:mapping) { {previous: :previous, next: :next, foo: {bar: :apple, foo: :orange}} }
+    let(:mapping) { {previous: :previous, next: :next, foo: :foo} }
 
     it "simple case" do
       model.json_attribute(:previous, 12, mapping).should == {previous: 12}
-    end
-
-    it "with recursion" do
-      model.json_attribute(:apple, 12, mapping).should == {foo: {bar: 12}}
     end
   end
 end
