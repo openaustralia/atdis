@@ -64,13 +64,8 @@ module ATDIS
 
     validate :json_left_overs_is_empty
 
-    def self.json_top_level_attribute(a, mappings = field_mappings)
-      mappings.each do |attribute, v|
-        if v == a
-          return attribute
-        end
-      end
-      nil
+    def self.json_top_level_attribute(a)
+      field_mappings[a]
     end
 
     def json_attribute(a, new_value, mappings = field_mappings)
