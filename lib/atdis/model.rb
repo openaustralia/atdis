@@ -64,12 +64,6 @@ module ATDIS
 
     validate :json_left_overs_is_empty
 
-    def json_attribute(a, new_value)
-      if field_mappings.has_key?(a)
-        {a => new_value}
-      end
-    end
-
     def self.unused_data(data, mappings = field_mappings)
       if data.kind_of?(Hash)
         json_left_overs = {}
@@ -107,7 +101,7 @@ module ATDIS
       attributes.each do |attribute_as_string, value|
         attribute = attribute_as_string.to_sym
         e = errors[attribute]
-        r << [json_attribute(attribute, attributes_before_type_cast[attribute.to_s]), e.map{|m| ErrorMessage["#{attribute} #{m}", m.spec_section]}] unless e.empty?
+        r << [{attribute => attributes_before_type_cast[attribute.to_s]}, e.map{|m| ErrorMessage["#{attribute} #{m}", m.spec_section]}] unless e.empty?
       end
       r
     end
@@ -118,10 +112,10 @@ module ATDIS
         attribute = attribute_as_string.to_sym
         e = errors[attribute]
         if value.respond_to?(:json_errors)
-           r += value.json_errors.map{|a, b| [json_attribute(attribute, a), b]}
+           r += value.json_errors.map{|a, b| [{attribute => a}, b]}
         elsif value.kind_of?(Array)
           f = value.find{|v| v.respond_to?(:json_errors) && !v.json_errors.empty?}
-          r += f.json_errors.map{|a, b| [json_attribute(attribute, [a]), b]} if f
+          r += f.json_errors.map{|a, b| [{attribute => [a]}, b]} if f
         end
       end
       r
