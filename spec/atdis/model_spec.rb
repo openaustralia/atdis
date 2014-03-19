@@ -126,25 +126,13 @@ describe ATDIS::Model do
         foo: 2,
         a: 3,
         d: 4,
-        info: {
-          foo: 2,
-          a: 3,
-          d: 4
-        }
       },
       {
         foo: :bar,
         a: :b,
-        info: {
-          foo: :bar2,
-          a: :b2
-        }
       }).should ==
       {
-        d: 4,
-        info: {
-          d: 4
-        }
+        d: 4
       }
     end
   end
