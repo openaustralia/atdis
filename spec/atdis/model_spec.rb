@@ -16,6 +16,13 @@ class ModelA < ATDIS::Model
 end
 
 describe ATDIS::Model do
+  describe ".attributes" do
+    it do
+      a = ModelA.new(a: "foo")
+      a.attributes.should == {"a" => "foo"}
+    end
+  end
+
   describe "#json_errors" do
     it "should return the json attribute with the errors" do
       a = ModelA.interpret(foo: {bar: "Hello"})
