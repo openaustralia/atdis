@@ -2,8 +2,7 @@ require File.expand_path(File.dirname(__FILE__) + '/../spec_helper')
 
 describe ATDIS::Page do
   it ".attribute_names" do
-    ATDIS::Page.attribute_names.should == ["response", "count", "previous", "next", "current",
-      "per_page", "total_no_results", "pages"]
+    ATDIS::Page.attribute_names.should == ["response", "count", "pagination"]
   end
 
   describe "validations" do
@@ -31,10 +30,11 @@ describe ATDIS::Page do
       context "with pagination" do
         before :each do
           page.count = 2
-          page.per_page = 25
-          page.current = 1
-          page.total_no_results = 2
-          page.pages = 1
+          page.pagination = ATDIS::Pagination.new
+          page.pagination.per_page = 25
+          page.pagination.current = 1
+          page.pagination.total_no_results = 2
+          page.pagination.pages = 1
         end
         it { page.should be_valid }
 
@@ -50,8 +50,8 @@ describe ATDIS::Page do
 
         context "count is larger than number of results per page" do
           before :each do
-            page.per_page = 1
-            page.total_no_results = 1
+            page.pagination.per_page = 1
+            page.pagination.total_no_results = 1
           end
           it do
             page.should_not be_valid
@@ -70,137 +70,14 @@ describe ATDIS::Page do
           end
         end
 
-        context "previous page number is pointing to a weird page number" do
+        context "pagination not valid" do
           before :each do
-            page.previous = 5
-            page.current = 2
-            page.total_no_results = 50
-            page.pages = 2
+            page.pagination.should_receive(:valid?).and_return(false)
           end
-          it do
-            page.should_not be_valid
-            page.errors.messages.should == {previous: [ATDIS::ErrorMessage["should be one less than current page number or null if first page", "6.5"]]}
-            page.json_errors.should == [[{pagination: {previous: 5}}, [ATDIS::ErrorMessage["previous should be one less than current page number or null if first page", "6.5"]]]]
-          end
-        end
 
-        context "previous page number if nil but not on first page" do
-          before :each do
-            page.current = 4
-            page.next = 5
-            page.previous = nil
-            page.total_no_results = 240
-            page.pages = 10
-          end
           it do
             page.should_not be_valid
-            page.errors.messages.should == {previous: [ATDIS::ErrorMessage["can't be null if not on the first page", "6.5"]]}
-          end
-        end
-
-        context "previous page number not nil but on first page" do
-          before :each do
-            page.current = 1
-            page.next = 2
-            page.previous = 0
-            page.total_no_results = 240
-            page.pages = 10
-          end
-          it do
-            page.should_not be_valid
-            page.errors.messages.should == {previous: [ATDIS::ErrorMessage["should be null if on the first page", "6.5"]]}
-          end
-        end
-
-        context "next page number is pointing to a weird page number" do
-          before :each do
-            page.next = 5
-            page.total_no_results = 50
-            page.pages = 2
-          end
-          it do
-            page.should_not be_valid
-            page.errors.messages.should == {next: [ATDIS::ErrorMessage["should be one greater than current page number or null if last page", "6.5"]]}
-          end
-        end
-
-        context "next page number is nil but not on last page" do
-          before :each do
-            page.current = 4
-            page.previous = 3
-            page.next = nil
-            page.total_no_results = 140
-            page.pages = 6
-          end
-          it do
-            page.should_not be_valid
-            page.errors.messages.should == {next: [ATDIS::ErrorMessage["can't be null if not on the last page", "6.5"]]}
-          end
-        end
-
-        context "next page number is not nil but on last page" do
-          before :each do
-            page.previous = 3
-            page.current = 4
-            page.next = 5
-            page.total_no_results = 100
-            page.pages = 4
-          end
-          it do
-            page.should_not be_valid
-            page.errors.messages.should == {next: [ATDIS::ErrorMessage["should be null if on the last page", "6.5"]]}
-          end
-        end
-
-        context "current page is larger than the number of pages" do
-          before :each do
-            page.current = 2
-            page.previous = 1
-            page.next = 3
-            page.pages = 1
-          end
-          it do
-            page.should_not be_valid
-            page.errors.messages.should == {current: [ATDIS::ErrorMessage["is larger than the number of pages", "6.5"]]}
-          end
-        end
-
-        context "current page is zero" do
-          before :each do
-            page.current = 0
-            page.next = 1
-          end
-          it do
-            page.should_not be_valid
-            page.errors.messages.should == {current: [ATDIS::ErrorMessage["can not be less than 1", "6.5"]]}
-          end
-        end
-
-        context "total_no_results is larger than would be expected" do
-          before :each do
-            page.current = 1
-            page.next = 2
-            page.per_page = 25
-            page.pages = 4
-            page.total_no_results = 101
-          end
-          it do
-            page.should_not be_valid
-            page.errors.messages.should == {total_no_results: [ATDIS::ErrorMessage["is larger than can be retrieved through paging", "6.5"]]}
-          end
-        end
-
-        context "total no_results is less than would be expected" do
-          before :each do
-            page.current = 1
-            page.next = 2
-            page.per_page = 25
-            page.pages = 4
-            page.total_no_results = 75
-          end
-          it do
-            page.should_not be_valid
-            page.errors.messages.should == {total_no_results: [ATDIS::ErrorMessage["could fit into a smaller number of pages", "6.5"]]}
+            page.errors.messages.should == {pagination: [ATDIS::ErrorMessage["is not valid (see further errors for details)", nil]]}
           end
         end
       end
@@ -347,28 +224,8 @@ describe ATDIS::Page do
         applications_results.next_page.should be_nil
       end
 
-      it ".previous" do
-        applications_results.previous.should be_nil
-      end
-
-      it ".next" do
-        applications_results.next.should be_nil
-      end
-
-      it ".current" do
-        applications_results.current.should be_nil
-      end
-
-      it ".per_page" do
-        applications_results.per_page.should be_nil
-      end
-
-      it ".total_no_results" do
-        applications_results.total_no_results.should be_nil
-      end
-
-      it ".pages" do
-        applications_results.pages.should be_nil
+      it ".pagination" do
+        applications_results.pagination.should be_nil
       end
       end
   end
@@ -406,27 +263,27 @@ describe ATDIS::Page do
     let(:applications_results) { ATDIS::Page.read_url("http://www.council.nsw.gov.au/atdis/1.0/applications.json?page=2") }
 
     it ".previous" do
-      applications_results.previous.should == 1
+      applications_results.pagination.previous.should == 1
     end
 
     it ".next" do
-      applications_results.next.should == 3
+      applications_results.pagination.next.should == 3
     end
 
     it ".current" do
-      applications_results.current.should == 2
+      applications_results.pagination.current.should == 2
     end
 
     it ".per_page" do
-      applications_results.per_page.should == 2
+      applications_results.pagination.per_page.should == 2
     end
 
     it ".total_no_results" do
-      applications_results.total_no_results.should == 50
+      applications_results.pagination.total_no_results.should == 50
     end
 
     it ".pages" do
-      applications_results.pages.should == 25
+      applications_results.pagination.pages.should == 25
     end
 
     it ".next_url" do
