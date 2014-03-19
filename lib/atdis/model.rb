@@ -69,12 +69,6 @@ module ATDIS
         if v == a
           return attribute
         end
-        if v.kind_of?(Hash)
-          r = json_top_level_attribute(a, v)
-          if r
-            return r
-          end
-        end
       end
       nil
     end
@@ -83,12 +77,6 @@ module ATDIS
       mappings.each do |attribute, v|
         if v == a
           return {attribute => new_value}
-        end
-        if v.kind_of?(Hash)
-          r = json_attribute(a, new_value, v)
-          if r
-            return {attribute => r}
-          end
         end
       end
       nil
@@ -99,11 +87,6 @@ module ATDIS
         mappings.each do |k, v|
           if v == key
             return data[k]
-          elsif v.kind_of?(Hash) && data.has_key?(k)
-            r = map_field(key, data[k], mappings[k])
-            if r
-              return r
-            end
           end
         end
       end
@@ -132,11 +115,7 @@ module ATDIS
     def self.attribute_names_from_mappings(mappings)
       result = []
       mappings.each do |k, v|
-        if v.kind_of?(Hash)
-          result += attribute_names_from_mappings(v)
-        else
-          result << v
-        end
+        result << v
       end
       result
     end
