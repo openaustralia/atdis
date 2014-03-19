@@ -183,10 +183,10 @@ describe ATDIS::Model do
     end
   end
 
-  describe ".attribute_names_from_mappings" do
+  describe ".attribute_keys" do
     it do
       h = {foo: :foo, a: :a, info: :info}
-      ATDIS::Model.attribute_names_from_mappings(h).should == [:foo, :a, :info]
+      ATDIS::Model.attribute_keys(h).should == [:foo, :a, :info]
     end
   end
 

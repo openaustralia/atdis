@@ -99,14 +99,10 @@ module ATDIS
       end
     end
 
-    def self.attribute_names_from_mappings(mappings)
-      mappings.keys
-    end
-
     # Map json structure to our values
     def self.map_fields(data, mappings = field_mappings)
       values = {}
-      attribute_names_from_mappings(mappings).each do |attribute|
+      attribute_keys(mappings).each do |attribute|
         values[attribute] = map_field(attribute, data, mappings)
       end
       values
@@ -162,6 +158,10 @@ module ATDIS
       params.each do |attr, value|
         self.send("#{attr}=", value)
       end if params
+    end
+
+    def self.attribute_keys(mappings)
+      mappings.keys
     end
 
     # Does what the equivalent on Activerecord does
