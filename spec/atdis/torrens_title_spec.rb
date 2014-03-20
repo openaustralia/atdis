@@ -1,7 +1,7 @@
 require File.expand_path(File.dirname(__FILE__) + '/../spec_helper')
 
-describe ATDIS::TorrensTitle do
-  let(:l) { ATDIS::TorrensTitle.new(
+describe ATDIS::Models::TorrensTitle do
+  let(:l) { ATDIS::Models::TorrensTitle.new(
     lot: "10",
     section: "ABC",
     dpsp_id: "DP2013-0381"

@@ -1,7 +1,7 @@
 require File.expand_path(File.dirname(__FILE__) + '/../spec_helper')
 
-describe ATDIS::Reference do
-  let(:a) { ATDIS::Reference.new(
+describe ATDIS::Models::Reference do
+  let(:a) { ATDIS::Models::Reference.new(
     more_info_url: URI.parse("http://foo.com/bar"),
   )}
 
@@ -29,7 +29,7 @@ describe ATDIS::Reference do
   end
 
   describe "#more_info_url=" do
-    let(:a) { ATDIS::Reference.new }
+    let(:a) { ATDIS::Models::Reference.new }
     it "should do no type casting when it's already a URI" do
       a.more_info_url = URI.parse("http://foo.com/bar")
       a.more_info_url.should == URI.parse("http://foo.com/bar")

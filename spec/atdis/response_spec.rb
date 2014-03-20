@@ -1,5 +1,5 @@
 require File.expand_path(File.dirname(__FILE__) + '/../spec_helper')
 
-describe ATDIS::Response do
+describe ATDIS::Models::Response do
 
 end

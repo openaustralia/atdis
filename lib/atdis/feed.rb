@@ -52,7 +52,7 @@ module ATDIS
     end
 
     def applications(options = {})
-      Page.read_url(url(options))
+      Models::Page.read_url(url(options))
     end
 
     private

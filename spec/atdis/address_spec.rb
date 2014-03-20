@@ -1,8 +1,8 @@
 require File.expand_path(File.dirname(__FILE__) + '/../spec_helper')
 
-describe ATDIS::Address do
+describe ATDIS::Models::Address do
   context "valid address" do
-    let(:a) { ATDIS::Address.new(
+    let(:a) { ATDIS::Models::Address.new(
       street: "123 Fourfivesix Street",
       suburb: "Neutral Bay",
       postcode: "2780"

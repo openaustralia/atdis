@@ -5,7 +5,7 @@ describe ATDIS::Feed do
   let(:page) { double }
 
   it "should return all the applications" do
-    ATDIS::Page.should_receive(:read_url).with("http://www.council.nsw.gov.au/atdis/1.0/applications.json").and_return(page)
+    ATDIS::Models::Page.should_receive(:read_url).with("http://www.council.nsw.gov.au/atdis/1.0/applications.json").and_return(page)
     feed.applications.should == page
   end
 
@@ -52,7 +52,7 @@ describe ATDIS::Feed do
   end
 
   it "jump straight to the second page" do
-    feed.url(page: 2).should == "http://www.council.nsw.gov.au/atdis/1.0/applications.json?page=2"    
+    feed.url(page: 2).should == "http://www.council.nsw.gov.au/atdis/1.0/applications.json?page=2"
   end
 
   it "passing an invalid option" do

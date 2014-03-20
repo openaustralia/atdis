@@ -1,8 +1,8 @@
 require File.expand_path(File.dirname(__FILE__) + '/../spec_helper')
 
-describe ATDIS::Location do
+describe ATDIS::Models::Location do
   it ".attribute_names" do
-    ATDIS::Location.attribute_names.should == [
+    ATDIS::Models::Location.attribute_names.should == [
       "address",
       "land_title_ref",
       "geometry"
@@ -11,7 +11,7 @@ describe ATDIS::Location do
 
   describe "validation" do
     context "valid location" do
-      let(:l) { ATDIS::Location.new(
+      let(:l) { ATDIS::Models::Location.new(
         address: {
           street: "123 Fourfivesix Street",
           suburb: "Neutral Bay",
@@ -21,7 +21,7 @@ describe ATDIS::Location do
           torrens: {
             lot: "10",
             section: "ABC",
-            dpsp_id: "DP2013-0381",            
+            dpsp_id: "DP2013-0381",
           }
         },
         geometry: {
@@ -48,13 +48,13 @@ describe ATDIS::Location do
 
   describe ".interpret" do
     it "should gracefully handle the land_title_ref block being missing" do
-      l = ATDIS::Location.interpret(address: {street: "123 Fourfivesix Street", suburb: "Neutral Bay", postcode: "2089"})
+      l = ATDIS::Models::Location.interpret(address: {street: "123 Fourfivesix Street", suburb: "Neutral Bay", postcode: "2089"})
       l.land_title_ref.should be_nil
     end
 
     it "should pass on the responsibility for parsing the geometry section" do
       # TODO Not 100% clear from section 4.3.3 of ATDIS-1.0.3 if this is the correct indentation
-      l = ATDIS::Location.interpret(
+      l = ATDIS::Models::Location.interpret(
         geometry: {
           type: "Point",
           coordinates: [100.0, 0.0]
@@ -67,7 +67,7 @@ describe ATDIS::Location do
 
     it "should interpret a polygon in the geometry section" do
       # TODO Not 100% clear from section 4.3.3 of ATDIS-1.0.3 if this is the correct indentation
-      l = ATDIS::Location.interpret(
+      l = ATDIS::Models::Location.interpret(
         geometry: {
           type: "Polygon",
           coordinates: [

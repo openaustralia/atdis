@@ -1,10 +1,10 @@
 require File.expand_path(File.dirname(__FILE__) + '/../spec_helper')
 
-describe ATDIS::Application do
+describe ATDIS::Models::Application do
   context "extra parameter in json" do
     it "should not be valid" do
-      ATDIS::Location.should_receive(:interpret).with(foo: "Some location data").and_return(double(valid?: true))
-      a = ATDIS::Application.interpret(
+      ATDIS::Models::Location.should_receive(:interpret).with(foo: "Some location data").and_return(double(valid?: true))
+      a = ATDIS::Models::Application.interpret(
         info: {
           dat_id: "DA2013-0381",
           development_type: "residential",
@@ -34,7 +34,7 @@ describe ATDIS::Application do
     it "should parse the json and create an application object" do
       application = double
 
-      ATDIS::Application.should_receive(:new).with(
+      ATDIS::Models::Application.should_receive(:new).with(
         info: {
           dat_id: "DA2013-0381",
           development_type: "residential",
@@ -61,7 +61,7 @@ describe ATDIS::Application do
         json_left_overs: {}
       ).and_return(application)
 
-      ATDIS::Application.interpret(
+      ATDIS::Models::Application.interpret(
         info: {
           dat_id: "DA2013-0381",
           development_type: "residential",
@@ -93,64 +93,64 @@ describe ATDIS::Application do
 
     it "should create a nil valued application when there is no information in the json" do
       application = double
-      ATDIS::Application.should_receive(:new).with({json_left_overs:{}, info: {},
+      ATDIS::Models::Application.should_receive(:new).with({json_left_overs:{}, info: {},
         reference: {}}).and_return(application)
 
-      ATDIS::Application.interpret(info: {}, reference: {}).should == application
+      ATDIS::Models::Application.interpret(info: {}, reference: {}).should == application
     end
   end
 
   describe "#extended" do
     it "should do no typecasting" do
-      a = ATDIS::Application.new(extended: {another_parameter: "with some value", anything: "can go here"})
+      a = ATDIS::Models::Application.new(extended: {another_parameter: "with some value", anything: "can go here"})
       a.extended.should == {another_parameter: "with some value", anything: "can go here"}
     end
   end
 
   describe "#location=" do
-    let(:a) { ATDIS::Application.new }
+    let(:a) { ATDIS::Models::Application.new }
     it "should type cast to a location" do
       location = double
-      ATDIS::Location.should_receive(:interpret).with(address: "123 Fourfivesix Street").and_return(location)
+      ATDIS::Models::Location.should_receive(:interpret).with(address: "123 Fourfivesix Street").and_return(location)
       a.locations = [{ address: "123 Fourfivesix Street" }]
       a.locations.should == [location]
     end
 
     it "should not cast when it's already a location" do
-      l = ATDIS::Location.new
+      l = ATDIS::Models::Location.new
       a.locations = [l]
       a.locations.should == [l]
     end
   end
 
   describe "#events" do
-    let(:a) { ATDIS::Application.new }
+    let(:a) { ATDIS::Models::Application.new }
     it "should type cast to several events" do
       event1, event2 = double, double
-      ATDIS::Event.should_receive(:interpret).with(id: "event1").and_return(event1)
-      ATDIS::Event.should_receive(:interpret).with(id: "event2").and_return(event2)
+      ATDIS::Models::Event.should_receive(:interpret).with(id: "event1").and_return(event1)
+      ATDIS::Models::Event.should_receive(:interpret).with(id: "event2").and_return(event2)
       a.events = [ { id: "event1" }, { id: "event2" } ]
       a.events.should == [event1, event2]
     end
   end
 
   describe "#documents" do
-    let(:a) { ATDIS::Application.new }
+    let(:a) { ATDIS::Models::Application.new }
     it "should type cast to several documents" do
       document1, document2 = double, double
-      ATDIS::Document.should_receive(:interpret).with(ref: "27B/6/a").and_return(document1)
-      ATDIS::Document.should_receive(:interpret).with(ref: "27B/6/b").and_return(document2)
+      ATDIS::Models::Document.should_receive(:interpret).with(ref: "27B/6/a").and_return(document1)
+      ATDIS::Models::Document.should_receive(:interpret).with(ref: "27B/6/b").and_return(document2)
       a.documents = [ { ref: "27B/6/a" }, { ref: "27B/6/b" } ]
       a.documents.should == [document1, document2]
     end
   end
 
   describe "#people" do
-    let(:a) { ATDIS::Application.new }
+    let(:a) { ATDIS::Models::Application.new }
     it "should type cast to several people" do
       tuttle, buttle = double, double
-      ATDIS::Person.should_receive(:interpret).with(name: "Tuttle").and_return(tuttle)
-      ATDIS::Person.should_receive(:interpret).with(name: "Buttle").and_return(buttle)
+      ATDIS::Models::Person.should_receive(:interpret).with(name: "Tuttle").and_return(tuttle)
+      ATDIS::Models::Person.should_receive(:interpret).with(name: "Buttle").and_return(buttle)
       a.people = [ { name: "Tuttle" }, { name: "Buttle" } ]
       a.people.should == [tuttle, buttle]
     end
@@ -160,7 +160,7 @@ describe ATDIS::Application do
   describe "#attribute_names" do
     it do
       # These are also ordered in a way that corresponds to the specification. Makes for easy reading by humans.
-      ATDIS::Application.attribute_names.should == [
+      ATDIS::Models::Application.attribute_names.should == [
         "info",
         "reference",
         "locations",
@@ -175,11 +175,11 @@ describe ATDIS::Application do
   describe "validations" do
     before :each do
       l = double(valid?: true)
-      ATDIS::Location.should_receive(:interpret).with(address: "123 Fourfivesix Street Neutral Bay NSW 2089").and_return(l)
+      ATDIS::Models::Location.should_receive(:interpret).with(address: "123 Fourfivesix Street Neutral Bay NSW 2089").and_return(l)
     end
 
-    let(:a) { ATDIS::Application.new(
-      info: ATDIS::Info.new(
+    let(:a) { ATDIS::Models::Application.new(
+      info: ATDIS::Models::Info.new(
         dat_id: "DA2013-0381",
         development_type: "residential",
         last_modified_date: DateTime.new(2013,4,20,2,1,7),
@@ -190,7 +190,7 @@ describe ATDIS::Application do
         determination_type: "Pending",
         status: "OPEN",
       ),
-      reference: ATDIS::Reference.new(
+      reference: ATDIS::Models::Reference.new(
         more_info_url: URI.parse("http://foo.com/bar"),
       ),
       locations: [{address: "123 Fourfivesix Street Neutral Bay NSW 2089"}],
@@ -203,7 +203,7 @@ describe ATDIS::Application do
     describe ".location" do
       it "should not be valid if the location is not valid" do
         l = double(valid?: false)
-        ATDIS::Location.should_receive(:interpret).with(foo: "some location data").and_return(l)
+        ATDIS::Models::Location.should_receive(:interpret).with(foo: "some location data").and_return(l)
         a.locations = [{foo: "some location data"}]
         a.should_not be_valid
       end
@@ -211,7 +211,7 @@ describe ATDIS::Application do
 
     describe "events" do
       it "has to be an array" do
-        ATDIS::Event.should_receive(:interpret).with(foo: "bar").and_return(double(valid?: true))
+        ATDIS::Models::Event.should_receive(:interpret).with(foo: "bar").and_return(double(valid?: true))
         a.events = {foo: "bar"}
         #a.events.should be_nil
         a.should_not be_valid

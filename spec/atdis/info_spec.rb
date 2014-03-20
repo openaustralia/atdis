@@ -1,7 +1,7 @@
 require File.expand_path(File.dirname(__FILE__) + '/../spec_helper')
 
-describe ATDIS::Info do
-  let(:a) { ATDIS::Info.new(
+describe ATDIS::Models::Info do
+  let(:a) { ATDIS::Models::Info.new(
     dat_id: "DA2013-0381",
     development_type: "residential",
     last_modified_date: DateTime.new(2013,4,20,2,1,7),
@@ -173,7 +173,7 @@ describe ATDIS::Info do
   end
 
   describe "#description=" do
-    let(:a) { ATDIS::Info.new }
+    let(:a) { ATDIS::Models::Info.new }
     it "should do not type casting when it's already a String" do
       a.description = "foo"
       a.description.should == "foo"
@@ -192,7 +192,7 @@ describe ATDIS::Info do
   end
 
   describe "#lodgement_date=" do
-    let(:a) { ATDIS::Info.new }
+    let(:a) { ATDIS::Models::Info.new }
     it "should do no type casting when it's already a date" do
       a.lodgement_date = DateTime.new(2013,1,1)
       a.lodgement_date.should == DateTime.new(2013,1,1)
@@ -217,7 +217,7 @@ describe ATDIS::Info do
   end
 
   describe "#last_modified_date=" do
-    let(:a) { ATDIS::Info.new }
+    let(:a) { ATDIS::Models::Info.new }
     it "should do no type casting when it's already a date" do
       a.last_modified_date = DateTime.new(2013,1,1)
       a.last_modified_date.should == DateTime.new(2013,1,1)
