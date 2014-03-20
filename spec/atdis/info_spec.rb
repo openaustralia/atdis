@@ -256,13 +256,19 @@ describe ATDIS::Info do
       }
     end
 
-    context "is a valid URL that uniquely identifies a DA" do
-      before(:each) { a.related_apps = ["http://www.council.nsw.gov.au/atdis/1.0/2014_20-022DA.json"]}
+    context "are all valid URLs that uniquely identifies a DA" do
+      before(:each) { a.related_apps = [
+        "http://www.council.nsw.gov.au/atdis/1.0/2014_20-022DA.json",
+        "http://www.council.nsw.gov.au/foo/bar/atdis/1.0/sdjfsd.json"
+      ]}
       it { a.should be_valid }
     end
 
-    context "is not a valid URL" do
-      before(:each) { a.related_apps = ["foobar"] }
+    context "contains an invalid URL" do
+      before(:each) { a.related_apps = [
+        "http://www.council.nsw.gov.au/atdis/1.0/2014_20-022DA.json",
+        "foobar"
+      ]}
       it {
         a.should_not be_valid
         a.errors.messages.should == {related_apps: [ATDIS::ErrorMessage.new("contains an invalid URL", "4.3.1")]}
