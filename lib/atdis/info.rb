@@ -5,7 +5,7 @@ module ATDIS
       development_type:        String,
       last_modified_date:      DateTime,
       description:             String,
-      authority:               String,
+      authority:               Authority,
       lodgement_date:          DateTime,
       determination_date:      DateTime,
       status:                  String,
