@@ -6,6 +6,6 @@ module ATDIS
     })
 
     validates :more_info_url, presence_before_type_cast: {spec_section: "4.3.2"}
-    validates :more_info_url, http_url: {spec_section: "4.3.2"}
+    validates :more_info_url, :comments_url, http_url: {spec_section: "4.3.2"}
   end
 end
