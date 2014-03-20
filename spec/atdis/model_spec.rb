@@ -100,5 +100,14 @@ describe ATDIS::Model do
         {d: 4}
       ]
     end
+
+    it "something that isn't a hash will never get used" do
+      ATDIS::Model.stub(:attribute_keys).and_return([:foo, :a])
+      ATDIS::Model.partition_by_used("hello").should == [
+        {},
+        "hello"
+      ]
+
+    end
   end
 end

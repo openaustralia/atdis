@@ -52,12 +52,16 @@ module ATDIS
     # Partition the data into used and unused by returning [used, unused]
     def self.partition_by_used(data)
       used, unused = {}, {}
-      data.each do |key, value|
-        if attribute_keys.include?(key)
-          used[key] = value
-        else
-          unused[key] = value
+      if data.respond_to?(:each)
+        data.each do |key, value|
+          if attribute_keys.include?(key)
+            used[key] = value
+          else
+            unused[key] = value
+          end
         end
+      else
+        unused = data
       end
       [used, unused]
     end
