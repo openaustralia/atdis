@@ -18,9 +18,11 @@ describe ATDIS::Location do
           postcode: "2089"
         },
         land_title_ref: {
-          lot: "10",
-          section: "ABC",
-          dpsp_id: "DP2013-0381",
+          torrens: {
+            lot: "10",
+            section: "ABC",
+            dpsp_id: "DP2013-0381",            
+          }
         },
         geometry: {
           type: "Point",
