@@ -2,7 +2,7 @@ require "spec_helper"
 
 describe ATDIS::Models::Event do
   it ".attribute_names" do
-    ATDIS::Models::Event.attribute_names.should == ["id", "date", "description", "event_type", "status"]
+    ATDIS::Models::Event.attribute_names.should == ["id", "timestamp", "description", "event_type", "status"]
   end
 
   it ".id" do
@@ -10,7 +10,7 @@ describe ATDIS::Models::Event do
   end
 
   it ".date" do
-    ATDIS::Models::Event.interpret(date: "2013-06-18").date.should == DateTime.new(2013,6,18)
+    ATDIS::Models::Event.interpret(timestamp: "2013-06-18").timestamp.should == DateTime.new(2013,6,18)
   end
 
   it ".description" do
