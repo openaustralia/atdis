@@ -242,4 +242,31 @@ describe ATDIS::Info do
     end
   end
 
+  describe "related_apps" do
+    context "is missing" do
+      before(:each) { a.related_apps = nil }
+      it { a.should be_valid }
+    end
+
+    context "is not an array" do
+      before(:each) { a.related_apps = "http://www.council.nsw.gov.au/atdis/1.0/2014_20-022DA.json"}
+      it {
+        a.should_not be_valid
+        a.errors.messages.should == {related_apps: [ATDIS::ErrorMessage.new("should be an array", "4.3.1")]}
+      }
+    end
+
+    context "is a valid URL that uniquely identifies a DA" do
+      before(:each) { a.related_apps = ["http://www.council.nsw.gov.au/atdis/1.0/2014_20-022DA.json"]}
+      it { a.should be_valid }
+    end
+
+    context "is not a valid URL" do
+      before(:each) { a.related_apps = ["foobar"] }
+      it {
+        a.should_not be_valid
+        a.errors.messages.should == {related_apps: [ATDIS::ErrorMessage.new("contains an invalid URL", "4.3.1")]}
+      }
+    end
+  end
 end

@@ -15,7 +15,8 @@ module ATDIS
       notification_start_date: DateTime,
       notification_end_date:   DateTime,
       officer:                 String,
-      estimated_cost:          String
+      estimated_cost:          String,
+      related_apps:            URI
     })
 
     # Mandatory parameters
@@ -35,6 +36,8 @@ module ATDIS
     validates :determination_date, :notification_start_date,
       :notification_end_date, date_time_or_none: {spec_section: "4.3.1"}
     validate :notification_dates_consistent!
+    validates :related_apps, array: {spec_section: "4.3.1"}
+    validates :related_apps, array_http_url: {spec_section: "4.3.1"}
 
     def notification_dates_consistent!
       if notification_start_date_before_type_cast == "none" && notification_end_date_before_type_cast != "none"

@@ -44,6 +44,17 @@ module ATDIS
       end
     end
 
+    class ArrayHttpUrlValidator < ActiveModel::EachValidator
+      def validate_each(record, attribute, value)
+        if value.present? && value.kind_of?(Array) &&
+          value.any?{|v| !v.kind_of?(URI::HTTP) && !v.kind_of?(URI::HTTPS)}
+            message = "contains an invalid URL"
+            message = ErrorMessage[message, options[:spec_section]] if options[:spec_section]
+            record.errors.add(attribute, message)
+        end
+      end
+    end
+
     class ArrayValidator < ActiveModel::EachValidator
       def validate_each(record, attribute, value)
         if value && !value.kind_of?(Array)
