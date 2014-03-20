@@ -1,4 +1,4 @@
-require 'multi_json'
+require "atdis/application"
 
 module ATDIS
   class Response < Model

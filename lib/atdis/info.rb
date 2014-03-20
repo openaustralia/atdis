@@ -1,3 +1,5 @@
+require "atdis/authority"
+
 module ATDIS
   class Info < Model
     set_field_mappings ({

@@ -1,3 +1,6 @@
+require "atdis/response"
+require "atdis/pagination"
+
 module ATDIS
   class Page < Model
     attr_accessor :url

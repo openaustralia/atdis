@@ -1,3 +1,4 @@
+require "atdis/land_title_ref"
 require "rgeo/geo_json"
 
 module ATDIS

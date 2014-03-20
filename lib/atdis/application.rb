@@ -1,3 +1,10 @@
+require "atdis/info"
+require "atdis/reference"
+require "atdis/location"
+require "atdis/event"
+require "atdis/document"
+require "atdis/person"
+
 module ATDIS
   class Application < Model
     set_field_mappings ({
