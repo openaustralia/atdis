@@ -9,6 +9,9 @@ module ATDIS
     # It should also be consistent for each council.
     # TODO: Check somehow that the authority ref is consistently used
 
+    # Mandatory attributes
+    validates :ref, :name, presence_before_type_cast: {spec_section: "4.3.1"}
+
     validates :ref, http_url: {spec_section: "4.2"}
     validates :ref, format: { with: /atdis\/1.0\z/, message: ATDIS::ErrorMessage.new("is not a valid Unique Authority Identifier", "4.2")}
   end
