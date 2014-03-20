@@ -10,6 +10,7 @@ module ATDIS
       authority:               Authority,
       lodgement_date:          DateTime,
       determination_date:      DateTime,
+      determination_type:      String,
       status:                  String,
       notification_start_date: DateTime,
       notification_end_date:   DateTime,
@@ -19,7 +20,7 @@ module ATDIS
 
     # Mandatory parameters
     validates :dat_id, :development_type, :last_modified_date, :description,
-      :authority, :lodgement_date, :determination_date, :status,
+      :authority, :lodgement_date, :determination_date, :determination_type, :status,
       presence_before_type_cast: {spec_section: "4.3.1"}
     # Other validations
     validates :last_modified_date, :lodgement_date,

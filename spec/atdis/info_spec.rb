@@ -9,8 +9,19 @@ describe ATDIS::Info do
     authority: "Example Council Shire Council",
     lodgement_date: DateTime.new(2013,4,20,2,1,7),
     determination_date: DateTime.new(2013,6,20),
+    determination_type: "Pending",
     status: "OPEN",
   )}
+
+  describe "determination_type" do
+    context "is missing" do
+      before(:each) { a.determination_type = nil}
+      it {
+        a.should_not be_valid
+        a.errors.messages.should == {determination_type: [ATDIS::ErrorMessage.new("can't be blank", "4.3.1")]}
+      }
+    end
+  end
 
   describe "notification_date" do
     it "both valid start and end dates" do

@@ -13,6 +13,7 @@ describe ATDIS::Application do
           authority: "Example Council Shire Council",
           lodgement_date: "2013-04-20T02:01:07Z",
           determination_date: "2013-06-20",
+          determination_type: "Pending",
           status: "OPEN"
         },
         reference: {
@@ -186,6 +187,7 @@ describe ATDIS::Application do
         authority: "Example Council Shire Council",
         lodgement_date: DateTime.new(2013,4,20,2,1,7),
         determination_date: DateTime.new(2013,6,20),
+        determination_type: "Pending",
         status: "OPEN",
       ),
       reference: ATDIS::Reference.new(
