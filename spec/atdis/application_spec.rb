@@ -21,7 +21,7 @@ describe ATDIS::Application do
         },
         # This is the extra parameter that shouldn't be here
         foo: "bar",
-        location: {foo: "Some location data"},
+        locations: [{foo: "Some location data"}],
         events: [],
         documents: []
       )
@@ -53,7 +53,7 @@ describe ATDIS::Application do
           more_info_url: "http://foo.com/bar",
           comments_url: "http://foo.com/comment",
         },
-        location: { address: "123 Fourfivesix Street" },
+        locations: [{ address: "123 Fourfivesix Street" }],
         events: [ { id: "event1" }, { id: "event2" } ],
         documents: [ { ref: "27B/6/a" }, { ref: "27B/6/b" } ],
         people: [ { name: "Tuttle" }, { name: "Buttle" } ],
@@ -83,7 +83,7 @@ describe ATDIS::Application do
           more_info_url: "http://foo.com/bar",
           comments_url: "http://foo.com/comment"
         },
-        location: { address: "123 Fourfivesix Street" },
+        locations: [{ address: "123 Fourfivesix Street" }],
         events: [ { id: "event1" }, { id: "event2" } ],
         documents: [ { ref: "27B/6/a" }, { ref: "27B/6/b" } ],
         people: [ { name: "Tuttle" }, { name: "Buttle" } ],
@@ -112,14 +112,14 @@ describe ATDIS::Application do
     it "should type cast to a location" do
       location = double
       ATDIS::Location.should_receive(:interpret).with(address: "123 Fourfivesix Street").and_return(location)
-      a.location = { address: "123 Fourfivesix Street" }
-      a.location.should == location
+      a.locations = [{ address: "123 Fourfivesix Street" }]
+      a.locations.should == [location]
     end
 
     it "should not cast when it's already a location" do
       l = ATDIS::Location.new
-      a.location = l
-      a.location.should == l
+      a.locations = [l]
+      a.locations.should == [l]
     end
   end
 
@@ -163,7 +163,7 @@ describe ATDIS::Application do
       ATDIS::Application.attribute_names.should == [
         "info",
         "reference",
-        "location",
+        "locations",
         "events",
         "documents",
         "people",
@@ -193,7 +193,7 @@ describe ATDIS::Application do
       reference: ATDIS::Reference.new(
         more_info_url: URI.parse("http://foo.com/bar"),
       ),
-      location: {address: "123 Fourfivesix Street Neutral Bay NSW 2089"},
+      locations: [{address: "123 Fourfivesix Street Neutral Bay NSW 2089"}],
       events: [],
       documents: []
   ) }
@@ -204,7 +204,7 @@ describe ATDIS::Application do
       it "should not be valid if the location is not valid" do
         l = double(valid?: false)
         ATDIS::Location.should_receive(:interpret).with(foo: "some location data").and_return(l)
-        a.location = {foo: "some location data"}
+        a.locations = [{foo: "some location data"}]
         a.should_not be_valid
       end
     end

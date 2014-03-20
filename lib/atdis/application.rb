@@ -10,21 +10,21 @@ module ATDIS
     set_field_mappings ({
       info:      Info,
       reference: Reference,
-      location:  Location,
+      locations: Location,
       events:    Event,
       documents: Document,
       people:    Person,
       extended:  Object,
     })
 
-    validates :location, presence_before_type_cast: {spec_section: "4.3.3"}
+    validates :locations, presence_before_type_cast: {spec_section: "4.3.3"}
     validates :events, presence_before_type_cast: {spec_section: "4.3.4"}
     validates :documents, presence_before_type_cast: {spec_section: "4.3.5"}
 
-    validates :events, :documents, array: {spec_section: "4.3.4"}
+    validates :locations, :events, :documents, array: {spec_section: "4.3.4"}
 
     # This model is only valid if the children are valid
-    validates :info, :reference, :location, :events, :documents, :people, valid: true
+    validates :info, :reference, :locations, :events, :documents, :people, valid: true
 
     # TODO people should be an array if it's included
 
