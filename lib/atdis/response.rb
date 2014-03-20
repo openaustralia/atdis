@@ -6,6 +6,8 @@ module ATDIS
       application: Application
     })
 
+    validates :application, presence_before_type_cast: {spec_section: "4.3"}
+
     # This model is only valid if the children are valid
     validates :application, valid: true
   end
