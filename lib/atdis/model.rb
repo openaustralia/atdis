@@ -62,10 +62,16 @@ module ATDIS
     # Map json structure to our values
     def self.map_fields(data)
       values = {}
-      attribute_keys.each do |attribute|
-        values[attribute] = data[attribute]
+      data.each_key.each do |attribute|
+        if attribute_keys.include?(attribute)
+          values[attribute] = data[attribute]
+        end
       end
       values
+    end
+
+    def self.interpret(*params)
+      new(map_fields(*params).merge(json_left_overs: unused_data(*params)))
     end
 
     def json_errors_local
@@ -127,10 +133,6 @@ module ATDIS
     # Does what the equivalent on Activerecord does
     def self.attribute_names
       attribute_types.keys.map{|k| k.to_s}
-    end
-
-    def self.interpret(*params)
-      new(map_fields(*params).merge(json_left_overs: unused_data(*params)))
     end
 
     def self.cast(value, type, options = {})
