@@ -36,7 +36,7 @@ module ATDIS
     class HttpUrlValidator < ActiveModel::EachValidator
       def validate_each(record, attribute, value)
         raw_value = record.send("#{attribute}_before_type_cast")
-        if raw_value.present? && !value.kind_of?(URI::HTTP) && !value.kind_of?(URI::HTTPS) 
+        if raw_value.present? && !value.kind_of?(URI::HTTP) && !value.kind_of?(URI::HTTPS)
           message = "is not a valid URL"
           message = ErrorMessage[message, options[:spec_section]] if options[:spec_section]
           record.errors.add(attribute, message)
@@ -70,7 +70,7 @@ module ATDIS
       def validate_each(record, attribute, value)
         raw_value = record.send("#{attribute}_before_type_cast")
         if !raw_value.kind_of?(Array) && !raw_value.present?
-          message = "can't be blank"          
+          message = "can't be blank"
           message = ErrorMessage[message, options[:spec_section]] if options[:spec_section]
           record.errors.add(attribute, message)
         end
