@@ -28,8 +28,8 @@ describe ATDIS::LandTitleRef do
       l.errors.messages.should == {section: [ATDIS::ErrorMessage["can't be blank", "4.3.3"]]}
     end
 
-    it "can be none" do
-      l.section = "none"
+    it "can be null" do
+      l.section = nil
       l.section.should be_nil
       l.should be_valid
     end

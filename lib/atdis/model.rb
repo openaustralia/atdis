@@ -132,13 +132,13 @@ module ATDIS
       attribute_types.keys.map{|k| k.to_s}
     end
 
-    def self.cast(value, type, options = {})
-      # If it's already the correct type then we don't need to do anything
-      if value.kind_of?(type)
+    def self.cast(value, type)
+      # If it's already the correct type (or nil) then we don't need to do anything
+      if value.nil? || value.kind_of?(type)
         value
       # Special handling for arrays. When we typecast arrays we actually typecast each member of the array
       elsif value.kind_of?(Array)
-        value.map {|v| cast(v, type, options)}
+        value.map {|v| cast(v, type)}
       elsif type == DateTime
         cast_datetime(value)
       elsif type == URI
@@ -169,7 +169,7 @@ module ATDIS
 
     def attribute=(attr, value)
       @attributes_before_type_cast[attr] = value
-      @attributes[attr] = Model.cast(value, attribute_types[attr.to_sym][0], attribute_types[attr.to_sym][1] || {})
+      @attributes[attr] = Model.cast(value, attribute_types[attr.to_sym][0])
     end
 
     def self.cast_datetime(value)
