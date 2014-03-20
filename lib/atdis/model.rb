@@ -49,24 +49,27 @@ module ATDIS
 
     validate :json_left_overs_is_empty
 
-    def self.unused_data(data)
-      json_left_overs = {}
-      data.each_key do |key|
-        if !attribute_keys.include?(key)
-          json_left_overs[key] = data[key]
+    # Partition the data into used and unused by returning [used, unused]
+    def self.partition_by_used(data)
+      used, unused = {}, {}
+      data.each do |key, value|
+        if attribute_keys.include?(key)
+          used[key] = value
+        else
+          unused[key] = value
         end
       end
+      [used, unused]
+    end
+
+    def self.unused_data(data)
+      values, json_left_overs = partition_by_used(data)
       json_left_overs
     end
 
     # Map json structure to our values
     def self.map_fields(data)
-      values = {}
-      data.each_key.each do |attribute|
-        if attribute_keys.include?(attribute)
-          values[attribute] = data[attribute]
-        end
-      end
+      values, json_left_overs = partition_by_used(data)
       values
     end
 

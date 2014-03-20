@@ -78,44 +78,6 @@ describe ATDIS::Model do
     end
   end
 
-  describe ".unused_data" do
-    it do
-      ATDIS::Model.stub(:attribute_keys).and_return([:foo])
-      ATDIS::Model.unused_data(
-      {
-        foo: 2
-      }).should ==
-      {
-      }
-    end
-
-    it do
-      ATDIS::Model.stub(:attribute_keys).and_return([:foo, :a])
-      ATDIS::Model.unused_data(
-      {
-        foo: 2,
-        a: 3,
-        d: 4
-      }).should ==
-      {
-        d: 4
-      }
-    end
-
-    it do
-      ATDIS::Model.stub(:attribute_keys).and_return([:foo, :a])
-      ATDIS::Model.unused_data(
-      {
-        foo: 2,
-        a: 3,
-        d: 4,
-      }).should ==
-      {
-        d: 4
-      }
-    end
-  end
-
   describe ".attribute_keys" do
     it do
       ATDIS::Model.attribute_types = {foo: String, a: Fixnum, info: String}
@@ -123,33 +85,20 @@ describe ATDIS::Model do
     end
   end
 
-  describe ".map_fields" do
+  describe ".partition_by_used" do
     it do
-      ATDIS::Model.stub(:attribute_keys).and_return([:foo, :a])
-      ATDIS::Model.map_fields(
-      {
-        foo: 2,
-        a: 3,
-        d: 4
-      }).should ==
-      {
-        foo: 2,
-        a: 3,
-      }
+      ATDIS::Model.stub(:attribute_keys).and_return([:foo])
+      ATDIS::Model.partition_by_used({foo: 2}).should == [
+        {foo: 2}, {}
+      ]
     end
 
     it do
       ATDIS::Model.stub(:attribute_keys).and_return([:foo, :a])
-      ATDIS::Model.map_fields(
-      {
-        foo: 2,
-        a: 3,
-        d: 4,
-      }).should ==
-      {
-        foo: 2,
-        a: 3,
-      }
+      ATDIS::Model.partition_by_used({foo: 2, a: 3, d: 4}).should == [
+        {foo: 2, a: 3},
+        {d: 4}
+      ]
     end
   end
 end
