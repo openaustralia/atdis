@@ -1,5 +1,5 @@
-require 'atdis/address'
-require "atdis/land_title_ref"
+require 'atdis/models/address'
+require "atdis/models/land_title_ref"
 require "rgeo/geo_json"
 
 module ATDIS

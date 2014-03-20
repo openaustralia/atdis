@@ -1,5 +1,5 @@
-require "atdis/response"
-require "atdis/pagination"
+require "atdis/models/response"
+require "atdis/models/pagination"
 
 module ATDIS
   class Page < Model

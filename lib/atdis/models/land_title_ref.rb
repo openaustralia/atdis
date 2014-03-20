@@ -1,4 +1,4 @@
-require "atdis/torrens_title"
+require "atdis/models/torrens_title"
 
 module ATDIS
   class LandTitleRef < Model

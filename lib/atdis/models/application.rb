@@ -1,9 +1,9 @@
-require "atdis/info"
-require "atdis/reference"
-require "atdis/location"
-require "atdis/event"
-require "atdis/document"
-require "atdis/person"
+require "atdis/models/info"
+require "atdis/models/reference"
+require "atdis/models/location"
+require "atdis/models/event"
+require "atdis/models/document"
+require "atdis/models/person"
 
 module ATDIS
   class Application < Model

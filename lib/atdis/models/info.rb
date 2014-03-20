@@ -1,4 +1,4 @@
-require "atdis/authority"
+require "atdis/models/authority"
 
 module ATDIS
   class Info < Model

@@ -1,4 +1,4 @@
-require "atdis/application"
+require "atdis/models/application"
 
 module ATDIS
   class Response < Model
