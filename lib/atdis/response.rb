@@ -8,6 +8,7 @@ module ATDIS
       application: Application
     })
 
+    # This model is only valid if the children are valid
     validates :application, valid: true
   end
 end

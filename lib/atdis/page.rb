@@ -10,12 +10,14 @@ module ATDIS
 
     # Mandatory parameters
     validates :response, presence_before_type_cast: {spec_section: "4.3"}
-    validates :response, valid: true
     # section 6.5 is not explicitly about this but it does contain an example which should be helpful
     validates :response, array: {spec_section: "6.5"}
     validate :count_is_consistent, :all_pagination_is_present
-    validates :pagination, valid: true
     validate :json_loaded_correctly!
+
+    # This model is only valid if the children are valid
+    validates :response, valid: true
+    validates :pagination, valid: true
 
     def json_loaded_correctly!
       if json_load_error
