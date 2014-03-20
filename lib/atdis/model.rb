@@ -62,19 +62,9 @@ module ATDIS
       [used, unused]
     end
 
-    def self.unused_data(data)
-      values, json_left_overs = partition_by_used(data)
-      json_left_overs
-    end
-
-    # Map json structure to our values
-    def self.map_fields(data)
-      values, json_left_overs = partition_by_used(data)
-      values
-    end
-
     def self.interpret(*params)
-      new(map_fields(*params).merge(json_left_overs: unused_data(*params)))
+      used, unused = partition_by_used(*params)
+      new(used.merge(json_left_overs: unused))
     end
 
     def json_errors_local
