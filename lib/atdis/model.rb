@@ -10,7 +10,7 @@ module ATDIS
     end
 
     module ClassMethods
-      # of the form {section: [String, {none_is_nil: true}], address: String}
+      # of the form {section: Fixnum, address: String}
       def set_field_mappings(p)
         define_attribute_methods(p.keys.map{|k| k.to_s})
         # Convert all values to arrays. Doing this for the sake of tidier notation
@@ -133,10 +133,8 @@ module ATDIS
     end
 
     def self.cast(value, type, options = {})
-      if options[:none_is_nil] && value == "none"
-        nil
       # If it's already the correct type then we don't need to do anything
-      elsif value.kind_of?(type)
+      if value.kind_of?(type)
         value
       # Special handling for arrays. When we typecast arrays we actually typecast each member of the array
       elsif value.kind_of?(Array)
