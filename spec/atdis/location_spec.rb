@@ -31,7 +31,7 @@ describe ATDIS::Location do
       it { l.should be_valid }
 
       it "address" do
-        l.address = ""
+        l.address = nil
         l.should_not be_valid
         l.errors.messages.should == {address: [ATDIS::ErrorMessage["can't be blank", "4.3.3"]]}
       end
