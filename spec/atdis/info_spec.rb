@@ -18,7 +18,20 @@ describe ATDIS::Info do
       before(:each) { a.determination_type = nil}
       it {
         a.should_not be_valid
-        a.errors.messages.should == {determination_type: [ATDIS::ErrorMessage.new("can't be blank", "4.3.1")]}
+        a.errors.messages.should == {determination_type: [ATDIS::ErrorMessage.new("is not one of the allowed types", "4.3.1")]}
+      }
+    end
+
+    context "is valid and Pending" do
+      before(:each) { a.determination_type = "Pending" }
+      it { a.should be_valid }
+    end
+
+    context "is not valid because it's not one of the set of allowed ones" do
+      before(:each) { a.determination_type = "Something random" }
+      it {
+        a.should_not be_valid
+        a.errors.messages.should == {determination_type: [ATDIS::ErrorMessage.new("is not one of the allowed types", "4.3.1")]}
       }
     end
   end

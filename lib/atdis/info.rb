@@ -20,11 +20,18 @@ module ATDIS
 
     # Mandatory parameters
     validates :dat_id, :development_type, :last_modified_date, :description,
-      :authority, :lodgement_date, :determination_date, :determination_type, :status,
+      :authority, :lodgement_date, :determination_date, :status,
       presence_before_type_cast: {spec_section: "4.3.1"}
     # Other validations
     validates :last_modified_date, :lodgement_date,
       date_time: {spec_section: "4.3.8"}
+    # We don't need to separately validate presence because this covers it
+    validates :determination_type, inclusion: { in: [
+      "Pending", "Refused by Council", "Refused under delegation", "Withdrawn",
+      "Approved by Council", "Approved under delegation", "Rejected"
+      ],
+      message: ATDIS::ErrorMessage.new("is not one of the allowed types", "4.3.1")
+    }
     validates :determination_date, :notification_start_date,
       :notification_end_date, date_time_or_none: {spec_section: "4.3.1"}
     validate :notification_dates_consistent!
