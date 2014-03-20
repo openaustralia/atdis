@@ -227,7 +227,7 @@ describe ATDIS::Application do
       it "can not be empty" do
         a.events = nil
         a.should_not be_valid
-        a.errors.messages.should == {events: [ATDIS::ErrorMessage["can't be blank", "4.3.4"]]}
+        a.errors.messages.should == {events: [ATDIS::ErrorMessage["can't be blank", "4.3"]]}
       end
     end
   end
