@@ -12,7 +12,11 @@ describe ATDIS::Location do
   describe "validation" do
     context "valid location" do
       let(:l) { ATDIS::Location.new(
-        address: "123 Fourfivesix Street Neutral Bay NSW 2089",
+        address: {
+          street: "123 Fourfivesix Street",
+          suburb: "Neutral Bay",
+          postcode: "2089"
+        },
         land_title_ref: {
           lot: "10",
           section: "ABC",
@@ -42,8 +46,7 @@ describe ATDIS::Location do
 
   describe ".interpret" do
     it "should gracefully handle the land_title_ref block being missing" do
-      l = ATDIS::Location.interpret(address: "123 Fourfivesix Street Neutral Bay NSW 2089")
-      l.address.should == "123 Fourfivesix Street Neutral Bay NSW 2089"
+      l = ATDIS::Location.interpret(address: {street: "123 Fourfivesix Street", suburb: "Neutral Bay", postcode: "2089"})
       l.land_title_ref.should be_nil
     end
 
