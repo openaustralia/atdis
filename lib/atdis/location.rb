@@ -10,7 +10,7 @@ module ATDIS
     })
 
     # Mandatory parameters
-    validates :address, presence_before_type_cast: {spec_section: "4.3.3"}
+    validates :address, :land_title_ref, presence_before_type_cast: {spec_section: "4.3.3"}
 
     validates :geometry, geo_json: {spec_section: "4.3.3"}
 
