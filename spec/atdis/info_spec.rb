@@ -264,6 +264,17 @@ describe ATDIS::Info do
       it { a.should be_valid }
     end
 
+    context "are all valid URLs but one does not end in json" do
+      before(:each) { a.related_apps = [
+        "http://www.council.nsw.gov.au/atdis/1.0/2014_20-022DA.json",
+        "http://www.council.nsw.gov.au/foo/bar/atdis/1.0/sdjfsd"
+      ]}
+      it {
+        a.should_not be_valid
+        a.errors.messages.should == {related_apps: [ATDIS::ErrorMessage.new("contains url(s) not in the expected format", "4.3.1")]}
+      }
+    end
+
     context "contains an invalid URL" do
       before(:each) { a.related_apps = [
         "http://www.council.nsw.gov.au/atdis/1.0/2014_20-022DA.json",
@@ -271,7 +282,10 @@ describe ATDIS::Info do
       ]}
       it {
         a.should_not be_valid
-        a.errors.messages.should == {related_apps: [ATDIS::ErrorMessage.new("contains an invalid URL", "4.3.1")]}
+        a.errors.messages.should == {related_apps: [
+          ATDIS::ErrorMessage.new("contains an invalid URL", "4.3.1"),
+          ATDIS::ErrorMessage.new("contains url(s) not in the expected format", "4.3.1")
+        ]}
       }
     end
   end

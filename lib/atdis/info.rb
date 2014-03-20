@@ -38,6 +38,13 @@ module ATDIS
     validate :notification_dates_consistent!
     validates :related_apps, array: {spec_section: "4.3.1"}
     validates :related_apps, array_http_url: {spec_section: "4.3.1"}
+    validate :related_apps_url_format
+
+    def related_apps_url_format
+      if related_apps.respond_to?(:all?) && !related_apps.all? {|url| url.to_s =~ /atdis\/1.0\/[^\/]+\.json/}
+        errors.add(:related_apps, ErrorMessage.new("contains url(s) not in the expected format", "4.3.1"))
+      end
+    end
 
     def notification_dates_consistent!
       if notification_start_date_before_type_cast == "none" && notification_end_date_before_type_cast != "none"
