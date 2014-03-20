@@ -10,10 +10,15 @@ module ATDIS
     end
 
     module ClassMethods
-      # of the form {section: [String, {none_is_nil: true}], address: [String]}
+      # of the form {section: [String, {none_is_nil: true}], address: String}
       def set_field_mappings(p)
         define_attribute_methods(p.keys.map{|k| k.to_s})
-        self.attribute_types = p
+        # Convert all values to arrays. Doing this for the sake of tidier notation
+        self.attribute_types = {}
+        p.each do |k,v|
+          v = [v] unless v.kind_of?(Array)
+          self.attribute_types[k] = v
+        end
       end
     end
   end

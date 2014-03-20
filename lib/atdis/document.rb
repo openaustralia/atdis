@@ -1,9 +1,9 @@
 module ATDIS
   class Document < Model
     set_field_mappings ({
-      ref:          [String],
-      title:        [String],
-      document_url: [URI]    
+      ref:          String,
+      title:        String,
+      document_url: URI    
     })
 
     # Mandatory parameters

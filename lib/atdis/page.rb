@@ -3,9 +3,9 @@ module ATDIS
     attr_accessor :url
 
     set_field_mappings ({
-      response:   [Response],
-      count:      [Fixnum],
-      pagination: [Pagination],
+      response:   Response,
+      count:      Fixnum,
+      pagination: Pagination,
     })
 
     # Mandatory parameters

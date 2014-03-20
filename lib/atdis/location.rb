@@ -3,9 +3,9 @@ require "rgeo/geo_json"
 module ATDIS
   class Location < Model
     set_field_mappings ({
-      address:        [String],
-      land_title_ref: [LandTitleRef],
-      geometry:       [RGeo::GeoJSON]      
+      address:        String,
+      land_title_ref: LandTitleRef,
+      geometry:       RGeo::GeoJSON      
     })
 
     # Mandatory parameters

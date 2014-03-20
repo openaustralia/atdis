@@ -1,11 +1,11 @@
 module ATDIS
   class Event < Model
     set_field_mappings ({
-      id:          [String],
-      date:        [DateTime],
-      description: [String],
-      event_type:  [String],
-      status:      [String]
+      id:          String,
+      date:        DateTime,
+      description: String,
+      event_type:  String,
+      status:      String
     })
 
     # Mandatory parameters
