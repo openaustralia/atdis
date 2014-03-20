@@ -1,4 +1,4 @@
-require File.expand_path(File.dirname(__FILE__) + '/../spec_helper')
+require "spec_helper"
 
 describe ATDIS::Models::Reference do
   let(:a) { ATDIS::Models::Reference.new(
