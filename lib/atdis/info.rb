@@ -20,12 +20,15 @@ module ATDIS
     })
 
     # Mandatory parameters
+    # determination_date is not in this list because even though it is mandatory
+    # it can be null if there is no value
     validates :dat_id, :development_type, :last_modified_date, :description,
-      :authority, :lodgement_date, :determination_date, :status,
+      :authority, :lodgement_date, :status,
       presence_before_type_cast: {spec_section: "4.3.1"}
     # Other validations
-    validates :last_modified_date, :lodgement_date,
-      date_time: {spec_section: "4.3.8"}
+    validates :last_modified_date, :lodgement_date, :determination_date,
+      :notification_start_date, :notification_end_date,
+      date_time: {spec_section: "4.3.1"}
     # We don't need to separately validate presence because this covers it
     validates :determination_type, inclusion: { in: [
       "Pending", "Refused by Council", "Refused under delegation", "Withdrawn",
@@ -33,8 +36,6 @@ module ATDIS
       ],
       message: ATDIS::ErrorMessage.new("is not one of the allowed types", "4.3.1")
     }
-    validates :determination_date, :notification_start_date,
-      :notification_end_date, date_time_or_none: {spec_section: "4.3.1"}
     validate :notification_dates_consistent!
     validates :related_apps, array: {spec_section: "4.3.1"}
     validates :related_apps, array_http_url: {spec_section: "4.3.1"}
@@ -47,12 +48,6 @@ module ATDIS
     end
 
     def notification_dates_consistent!
-      if notification_start_date_before_type_cast == "none" && notification_end_date_before_type_cast != "none"
-        errors.add(:notification_start_date, ErrorMessage["can't be none unless notification_end_date is none as well", "4.3.1"])
-      end
-      if notification_start_date_before_type_cast != "none" && notification_end_date_before_type_cast == "none"
-        errors.add(:notification_end_date, ErrorMessage["can't be none unless notification_start_date is none as well", "4.3.1"])
-      end
       if notification_start_date_before_type_cast && notification_end_date_before_type_cast.blank?
         errors.add(:notification_end_date, ErrorMessage["can not be blank if notification_start_date is set", "4.3.1"])
       end

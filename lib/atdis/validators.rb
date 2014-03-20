@@ -22,17 +22,6 @@ module ATDIS
       end
     end
 
-    class DateTimeOrNoneValidator < ActiveModel::EachValidator
-      def validate_each(record, attribute, value)
-        raw_value = record.send("#{attribute}_before_type_cast")
-        if raw_value.present? && raw_value != "none" && !value.kind_of?(DateTime)
-          message = "is not a valid date or none"
-          message = ErrorMessage[message, options[:spec_section]] if options[:spec_section]
-          record.errors.add(attribute, message)
-        end
-      end
-    end
-
     class HttpUrlValidator < ActiveModel::EachValidator
       def validate_each(record, attribute, value)
         raw_value = record.send("#{attribute}_before_type_cast")

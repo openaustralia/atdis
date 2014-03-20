@@ -47,14 +47,14 @@ describe ATDIS::Info do
       a.notification_start_date = "18 January 2013"
       a.notification_end_date = DateTime.new(2013,2,1,0,0,0)
       a.should_not be_valid
-      a.errors.messages.should == {notification_start_date: [ATDIS::ErrorMessage["is not a valid date or none", "4.3.1"]]}
+      a.errors.messages.should == {notification_start_date: [ATDIS::ErrorMessage["is not a valid date", "4.3.1"]]}
     end
 
     it "invalid end date" do
       a.notification_start_date = DateTime.new(2013,1,10,0,0,0)
       a.notification_end_date = "18 January 2013"
       a.should_not be_valid
-      a.errors.messages.should == {notification_end_date: [ATDIS::ErrorMessage["is not a valid date or none", "4.3.1"]]}
+      a.errors.messages.should == {notification_end_date: [ATDIS::ErrorMessage["is not a valid date", "4.3.1"]]}
     end
 
     it "only start date set" do
@@ -76,26 +76,26 @@ describe ATDIS::Info do
       a.errors.messages.should == {notification_end_date: [ATDIS::ErrorMessage["can not be earlier than notification_start_date", "4.3.1"]]}
     end
 
-    it "both dates set to none" do
-      a.notification_start_date = "none"
-      a.notification_end_date = "none"
+    it "both dates set to null" do
+      a.notification_start_date = nil
+      a.notification_end_date = nil
       a.notification_start_date.should be_nil
       a.notification_end_date.should be_nil
       a.should be_valid
     end
 
-    it "only start date set to none" do
-      a.notification_start_date = "none"
+    it "only start date set to null" do
+      a.notification_start_date = nil
       a.notification_end_date = DateTime.new(2013,2,1,0,0,0)
       a.should_not be_valid
-      a.errors.messages.should == {notification_start_date: [ATDIS::ErrorMessage["can't be none unless notification_end_date is none as well", "4.3.1"]]}
+      a.errors.messages.should == {notification_start_date: [ATDIS::ErrorMessage["can not be blank if notification_end_date is set", "4.3.1"]]}
     end
 
-    it "only end date set to none" do
+    it "only end date set to null" do
       a.notification_start_date = DateTime.new(2013,2,1,0,0,0)
-      a.notification_end_date = "none"
+      a.notification_end_date = nil
       a.should_not be_valid
-      a.errors.messages.should == {notification_end_date: [ATDIS::ErrorMessage["can't be none unless notification_start_date is none as well", "4.3.1"]]}
+      a.errors.messages.should == {notification_end_date: [ATDIS::ErrorMessage["can not be blank if notification_start_date is set", "4.3.1"]]}
     end
   end
 
@@ -110,16 +110,15 @@ describe ATDIS::Info do
   describe ".determination_date" do
     it do
       a.determination_date = nil
-      a.should_not be_valid
-      a.errors.messages.should == {determination_date: [ATDIS::ErrorMessage["can't be blank", "4.3.1"]]}
+      a.should be_valid
     end
     it do
       a.determination_date = "18 January 2013"
       a.should_not be_valid
-      a.errors.messages.should == {determination_date: [ATDIS::ErrorMessage["is not a valid date or none", "4.3.1"]]}
+      a.errors.messages.should == {determination_date: [ATDIS::ErrorMessage["is not a valid date", "4.3.1"]]}
     end
-    it "none should be allowed if the application is not yet determined" do
-      a.determination_date = "none"
+    it "nil should be allowed if the application is not yet determined" do
+      a.determination_date = nil
       a.determination_date.should be_nil
       a.should be_valid
     end
@@ -134,7 +133,7 @@ describe ATDIS::Info do
     it do
       a.lodgement_date = "18 January 2013"
       a.should_not be_valid
-      a.errors.messages.should == {lodgement_date: [ATDIS::ErrorMessage["is not a valid date", "4.3.8"]]}
+      a.errors.messages.should == {lodgement_date: [ATDIS::ErrorMessage["is not a valid date", "4.3.1"]]}
     end
   end
 
@@ -163,7 +162,7 @@ describe ATDIS::Info do
     it do
       a.last_modified_date = "18 January 2013"
       a.should_not be_valid
-      a.errors.messages.should == {last_modified_date: [ATDIS::ErrorMessage["is not a valid date", "4.3.8"]]}
+      a.errors.messages.should == {last_modified_date: [ATDIS::ErrorMessage["is not a valid date", "4.3.1"]]}
     end
   end
 
