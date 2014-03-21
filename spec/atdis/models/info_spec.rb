@@ -18,7 +18,7 @@ describe ATDIS::Models::Info do
       before(:each) { a.determination_type = nil}
       it {
         a.should_not be_valid
-        a.errors.messages.should == {determination_type: [ATDIS::ErrorMessage.new("is not one of the allowed types", "4.3.1")]}
+        a.errors.messages.should == {determination_type: [ATDIS::ErrorMessage.new("does not have one of the allowed types", "4.3.1")]}
       }
     end
 
@@ -31,7 +31,7 @@ describe ATDIS::Models::Info do
       before(:each) { a.determination_type = "Something random" }
       it {
         a.should_not be_valid
-        a.errors.messages.should == {determination_type: [ATDIS::ErrorMessage.new("is not one of the allowed types", "4.3.1")]}
+        a.errors.messages.should == {determination_type: [ATDIS::ErrorMessage.new("does not have one of the allowed types", "4.3.1")]}
       }
     end
   end

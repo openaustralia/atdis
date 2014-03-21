@@ -35,7 +35,7 @@ module ATDIS
         "Pending", "Refused by Council", "Refused under delegation", "Withdrawn",
         "Approved by Council", "Approved under delegation", "Rejected"
         ],
-        message: ATDIS::ErrorMessage.new("is not one of the allowed types", "4.3.1")
+        message: ATDIS::ErrorMessage.new("does not have one of the allowed types", "4.3.1")
       }
       validate :notification_dates_consistent!
       validates :related_apps, array: {spec_section: "4.3.1"}
