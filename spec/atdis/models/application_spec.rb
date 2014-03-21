@@ -3,7 +3,10 @@ require "spec_helper"
 describe ATDIS::Models::Application do
   context "extra parameter in json" do
     it "should not be valid" do
-      ATDIS::Models::Location.should_receive(:interpret).with(foo: "Some location data").and_return(double(valid?: true))
+      ATDIS::Models::Location.should_receive(:interpret).with("location").and_return(double(valid?: true))
+      ATDIS::Models::Document.should_receive(:interpret).with("document").and_return(double(valid?: true))
+      ATDIS::Models::Event.should_receive(:interpret).with("event").and_return(double(valid?: true))
+
       a = ATDIS::Models::Application.interpret(
         info: {
           dat_id: "DA2013-0381",
@@ -24,9 +27,9 @@ describe ATDIS::Models::Application do
         },
         # This is the extra parameter that shouldn't be here
         foo: "bar",
-        locations: [{foo: "Some location data"}],
-        events: [],
-        documents: []
+        locations: ["location"],
+        events: ["event"],
+        documents: ["document"]
       )
       a.should_not be_valid
       a.errors.messages.should == {json: [ATDIS::ErrorMessage['Unexpected parameters in json data: {"foo":"bar"}', "4"]]}
@@ -177,8 +180,9 @@ describe ATDIS::Models::Application do
 
   describe "validations" do
     before :each do
-      l = double(valid?: true)
-      ATDIS::Models::Location.should_receive(:interpret).with(address: "123 Fourfivesix Street Neutral Bay NSW 2089").and_return(l)
+      ATDIS::Models::Location.should_receive(:interpret).with("address").and_return(double(valid?: true))
+      ATDIS::Models::Document.should_receive(:interpret).with("document").and_return(double(valid?: true))
+      ATDIS::Models::Event.should_receive(:interpret).with("event").and_return(double(valid?: true))
     end
 
     let(:a) { ATDIS::Models::Application.new(
@@ -199,9 +203,9 @@ describe ATDIS::Models::Application do
       reference: ATDIS::Models::Reference.new(
         more_info_url: URI.parse("http://foo.com/bar"),
       ),
-      locations: [{address: "123 Fourfivesix Street Neutral Bay NSW 2089"}],
-      events: [],
-      documents: []
+      locations: ["address"],
+      events: ["event"],
+      documents: ["document"]
   ) }
 
     it { a.should be_valid }
@@ -221,13 +225,13 @@ describe ATDIS::Models::Application do
         a.events = {foo: "bar"}
         #a.events.should be_nil
         a.should_not be_valid
-        a.errors.messages.should == {events: [ATDIS::ErrorMessage["should be an array", "4.3.4"]]}
+        a.errors.messages.should == {events: [ATDIS::ErrorMessage["should be an array", "4.3"]]}
       end
 
-      it "can be an empty array" do
+      it "can not be an empty array" do
         a.events = []
-        a.events.should == []
-        a.should be_valid
+        a.should_not be_valid
+        a.errors.messages.should == {events: [ATDIS::ErrorMessage.new("should not be an empty array", "4.3")]}
       end
 
       it "can not be empty" do

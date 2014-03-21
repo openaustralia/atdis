@@ -54,6 +54,22 @@ module ATDIS
       end
     end
 
+    # Can't be an empty array
+    class FilledArrayValidator < ActiveModel::EachValidator
+      def validate_each(record, attribute, value)
+        if value && !value.kind_of?(Array)
+          message = "should be an array"
+          message = ErrorMessage[message, options[:spec_section]] if options[:spec_section]
+          record.errors.add(attribute, message)
+        end
+        if value && value.kind_of?(Array) && value.empty?
+          message = "should not be an empty array"
+          message = ErrorMessage[message, options[:spec_section]] if options[:spec_section]
+          record.errors.add(attribute, message)
+        end
+      end
+    end
+
     # Take into account the value before type casting
     class PresenceBeforeTypeCastValidator < ActiveModel::EachValidator
       def validate_each(record, attribute, value)

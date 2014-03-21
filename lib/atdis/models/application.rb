@@ -21,7 +21,8 @@ module ATDIS
       # Mandatory attributes
       validates :info, :reference, :locations, :events, :documents, presence_before_type_cast: {spec_section: "4.3"}
 
-      validates :locations, :events, :documents, :people, array: {spec_section: "4.3.4"}
+      validates :people, array: {spec_section: "4.3.4"}
+      validates :locations, :events, :documents, filled_array: {spec_section: "4.3"}
 
       # This model is only valid if the children are valid
       validates :info, :reference, :locations, :events, :documents, :people, valid: true
