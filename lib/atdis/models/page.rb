@@ -62,7 +62,7 @@ module ATDIS
 
       def previous_url
         raise "Can't use previous_url when loaded with read_json" if url.nil?
-        ATDIS::SeparatedURL.merge(url, page: previous) if previous
+        ATDIS::SeparatedURL.merge(url, page: pagination.previous) if pagination
       end
 
       def next_url
