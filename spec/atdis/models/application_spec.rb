@@ -11,6 +11,7 @@ describe ATDIS::Models::Application do
         info: {
           dat_id: "DA2013-0381",
           development_type: "residential",
+          application_type: "DA",
           last_modified_date: "2013-04-20T02:01:07Z",
           description: "New pool plus deck",
           authority: {
@@ -189,6 +190,7 @@ describe ATDIS::Models::Application do
       info: ATDIS::Models::Info.new(
         dat_id: "DA2013-0381",
         development_type: "residential",
+        application_type: "DA",
         last_modified_date: DateTime.new(2013,4,20,2,1,7),
         description: "New pool plus deck",
         authority: {

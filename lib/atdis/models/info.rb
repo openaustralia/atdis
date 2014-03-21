@@ -6,6 +6,7 @@ module ATDIS
       set_field_mappings ({
         dat_id:                  String,
         development_type:        String,
+        application_type:        String,
         last_modified_date:      DateTime,
         description:             String,
         authority:               Authority,
@@ -27,6 +28,10 @@ module ATDIS
         :authority, :lodgement_date, :status,
         presence_before_type_cast: {spec_section: "4.3.1"}
       # Other validations
+      validates :application_type, inclusion: { in: [
+        "DA", "CDC", "S96", "Review", "Appeal", "Other"
+        ],
+        message: ATDIS::ErrorMessage.new("does not have one of the allowed types", "4.3.1")}
       validates :last_modified_date, :lodgement_date, :determination_date,
         :notification_start_date, :notification_end_date,
         date_time: {spec_section: "4.3.1"}
