@@ -4,7 +4,7 @@ module ATDIS
   class Feed
     attr_reader :base_url
 
-    VALID_OPTIONS = [:page, :postcode, :lodgement_date_start, :lodgement_date_end, :last_modified_date_start, :last_modified_date_end]
+    VALID_OPTIONS = [:page, :street, :suburb, :postcode, :lodgement_date_start, :lodgement_date_end, :last_modified_date_start, :last_modified_date_end]
 
     # base_url - the base url from which the urls for all atdis urls are made
     # It should be of the form:
