@@ -5,7 +5,8 @@ describe ATDIS::Models::Address do
     let(:a) { ATDIS::Models::Address.new(
       street: "123 Fourfivesix Street",
       suburb: "Neutral Bay",
-      postcode: "2780"
+      postcode: "2780",
+      state: "NSW"
     )}
 
     it { a.should be_valid }

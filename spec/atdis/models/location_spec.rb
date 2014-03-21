@@ -15,7 +15,8 @@ describe ATDIS::Models::Location do
         address: {
           street: "123 Fourfivesix Street",
           suburb: "Neutral Bay",
-          postcode: "2089"
+          postcode: "2089",
+          state: "NSW"
         },
         land_title_ref: {
           torrens: {
