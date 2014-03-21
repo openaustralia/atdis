@@ -77,10 +77,12 @@ module ATDIS
       if !errors[:json].empty?
         r << [nil, errors[:json]]
       end
-      attributes.each do |attribute_as_string, value|
-        attribute = attribute_as_string.to_sym
-        e = errors[attribute]
-        r << [{attribute => attributes_before_type_cast[attribute.to_s]}, e.map{|m| ErrorMessage["#{attribute} #{m}", m.spec_section]}] unless e.empty?
+      errors.keys.each do |attribute|
+        # The :json attribute is special
+        if attribute != :json
+          e = errors[attribute]
+          r << [{attribute => attributes_before_type_cast[attribute.to_s]}, e.map{|m| ErrorMessage["#{attribute} #{m}", m.spec_section]}] unless e.empty?
+        end
       end
       r
     end

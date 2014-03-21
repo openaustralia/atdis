@@ -53,6 +53,12 @@ describe ATDIS::Model do
       a.should_not be_valid
       a.json_errors.should == [[nil, [ATDIS::ErrorMessage['Unexpected parameters in json data: {"invalid":{"parameter":"foo"}}', "4"]]]]
     end
+
+    it "should json errors even if value is nil" do
+      b = ModelB.new
+      b.errors.add(:bar, ATDIS::ErrorMessage.new("can't be nil", "1.2"))
+      b.json_errors.should == [[{bar: nil}, [ATDIS::ErrorMessage.new("bar can't be nil", "1.2")]]]
+    end
   end
 
   describe ".cast" do
