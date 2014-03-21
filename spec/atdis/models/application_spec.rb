@@ -10,7 +10,10 @@ describe ATDIS::Models::Application do
           development_type: "residential",
           last_modified_date: "2013-04-20T02:01:07Z",
           description: "New pool plus deck",
-          authority: "Example Council Shire Council",
+          authority: {
+            ref:  "http://www.council.nsw.gov.au/atdis/1.0",
+            name: "Example Council Shire Council"
+          },
           lodgement_date: "2013-04-20T02:01:07Z",
           determination_date: "2013-06-20",
           determination_type: "Pending",
@@ -184,7 +187,10 @@ describe ATDIS::Models::Application do
         development_type: "residential",
         last_modified_date: DateTime.new(2013,4,20,2,1,7),
         description: "New pool plus deck",
-        authority: "Example Council Shire Council",
+        authority: {
+          ref:  "http://www.council.nsw.gov.au/atdis/1.0",
+          name: "Example Council Shire Council"
+        },
         lodgement_date: DateTime.new(2013,4,20,2,1,7),
         determination_date: DateTime.new(2013,6,20),
         determination_type: "Pending",
