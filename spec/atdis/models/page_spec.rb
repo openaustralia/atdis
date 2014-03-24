@@ -14,7 +14,7 @@ describe ATDIS::Models::Page do
 
       it do
         page.should_not be_valid
-        page.errors.messages.should == {response: [ATDIS::ErrorMessage["should be an array", "6.5"]]}
+        page.errors.messages.should == {response: [ATDIS::ErrorMessage["should be an array", "6.4"]]}
       end
     end
 
@@ -40,7 +40,7 @@ describe ATDIS::Models::Page do
           end
           it do
             page.should_not be_valid
-            page.errors.messages.should == {count: [ATDIS::ErrorMessage["is not the same as the number of applications returned", "6.5"]]}
+            page.errors.messages.should == {count: [ATDIS::ErrorMessage["is not the same as the number of applications returned", "6.4"]]}
           end
         end
 
@@ -51,7 +51,7 @@ describe ATDIS::Models::Page do
           end
           it do
             page.should_not be_valid
-            page.errors.messages.should == {count: [ATDIS::ErrorMessage["should not be larger than the number of results per page", "6.5"]]}
+            page.errors.messages.should == {count: [ATDIS::ErrorMessage["should not be larger than the number of results per page", "6.4"]]}
           end
         end
 
@@ -62,7 +62,7 @@ describe ATDIS::Models::Page do
 
           it do
             page.should_not be_valid
-            page.errors.messages.should == {count: [ATDIS::ErrorMessage["should be present if pagination is being used", "6.5"]]}
+            page.errors.messages.should == {count: [ATDIS::ErrorMessage["should be present if pagination is being used", "6.4"]]}
           end
         end
 

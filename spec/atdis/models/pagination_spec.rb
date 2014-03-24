@@ -16,7 +16,7 @@ describe ATDIS::Models::Pagination do
     )}
     it do
       pagination.should_not be_valid
-      pagination.errors.messages.should == {current: [ATDIS::ErrorMessage["should be present if pagination is being used", "6.5"]]}
+      pagination.errors.messages.should == {current: [ATDIS::ErrorMessage["should be present if pagination is being used", "6.4"]]}
     end
   end
 
@@ -26,7 +26,7 @@ describe ATDIS::Models::Pagination do
     )}
     it do
       pagination.should_not be_valid
-      pagination.errors.messages.should == {per_page: [ATDIS::ErrorMessage["should be present if pagination is being used", "6.5"]]}
+      pagination.errors.messages.should == {per_page: [ATDIS::ErrorMessage["should be present if pagination is being used", "6.4"]]}
     end
   end
 
@@ -36,7 +36,7 @@ describe ATDIS::Models::Pagination do
     )}
     it do
       pagination.should_not be_valid
-      pagination.errors.messages.should == {count: [ATDIS::ErrorMessage["should be present if pagination is being used", "6.5"]]}
+      pagination.errors.messages.should == {count: [ATDIS::ErrorMessage["should be present if pagination is being used", "6.4"]]}
     end
   end
 
@@ -46,7 +46,7 @@ describe ATDIS::Models::Pagination do
     )}
     it do
       pagination.should_not be_valid
-      pagination.errors.messages.should == {pages: [ATDIS::ErrorMessage["should be present if pagination is being used", "6.5"]]}
+      pagination.errors.messages.should == {pages: [ATDIS::ErrorMessage["should be present if pagination is being used", "6.4"]]}
     end
   end
 
@@ -56,7 +56,7 @@ describe ATDIS::Models::Pagination do
     )}
     it do
       pagination.should_not be_valid
-      pagination.errors.messages.should == {count: [ATDIS::ErrorMessage["could fit into a smaller number of pages", "6.5"]]}
+      pagination.errors.messages.should == {count: [ATDIS::ErrorMessage["could fit into a smaller number of pages", "6.4"]]}
     end
   end
 
@@ -66,7 +66,7 @@ describe ATDIS::Models::Pagination do
     )}
     it do
       pagination.should_not be_valid
-      pagination.errors.messages.should == {count: [ATDIS::ErrorMessage["is larger than can be retrieved through paging", "6.5"]]}
+      pagination.errors.messages.should == {count: [ATDIS::ErrorMessage["is larger than can be retrieved through paging", "6.4"]]}
     end
   end
 
@@ -76,7 +76,7 @@ describe ATDIS::Models::Pagination do
     ) }
     it do
       pagination.should_not be_valid
-      pagination.errors.messages.should == {current: [ATDIS::ErrorMessage["can not be less than 1", "6.5"]]}
+      pagination.errors.messages.should == {current: [ATDIS::ErrorMessage["can not be less than 1", "6.4"]]}
     end
   end
 
@@ -86,7 +86,7 @@ describe ATDIS::Models::Pagination do
     ) }
     it do
       pagination.should_not be_valid
-      pagination.errors.messages.should == {current: [ATDIS::ErrorMessage["is larger than the number of pages", "6.5"]]}
+      pagination.errors.messages.should == {current: [ATDIS::ErrorMessage["is larger than the number of pages", "6.4"]]}
     end
   end
 
@@ -96,7 +96,7 @@ describe ATDIS::Models::Pagination do
     ) }
     it do
       pagination.should_not be_valid
-      pagination.errors.messages.should == {next: [ATDIS::ErrorMessage["should be null if on the last page", "6.5"]]}
+      pagination.errors.messages.should == {next: [ATDIS::ErrorMessage["should be null if on the last page", "6.4"]]}
     end
   end
 
@@ -106,7 +106,7 @@ describe ATDIS::Models::Pagination do
     ) }
     it do
       pagination.should_not be_valid
-      pagination.errors.messages.should == {next: [ATDIS::ErrorMessage["can't be null if not on the last page", "6.5"]]}
+      pagination.errors.messages.should == {next: [ATDIS::ErrorMessage["can't be null if not on the last page", "6.4"]]}
     end
   end
 
@@ -116,7 +116,7 @@ describe ATDIS::Models::Pagination do
     ) }
     it do
       pagination.should_not be_valid
-      pagination.errors.messages.should == {next: [ATDIS::ErrorMessage["should be one greater than current page number or null if last page", "6.5"]]}
+      pagination.errors.messages.should == {next: [ATDIS::ErrorMessage["should be one greater than current page number or null if last page", "6.4"]]}
     end
   end
 
@@ -126,7 +126,7 @@ describe ATDIS::Models::Pagination do
     ) }
     it do
       pagination.should_not be_valid
-      pagination.errors.messages.should == {previous: [ATDIS::ErrorMessage["should be null if on the first page", "6.5"]]}
+      pagination.errors.messages.should == {previous: [ATDIS::ErrorMessage["should be null if on the first page", "6.4"]]}
     end
   end
 
@@ -136,7 +136,7 @@ describe ATDIS::Models::Pagination do
     ) }
     it do
       pagination.should_not be_valid
-      pagination.errors.messages.should == {previous: [ATDIS::ErrorMessage["can't be null if not on the first page", "6.5"]]}
+      pagination.errors.messages.should == {previous: [ATDIS::ErrorMessage["can't be null if not on the first page", "6.4"]]}
     end
   end
 
@@ -146,8 +146,8 @@ describe ATDIS::Models::Pagination do
     ) }
     it do
       pagination.should_not be_valid
-      pagination.errors.messages.should == {previous: [ATDIS::ErrorMessage["should be one less than current page number or null if first page", "6.5"]]}
-      pagination.json_errors.should == [[{previous: 5}, [ATDIS::ErrorMessage["previous should be one less than current page number or null if first page", "6.5"]]]]
+      pagination.errors.messages.should == {previous: [ATDIS::ErrorMessage["should be one less than current page number or null if first page", "6.4"]]}
+      pagination.json_errors.should == [[{previous: 5}, [ATDIS::ErrorMessage["previous should be one less than current page number or null if first page", "6.4"]]]]
     end
   end
 end

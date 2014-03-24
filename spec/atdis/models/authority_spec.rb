@@ -17,8 +17,8 @@ describe ATDIS::Models::Authority do
       it {
         a.should_not be_valid
         a.errors.messages.should == {ref: [
-          ATDIS::ErrorMessage.new("is not a valid URL", "4.2"),
-          ATDIS::ErrorMessage.new("is not a valid Unique Authority Identifier", "4.2")
+          ATDIS::ErrorMessage.new("is not a valid URL", "4.3.1"),
+          ATDIS::ErrorMessage.new("is not a valid Unique Authority Identifier", "4.3.1")
         ]}
       }
     end
@@ -27,7 +27,7 @@ describe ATDIS::Models::Authority do
       let(:a) { ATDIS::Models::Authority.new(ref: "http://www.council.nsw.gov.au/foobar", name: "Council")}
       it {
         a.should_not be_valid
-        a.errors.messages.should == {ref: [ATDIS::ErrorMessage.new("is not a valid Unique Authority Identifier", "4.2")]}
+        a.errors.messages.should == {ref: [ATDIS::ErrorMessage.new("is not a valid Unique Authority Identifier", "4.3.1")]}
       }
     end
   end
