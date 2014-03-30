@@ -26,6 +26,10 @@ module ATDIS
       "#{base_url}/applications.json" + (q ? "?#{q}" : "")
     end
 
+    def application_url(id)
+      "#{base_url}/#{CGI::escape(id)}.json"
+    end
+
     def self.base_url_from_url(url)
       u = URI.parse(url)
       options = query_to_options(u.query)

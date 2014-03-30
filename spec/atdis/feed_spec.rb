@@ -79,4 +79,10 @@ describe ATDIS::Feed do
       ATDIS::Feed.options_from_url("http://www.foo.nsw.gov.au/prefix/atdis/1.0/applications.json?postcode=2000&foo=bar").should == {postcode: "2000"}
     end
   end
+
+  describe "#application_url" do
+    it { feed.application_url("27B6").should == "http://www.council.nsw.gov.au/atdis/1.0/27B6.json" }
+    it { feed.application_url("27B stroke 6").should == "http://www.council.nsw.gov.au/atdis/1.0/27B+stroke+6.json" }
+    it { feed.application_url("27B/6").should == "http://www.council.nsw.gov.au/atdis/1.0/27B%2F6.json" }
+  end
 end
