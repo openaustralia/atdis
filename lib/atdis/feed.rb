@@ -18,6 +18,8 @@ module ATDIS
       if !invalid_options.empty?
         raise "Unexpected options used: #{invalid_options.join(',')}"
       end
+      options[:street] = options[:street].join(",") if options[:street].respond_to?(:join)
+      options[:suburb] = options[:suburb].join(",") if options[:suburb].respond_to?(:join)
       options[:postcode] = options[:postcode].join(",") if options[:postcode].respond_to?(:join)
 
       q = Feed.options_to_query(options)
