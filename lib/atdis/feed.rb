@@ -13,7 +13,7 @@ module ATDIS
       @base_url = base_url
     end
 
-    def url(options = {})
+    def applications_url(options = {})
       invalid_options = options.keys - VALID_OPTIONS
       if !invalid_options.empty?
         raise "Unexpected options used: #{invalid_options.join(',')}"
@@ -55,7 +55,7 @@ module ATDIS
     end
 
     def applications(options = {})
-      Models::Page.read_url(url(options))
+      Models::Page.read_url(applications_url(options))
     end
 
     private
