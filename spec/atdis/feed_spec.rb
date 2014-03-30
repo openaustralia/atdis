@@ -1,7 +1,7 @@
 require File.expand_path(File.dirname(__FILE__) + '/../spec_helper')
 
 describe ATDIS::Feed do
-  let(:feed) { ATDIS::Feed.new("http://www.council.nsw.gov.au/atdis/1.0/applications.json") }
+  let(:feed) { ATDIS::Feed.new("http://www.council.nsw.gov.au/atdis/1.0") }
   let(:page) { double }
 
   it "should return all the applications" do
@@ -60,10 +60,10 @@ describe ATDIS::Feed do
   end
 
   describe ".base_url_from_url" do
-    it { ATDIS::Feed.base_url_from_url("http://www.council.nsw.gov.au/atdis/1.0/applications.json?postcode=2000").should == "http://www.council.nsw.gov.au/atdis/1.0/applications.json" }
-    it { ATDIS::Feed.base_url_from_url("http://www.foo.nsw.gov.au/prefix/atdis/1.0/applications.json?postcode=2000#bar").should == "http://www.foo.nsw.gov.au/prefix/atdis/1.0/applications.json" }
+    it { ATDIS::Feed.base_url_from_url("http://www.council.nsw.gov.au/atdis/1.0/applications.json?postcode=2000").should == "http://www.council.nsw.gov.au/atdis/1.0" }
+    it { ATDIS::Feed.base_url_from_url("http://www.foo.nsw.gov.au/prefix/atdis/1.0/applications.json?postcode=2000#bar").should == "http://www.foo.nsw.gov.au/prefix/atdis/1.0" }
     it "should assume that any query parameters that are not recognised are part of the base_url" do
-      ATDIS::Feed.base_url_from_url("http://www.foo.nsw.gov.au/prefix/atdis/1.0/applications.json?postcode=2000&foo=bar").should == "http://www.foo.nsw.gov.au/prefix/atdis/1.0/applications.json?foo=bar"
+      ATDIS::Feed.base_url_from_url("http://www.foo.nsw.gov.au/prefix/atdis/1.0/applications.json?postcode=2000&foo=bar").should == "http://www.foo.nsw.gov.au/prefix/atdis/1.0?foo=bar"
     end
   end
 

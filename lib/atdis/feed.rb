@@ -8,7 +8,7 @@ module ATDIS
 
     # base_url - the base url from which the urls for all atdis urls are made
     # It should be of the form:
-    # http://www.council.nsw.gov.au/atdis/1.0/applications.json
+    # http://www.council.nsw.gov.au/atdis/1.0
     def initialize(base_url)
       @base_url = base_url
     end
@@ -23,7 +23,7 @@ module ATDIS
       options[:postcode] = options[:postcode].join(",") if options[:postcode].respond_to?(:join)
 
       q = Feed.options_to_query(options)
-      q.nil? ? base_url : "#{base_url}?#{q}"
+      "#{base_url}/applications.json" + (q ? "?#{q}" : "")
     end
 
     def self.base_url_from_url(url)
@@ -34,6 +34,7 @@ module ATDIS
       end
       u.query = options_to_query(options)
       u.fragment = nil
+      u.path = "/" + u.path.split("/")[1..-2].join("/")
       u.to_s
     end
 
