@@ -170,10 +170,18 @@ describe ATDIS::Models::Info do
     end
   end
 
-  it ".dat_id" do
-    a.dat_id = nil
-    a.should_not be_valid
-    a.errors.messages.should == {dat_id: [ATDIS::ErrorMessage["can't be blank", "4.3.1"]]}
+  describe ".dat_id" do
+    it ".dat_id" do
+      a.dat_id = nil
+      a.should_not be_valid
+      a.errors.messages.should == {dat_id: [ATDIS::ErrorMessage["can't be blank", "4.3.1"]]}
+    end
+
+    it "should be url encoded" do
+      a.dat_id = "foo bar"
+      a.should_not be_valid
+      a.errors.messages.should == {dat_id: [ATDIS::ErrorMessage["should be url encoded", "4.3.1"]]}
+    end
   end
 
   describe "#description=" do

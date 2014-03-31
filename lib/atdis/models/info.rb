@@ -46,9 +46,16 @@ module ATDIS
       validates :related_apps, array: {spec_section: "4.3.1"}
       validates :related_apps, array_http_url: {spec_section: "4.3.1"}
       validate :related_apps_url_format
+      validate :dat_id_is_url_encoded!
 
       # This model is only valid if the children are valid
       validates :authority, valid: true
+
+      def dat_id_is_url_encoded!
+        if dat_id && CGI::escape(dat_id) != dat_id
+          errors.add(:dat_id, ErrorMessage.new("should be url encoded", "4.3.1"))
+        end
+      end
 
       def related_apps_url_format
         if related_apps.respond_to?(:all?) && !related_apps.all? {|url| url.to_s =~ /atdis\/1.0\/[^\/]+\.json/}
