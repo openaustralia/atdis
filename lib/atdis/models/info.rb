@@ -51,6 +51,8 @@ module ATDIS
       # This model is only valid if the children are valid
       validates :authority, valid: true
 
+      # TODO Validate contents of estimated_cost
+
       def dat_id_is_url_encoded!
         if dat_id && CGI::escape(dat_id) != dat_id
           errors.add(:dat_id, ErrorMessage.new("should be url encoded", "4.3.1"))
