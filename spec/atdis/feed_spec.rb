@@ -85,4 +85,12 @@ describe ATDIS::Feed do
     it { feed.application_url("27B stroke 6").should == "http://www.council.nsw.gov.au/atdis/1.0/27B+stroke+6.json" }
     it { feed.application_url("27B/6").should == "http://www.council.nsw.gov.au/atdis/1.0/27B%2F6.json" }
   end
+
+  describe "#application" do
+    it {
+      application = double
+      ATDIS::Models::Application.should_receive(:read_url).with("http://www.council.nsw.gov.au/atdis/1.0/27B%2F6.json").and_return(application)
+      feed.application("27B/6").should == application
+    }
+  end
 end

@@ -62,6 +62,10 @@ module ATDIS
       Models::Page.read_url(applications_url(options))
     end
 
+    def application(id)
+      Models::Application.read_url(application_url(id))
+    end
+
     private
 
     # Turn a query string of the form "foo=bar&hello=sir" to {foo: "bar", hello: sir"}
