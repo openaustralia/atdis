@@ -46,7 +46,9 @@ module ATDIS
     # Stores any part of the json that could not be interpreted. Usually
     # signals an error if it isn't empty.
     attr_accessor :json_left_overs, :json_load_error
+    attr_accessor :url
 
+    validate :json_loaded_correctly!
     validate :json_left_overs_is_empty
 
     # Partition the data into used and unused by returning [used, unused]
@@ -66,9 +68,32 @@ module ATDIS
       [used, unused]
     end
 
+    def self.read_url(url)
+      r = read_json(RestClient.get(url.to_s).to_str)
+      r.url = url.to_s
+      r
+    end
+
+    def self.read_json(text)
+      begin
+        data = MultiJson.load(text, symbolize_keys: true)
+        interpret(data)
+      rescue MultiJson::LoadError => e
+        a = interpret({response: []})
+        a.json_load_error = e.to_s
+        a
+      end
+    end
+
     def self.interpret(*params)
       used, unused = partition_by_used(*params)
       new(used.merge(json_left_overs: unused))
+    end
+
+    def json_loaded_correctly!
+      if json_load_error
+        errors.add(:json, ErrorMessage["Invalid JSON: #{json_load_error}", nil])
+      end
     end
 
     def json_errors_local
