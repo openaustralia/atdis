@@ -54,9 +54,20 @@ module ATDIS
       # TODO Validate contents of estimated_cost
 
       def dat_id_is_url_encoded!
-        if dat_id && CGI::escape(dat_id) != dat_id
+        if dat_id && !Info.url_encoded?(dat_id)
           errors.add(:dat_id, ErrorMessage.new("should be url encoded", "4.3.1"))
         end
+      end
+
+      def self.url_encoded?(s)
+        url_encoded = true
+        s.each_char do |c|
+          # These characters are the valid ones in a url encoded string
+          unless c =~ /[a-zA-Z0-9\-_.~%+]/
+            url_encoded = false
+          end
+        end
+        url_encoded
       end
 
       def related_apps_url_format

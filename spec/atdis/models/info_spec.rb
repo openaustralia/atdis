@@ -182,6 +182,11 @@ describe ATDIS::Models::Info do
       a.should_not be_valid
       a.errors.messages.should == {dat_id: [ATDIS::ErrorMessage["should be url encoded", "4.3.1"]]}
     end
+
+    it "should be valid if url encoded" do
+      a.dat_id = "010%2F2014%2F00000031%2F001"
+      a.should be_valid
+    end
   end
 
   describe "#description=" do
