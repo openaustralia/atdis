@@ -4,8 +4,8 @@ describe ATDIS::Models::LandTitleRef do
   context "torrens" do
     before(:each) {
       m = double
-      ATDIS::Models::TorrensTitle.should_receive(:interpret).with({lot: "10"}).and_return(m)
-      m.should_receive(:valid?).and_return(true)
+      expect(ATDIS::Models::TorrensTitle).to receive(:interpret).with({lot: "10"}).and_return(m)
+      expect(m).to receive(:valid?).and_return(true)
     }
     let(:l) { ATDIS::Models::LandTitleRef.new(torrens: {lot: "10"}) }
     it { l.should be_valid }
@@ -27,8 +27,8 @@ describe ATDIS::Models::LandTitleRef do
   context "both torrens and other" do
     before(:each) {
       m = double
-      ATDIS::Models::TorrensTitle.should_receive(:interpret).with({lot: "10"}).and_return(m)
-      m.should_receive(:valid?).and_return(true)
+      expect(ATDIS::Models::TorrensTitle).to receive(:interpret).with({lot: "10"}).and_return(m)
+      expect(m).to receive(:valid?).and_return(true)
     }
     let(:l) { ATDIS::Models::LandTitleRef.new(torrens: {lot: "10"}, other: {some: "foo", random: "stuff"})}
     it {

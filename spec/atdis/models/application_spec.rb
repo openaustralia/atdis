@@ -3,9 +3,9 @@ require "spec_helper"
 describe ATDIS::Models::Application do
   context "extra parameter in json" do
     it "should not be valid" do
-      ATDIS::Models::Location.should_receive(:interpret).with("location").and_return(double(valid?: true))
-      ATDIS::Models::Document.should_receive(:interpret).with("document").and_return(double(valid?: true))
-      ATDIS::Models::Event.should_receive(:interpret).with("event").and_return(double(valid?: true))
+      expect(ATDIS::Models::Location).to receive(:interpret).with("location").and_return(double(valid?: true))
+      expect(ATDIS::Models::Document).to receive(:interpret).with("document").and_return(double(valid?: true))
+      expect(ATDIS::Models::Event).to receive(:interpret).with("event").and_return(double(valid?: true))
 
       a = ATDIS::Models::Application.interpret(
         info: {
@@ -41,7 +41,7 @@ describe ATDIS::Models::Application do
     it "should parse the json and create an application object" do
       application = double
 
-      ATDIS::Models::Application.should_receive(:new).with(
+      expect(ATDIS::Models::Application).to receive(:new).with(
         info: {
           dat_id: "DA2013-0381",
           development_type: "residential",
@@ -100,7 +100,7 @@ describe ATDIS::Models::Application do
 
     it "should create a nil valued application when there is no information in the json" do
       application = double
-      ATDIS::Models::Application.should_receive(:new).with({json_left_overs:{}, info: {},
+      expect(ATDIS::Models::Application).to receive(:new).with({json_left_overs:{}, info: {},
         reference: {}}).and_return(application)
 
       ATDIS::Models::Application.interpret(info: {}, reference: {}).should == application
@@ -118,7 +118,7 @@ describe ATDIS::Models::Application do
     let(:a) { ATDIS::Models::Application.new }
     it "should type cast to a location" do
       location = double
-      ATDIS::Models::Location.should_receive(:interpret).with(address: "123 Fourfivesix Street").and_return(location)
+      expect(ATDIS::Models::Location).to receive(:interpret).with(address: "123 Fourfivesix Street").and_return(location)
       a.locations = [{ address: "123 Fourfivesix Street" }]
       a.locations.should == [location]
     end
@@ -134,8 +134,8 @@ describe ATDIS::Models::Application do
     let(:a) { ATDIS::Models::Application.new }
     it "should type cast to several events" do
       event1, event2 = double, double
-      ATDIS::Models::Event.should_receive(:interpret).with(id: "event1").and_return(event1)
-      ATDIS::Models::Event.should_receive(:interpret).with(id: "event2").and_return(event2)
+      expect(ATDIS::Models::Event).to receive(:interpret).with(id: "event1").and_return(event1)
+      expect(ATDIS::Models::Event).to receive(:interpret).with(id: "event2").and_return(event2)
       a.events = [ { id: "event1" }, { id: "event2" } ]
       a.events.should == [event1, event2]
     end
@@ -145,8 +145,8 @@ describe ATDIS::Models::Application do
     let(:a) { ATDIS::Models::Application.new }
     it "should type cast to several documents" do
       document1, document2 = double, double
-      ATDIS::Models::Document.should_receive(:interpret).with(ref: "27B/6/a").and_return(document1)
-      ATDIS::Models::Document.should_receive(:interpret).with(ref: "27B/6/b").and_return(document2)
+      expect(ATDIS::Models::Document).to receive(:interpret).with(ref: "27B/6/a").and_return(document1)
+      expect(ATDIS::Models::Document).to receive(:interpret).with(ref: "27B/6/b").and_return(document2)
       a.documents = [ { ref: "27B/6/a" }, { ref: "27B/6/b" } ]
       a.documents.should == [document1, document2]
     end
@@ -156,8 +156,8 @@ describe ATDIS::Models::Application do
     let(:a) { ATDIS::Models::Application.new }
     it "should type cast to several people" do
       tuttle, buttle = double, double
-      ATDIS::Models::Person.should_receive(:interpret).with(name: "Tuttle").and_return(tuttle)
-      ATDIS::Models::Person.should_receive(:interpret).with(name: "Buttle").and_return(buttle)
+      expect(ATDIS::Models::Person).to receive(:interpret).with(name: "Tuttle").and_return(tuttle)
+      expect(ATDIS::Models::Person).to receive(:interpret).with(name: "Buttle").and_return(buttle)
       a.people = [ { name: "Tuttle" }, { name: "Buttle" } ]
       a.people.should == [tuttle, buttle]
     end
@@ -181,9 +181,9 @@ describe ATDIS::Models::Application do
 
   describe "validations" do
     before :each do
-      ATDIS::Models::Location.should_receive(:interpret).with("address").and_return(double(valid?: true))
-      ATDIS::Models::Document.should_receive(:interpret).with("document").and_return(double(valid?: true))
-      ATDIS::Models::Event.should_receive(:interpret).with("event").and_return(double(valid?: true))
+      expect(ATDIS::Models::Location).to receive(:interpret).with("address").and_return(double(valid?: true))
+      expect(ATDIS::Models::Document).to receive(:interpret).with("document").and_return(double(valid?: true))
+      expect(ATDIS::Models::Event).to receive(:interpret).with("event").and_return(double(valid?: true))
     end
 
     let(:a) { ATDIS::Models::Application.new(
@@ -215,7 +215,7 @@ describe ATDIS::Models::Application do
     describe ".location" do
       it "should not be valid if the location is not valid" do
         l = double(valid?: false)
-        ATDIS::Models::Location.should_receive(:interpret).with(foo: "some location data").and_return(l)
+        expect(ATDIS::Models::Location).to receive(:interpret).with(foo: "some location data").and_return(l)
         a.locations = [{foo: "some location data"}]
         a.should_not be_valid
       end
@@ -223,7 +223,7 @@ describe ATDIS::Models::Application do
 
     describe "events" do
       it "has to be an array" do
-        ATDIS::Models::Event.should_receive(:interpret).with(foo: "bar").and_return(double(valid?: true))
+        expect(ATDIS::Models::Event).to receive(:interpret).with(foo: "bar").and_return(double(valid?: true))
         a.events = {foo: "bar"}
         #a.events.should be_nil
         a.should_not be_valid

@@ -5,7 +5,7 @@ describe ATDIS::Feed do
   let(:page) { double }
 
   it "should return all the applications" do
-    ATDIS::Models::Page.should_receive(:read_url).with("http://www.council.nsw.gov.au/atdis/1.0/applications.json").and_return(page)
+  expect(ATDIS::Models::Page).to receive(:read_url).with("http://www.council.nsw.gov.au/atdis/1.0/applications.json").and_return(page)
     feed.applications.should == page
   end
 
@@ -89,7 +89,7 @@ describe ATDIS::Feed do
   describe "#application" do
     it {
       application = double
-      ATDIS::Models::Application.should_receive(:read_url).with("http://www.council.nsw.gov.au/atdis/1.0/27B%2F6.json").and_return(application)
+      expect(ATDIS::Models::Application).to receive(:read_url).with("http://www.council.nsw.gov.au/atdis/1.0/27B%2F6.json").and_return(application)
       feed.application("27B/6").should == application
     }
   end
