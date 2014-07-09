@@ -5,6 +5,12 @@ describe ATDIS::Models::Page do
     ATDIS::Models::Page.attribute_names.should == ["response", "count", "pagination"]
   end
 
+  it "should error if response is null" do
+    page = ATDIS::Models::Page.new(response: nil, count: 0, pagination: {pages: 1, per_page: 20, count: 0, current: 1})
+    page.should_not be_valid
+    page.errors.messages.should == {:response => [ATDIS::ErrorMessage["can't be blank", "4.3"]]}
+  end
+
   describe "validations" do
     context "results block that is a hash" do
       before :each do
