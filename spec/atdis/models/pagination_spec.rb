@@ -60,6 +60,13 @@ describe ATDIS::Models::Pagination do
     end
   end
 
+  context "zero results returned" do
+    let (:pagination) { ATDIS::Models::Pagination.new(previous: nil, current: 1, next: nil, per_page: 25, pages: 1, count: 0) }
+    it do
+      pagination.should be_valid
+    end
+  end
+
   context "count is larger than would be expected" do
     let(:pagination) { ATDIS::Models::Pagination.new(
       previous: nil, current: 1, next: 2, per_page: 25, pages: 4, count: 101

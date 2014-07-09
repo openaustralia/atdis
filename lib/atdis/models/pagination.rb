@@ -59,7 +59,7 @@ module ATDIS
         if pages && per_page && count && count > pages * per_page
           errors.add(:count, ErrorMessage["is larger than can be retrieved through paging", "6.4"])
         end
-        if pages && per_page && count && count <= (pages - 1) * per_page
+        if pages && per_page && count && count > 0 && count <= (pages - 1) * per_page
           errors.add(:count, ErrorMessage["could fit into a smaller number of pages", "6.4"])
         end
       end
