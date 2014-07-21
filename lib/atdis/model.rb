@@ -1,5 +1,6 @@
 require 'active_model'
 require 'date'
+require 'multi_json'
 
 module ATDIS
   module TypeCastAttributes
