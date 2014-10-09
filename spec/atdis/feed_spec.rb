@@ -84,6 +84,10 @@ describe ATDIS::Feed do
     it "should assume that any query parameters that are not recognised are part of the base_url" do
       ATDIS::Feed.options_from_url("http://www.foo.nsw.gov.au/prefix/atdis/1.0/applications.json?postcode=2000&foo=bar").should == {postcode: "2000"}
     end
+
+    it do
+      ATDIS::Feed.options_from_url("http://www.council.nsw.gov.au/atdis/1.0/applications.json?suburb=willow+tree,foo,bar").should == {suburb: "willow tree,foo,bar"}
+    end
   end
 
   describe "#application_url" do
