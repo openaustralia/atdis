@@ -80,13 +80,18 @@ module ATDIS
       options
     end
 
+    # Escape but leave commas unchanged (which are valid in query strings)
+    def self.escape(v)
+      CGI::escape(v.to_s).gsub('%2C',',')
+    end
+
     # Turn an options hash of the form {foo: "bar", hello: "sir"} into a query
     # string of the form "foo=bar&hello=sir"
     def self.options_to_query(options)
       if options.empty?
         nil
       else
-        options.sort{|a,b| a.first.to_s <=> b.first.to_s}.map{|k,v| "#{k}=#{v}"}.join("&")
+        options.sort{|a,b| a.first.to_s <=> b.first.to_s}.map{|k,v| "#{k}=#{escape(v)}"}.join("&")
       end
     end
   end

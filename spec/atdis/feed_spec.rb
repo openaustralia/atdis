@@ -51,6 +51,12 @@ describe ATDIS::Feed do
     end
   end
 
+  describe "search by suburb" do
+    it do
+      feed.applications_url(suburb: ["willow tree", "foo", "bar"]).should == "http://www.council.nsw.gov.au/atdis/1.0/applications.json?suburb=willow+tree,foo,bar"
+    end
+  end
+
   it "jump straight to the second page" do
     feed.applications_url(page: 2).should == "http://www.council.nsw.gov.au/atdis/1.0/applications.json?page=2"
   end
