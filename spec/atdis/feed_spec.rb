@@ -86,7 +86,11 @@ describe ATDIS::Feed do
     end
 
     it do
-      ATDIS::Feed.options_from_url("http://www.council.nsw.gov.au/atdis/1.0/applications.json?suburb=willow+tree,foo,bar").should == {suburb: "willow tree,foo,bar"}
+        ATDIS::Feed.options_from_url("http://www.council.nsw.gov.au/atdis/1.0/applications.json?suburb=willow+tree,foo,bar").should == {suburb: "willow tree,foo,bar"}
+    end
+
+    it do
+      ATDIS::Feed.options_from_url("http://www.council.nsw.gov.au/atdis/1.0/applications.json?suburb=&postcode=2000").should == {postcode: "2000", suburb: nil}
     end
   end
 

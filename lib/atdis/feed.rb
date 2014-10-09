@@ -74,7 +74,7 @@ module ATDIS
       if query
         query.split("&").each do |t|
           key, value = t.split("=")
-          options[key.to_sym] = CGI::unescape(value)
+          options[key.to_sym] = (CGI::unescape(value) if value)
         end
       end
       options
