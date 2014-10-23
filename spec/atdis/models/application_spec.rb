@@ -242,5 +242,12 @@ describe ATDIS::Models::Application do
         a.errors.messages.should == {events: [ATDIS::ErrorMessage["can't be blank", "4.3"]]}
       end
     end
+
+    describe "documents" do
+      it "can be an empty array" do
+        a.documents = []
+        a.should be_valid
+      end
+    end
   end
 end
