@@ -9,8 +9,17 @@ describe ATDIS::Models::Event do
     ATDIS::Models::Event.interpret(id: "27B/6").id.should == "27B/6"
   end
 
-  it ".date" do
-    ATDIS::Models::Event.interpret(timestamp: "2013-06-18").timestamp.should == DateTime.new(2013,6,18)
+  describe ".date" do
+    it do
+      ATDIS::Models::Event.interpret(timestamp: "2013-06-18").timestamp.should == DateTime.new(2013,6,18)
+    end
+
+    it do
+      e = ATDIS::Models::Event.new(description: "Something", id: "27B/6")
+      e.timestamp = "18 January 2013"
+      e.should_not be_valid
+      e.errors.messages.should == {timestamp: [ATDIS::ErrorMessage["is not a valid date", "4.3.8"]]}
+    end
   end
 
   it ".description" do
