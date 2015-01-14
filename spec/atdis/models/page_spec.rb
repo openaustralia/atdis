@@ -33,6 +33,15 @@ describe ATDIS::Models::Page do
 
       it {page.should be_valid}
 
+      # It's not super clear in the spec whether this should be allowed but it seems sensible to
+      # allow it.
+      context "with a count but no pagination" do
+        before :each do
+          page.count = 2
+        end
+        it { page.should be_valid }
+      end
+
       context "with pagination" do
         before :each do
           page.count = 2
