@@ -32,7 +32,7 @@ module ATDIS
           if response.respond_to?(:count)
             errors.add(:count, ErrorMessage["is not the same as the number of applications returned", "6.4"]) if count != response.count
           end
-          if pagination.respond_to?(:per_page)
+          if pagination.respond_to?(:per_page) && pagination.per_page
             errors.add(:count, ErrorMessage["should not be larger than the number of results per page", "6.4"]) if count > pagination.per_page
           end
         end
