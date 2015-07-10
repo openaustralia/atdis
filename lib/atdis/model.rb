@@ -209,7 +209,11 @@ module ATDIS
       # or the full date with hours, seconds, minutes and timezone. We'll assume that these
       # are the two variants that are allowed.
       if value.respond_to?(:match) && value.match(/^\d\d\d\d-\d\d-\d\d(T\d\d:\d\d:\d\d(Z|(\+|-)\d\d:\d\d))?$/)
-        DateTime.parse(value)
+        begin
+          DateTime.parse(value)
+        rescue ArgumentError
+          nil
+        end
       end
     end
 

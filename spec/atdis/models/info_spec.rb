@@ -117,6 +117,15 @@ describe ATDIS::Models::Info do
       a.should be_valid
     end
     it do
+      a.determination_date = "2013-01-18"
+      a.should be_valid
+    end
+    it do
+      a.determination_date = "2013-18-01"
+      a.should_not be_valid
+      a.errors.messages.should == {determination_date: [ATDIS::ErrorMessage["is not a valid date", "4.3.1"]]}
+    end
+    it do
       a.determination_date = "18 January 2013"
       a.should_not be_valid
       a.errors.messages.should == {determination_date: [ATDIS::ErrorMessage["is not a valid date", "4.3.1"]]}
