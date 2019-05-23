@@ -2,7 +2,7 @@ require "spec_helper"
 
 describe ATDIS::Models::Location do
   it ".attribute_names" do
-    ATDIS::Models::Location.attribute_names.should == [
+    expect(ATDIS::Models::Location.attribute_names).to eq [
       "address",
       "land_title_ref",
       "geometry"
@@ -31,18 +31,18 @@ describe ATDIS::Models::Location do
         }
       )}
 
-      it { l.should be_valid }
+      it { expect(l).to be_valid }
 
       it "address" do
         l.address = nil
-        l.should_not be_valid
-        l.errors.messages.should == {address: [ATDIS::ErrorMessage["can't be blank", "4.3.3"]]}
+        expect(l).to_not be_valid
+        expect(l.errors.messages).to eq ({address: [ATDIS::ErrorMessage["can't be blank", "4.3.3"]]})
       end
 
       it "geometry" do
         l.geometry = {type: "Point"}
-        l.geometry.should be_nil
-        l.should_not be_valid
+        expect(l.geometry).to be_nil
+        expect(l).to_not be_valid
       end
     end
   end
@@ -50,7 +50,7 @@ describe ATDIS::Models::Location do
   describe ".interpret" do
     it "should gracefully handle the land_title_ref block being missing" do
       l = ATDIS::Models::Location.interpret(address: {street: "123 Fourfivesix Street", suburb: "Neutral Bay", postcode: "2089"})
-      l.land_title_ref.should be_nil
+      expect(l.land_title_ref).to be_nil
     end
 
     it "should pass on the responsibility for parsing the geometry section" do
@@ -62,8 +62,8 @@ describe ATDIS::Models::Location do
         }
       )
       # TODO Check that the returned geometry is a point
-      l.geometry.x.should == 100
-      l.geometry.y.should == 0
+      expect(l.geometry.x).to eq 100
+      expect(l.geometry.y).to eq 0
     end
 
     it "should interpret a polygon in the geometry section" do
@@ -78,18 +78,18 @@ describe ATDIS::Models::Location do
         }
       )
       # TODO Check that the returned geometry is a polygon
-      l.geometry.interior_rings.should be_empty
-      l.geometry.exterior_ring.points.count.should == 5
-      l.geometry.exterior_ring.points[0].x.should == 100
-      l.geometry.exterior_ring.points[0].y.should == 0
-      l.geometry.exterior_ring.points[1].x.should == 101
-      l.geometry.exterior_ring.points[1].y.should == 0
-      l.geometry.exterior_ring.points[2].x.should == 101
-      l.geometry.exterior_ring.points[2].y.should == 1
-      l.geometry.exterior_ring.points[3].x.should == 100
-      l.geometry.exterior_ring.points[3].y.should == 1
-      l.geometry.exterior_ring.points[4].x.should == 100
-      l.geometry.exterior_ring.points[4].y.should == 0
+      expect(l.geometry.interior_rings).to be_empty
+      expect(l.geometry.exterior_ring.points.count).to eq 5
+      expect(l.geometry.exterior_ring.points[0].x).to eq 100
+      expect(l.geometry.exterior_ring.points[0].y).to eq 0
+      expect(l.geometry.exterior_ring.points[1].x).to eq 101
+      expect(l.geometry.exterior_ring.points[1].y).to eq 0
+      expect(l.geometry.exterior_ring.points[2].x).to eq 101
+      expect(l.geometry.exterior_ring.points[2].y).to eq 1
+      expect(l.geometry.exterior_ring.points[3].x).to eq 100
+      expect(l.geometry.exterior_ring.points[3].y).to eq 1
+      expect(l.geometry.exterior_ring.points[4].x).to eq 100
+      expect(l.geometry.exterior_ring.points[4].y).to eq 0
     end
   end
 end

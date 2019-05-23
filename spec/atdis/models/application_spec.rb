@@ -32,8 +32,8 @@ describe ATDIS::Models::Application do
         events: ["event"],
         documents: ["document"]
       )
-      a.should_not be_valid
-      a.errors.messages.should == {json: [ATDIS::ErrorMessage['Unexpected parameters in json data: {"foo":"bar"}', "4"]]}
+      expect(a).to_not be_valid
+      expect(a.errors.messages).to eq ({json: [ATDIS::ErrorMessage['Unexpected parameters in json data: {"foo":"bar"}', "4"]]})
     end
   end
 
@@ -68,7 +68,7 @@ describe ATDIS::Models::Application do
         json_left_overs: {}
       ).and_return(application)
 
-      ATDIS::Models::Application.interpret(
+      expect(ATDIS::Models::Application.interpret(
         info: {
           dat_id: "DA2013-0381",
           development_type: "residential",
@@ -95,7 +95,7 @@ describe ATDIS::Models::Application do
         documents: [ { ref: "27B/6/a" }, { ref: "27B/6/b" } ],
         people: [ { name: "Tuttle" }, { name: "Buttle" } ],
         extended: {another_parameter: "with some value", anything: "can go here"}
-      ).should == application
+      )).to eq application
     end
 
     it "should create a nil valued application when there is no information in the json" do
@@ -103,14 +103,14 @@ describe ATDIS::Models::Application do
       expect(ATDIS::Models::Application).to receive(:new).with({json_left_overs:{}, info: {},
         reference: {}}).and_return(application)
 
-      ATDIS::Models::Application.interpret(info: {}, reference: {}).should == application
+      expect(ATDIS::Models::Application.interpret(info: {}, reference: {})).to eq application
     end
   end
 
   describe "#extended" do
     it "should do no typecasting" do
       a = ATDIS::Models::Application.new(extended: {another_parameter: "with some value", anything: "can go here"})
-      a.extended.should == {another_parameter: "with some value", anything: "can go here"}
+      expect(a.extended).to eq ({another_parameter: "with some value", anything: "can go here"})
     end
   end
 
@@ -120,13 +120,13 @@ describe ATDIS::Models::Application do
       location = double
       expect(ATDIS::Models::Location).to receive(:interpret).with(address: "123 Fourfivesix Street").and_return(location)
       a.locations = [{ address: "123 Fourfivesix Street" }]
-      a.locations.should == [location]
+      expect(a.locations).to eq [location]
     end
 
     it "should not cast when it's already a location" do
       l = ATDIS::Models::Location.new
       a.locations = [l]
-      a.locations.should == [l]
+      expect(a.locations).to eq [l]
     end
   end
 
@@ -137,7 +137,7 @@ describe ATDIS::Models::Application do
       expect(ATDIS::Models::Event).to receive(:interpret).with(id: "event1").and_return(event1)
       expect(ATDIS::Models::Event).to receive(:interpret).with(id: "event2").and_return(event2)
       a.events = [ { id: "event1" }, { id: "event2" } ]
-      a.events.should == [event1, event2]
+      expect(a.events).to eq [event1, event2]
     end
   end
 
@@ -148,7 +148,7 @@ describe ATDIS::Models::Application do
       expect(ATDIS::Models::Document).to receive(:interpret).with(ref: "27B/6/a").and_return(document1)
       expect(ATDIS::Models::Document).to receive(:interpret).with(ref: "27B/6/b").and_return(document2)
       a.documents = [ { ref: "27B/6/a" }, { ref: "27B/6/b" } ]
-      a.documents.should == [document1, document2]
+      expect(a.documents).to eq [document1, document2]
     end
   end
 
@@ -159,7 +159,7 @@ describe ATDIS::Models::Application do
       expect(ATDIS::Models::Person).to receive(:interpret).with(name: "Tuttle").and_return(tuttle)
       expect(ATDIS::Models::Person).to receive(:interpret).with(name: "Buttle").and_return(buttle)
       a.people = [ { name: "Tuttle" }, { name: "Buttle" } ]
-      a.people.should == [tuttle, buttle]
+      expect(a.people).to eq [tuttle, buttle]
     end
   end
 
@@ -167,7 +167,7 @@ describe ATDIS::Models::Application do
   describe "#attribute_names" do
     it do
       # These are also ordered in a way that corresponds to the specification. Makes for easy reading by humans.
-      ATDIS::Models::Application.attribute_names.should == [
+      expect(ATDIS::Models::Application.attribute_names).to eq [
         "info",
         "reference",
         "locations",
@@ -210,14 +210,14 @@ describe ATDIS::Models::Application do
       documents: ["document"]
   ) }
 
-    it { a.should be_valid }
+    it { expect(a).to be_valid }
 
     describe ".location" do
       it "should not be valid if the location is not valid" do
         l = double(valid?: false)
         expect(ATDIS::Models::Location).to receive(:interpret).with(foo: "some location data").and_return(l)
         a.locations = [{foo: "some location data"}]
-        a.should_not be_valid
+        expect(a).to_not be_valid
       end
     end
 
@@ -225,28 +225,28 @@ describe ATDIS::Models::Application do
       it "has to be an array" do
         expect(ATDIS::Models::Event).to receive(:interpret).with(foo: "bar").and_return(double(valid?: true))
         a.events = {foo: "bar"}
-        #a.events.should be_nil
-        a.should_not be_valid
-        a.errors.messages.should == {events: [ATDIS::ErrorMessage["should be an array", "4.3"]]}
+        #expect(a.events).to be_nil
+        expect(a).to_not be_valid
+        expect(a.errors.messages).to eq ({events: [ATDIS::ErrorMessage["should be an array", "4.3"]]})
       end
 
       it "can not be an empty array" do
         a.events = []
-        a.should_not be_valid
-        a.errors.messages.should == {events: [ATDIS::ErrorMessage.new("should not be an empty array", "4.3")]}
+        expect(a).to_not be_valid
+        expect(a.errors.messages).to eq ({events: [ATDIS::ErrorMessage.new("should not be an empty array", "4.3")]})
       end
 
       it "can not be empty" do
         a.events = nil
-        a.should_not be_valid
-        a.errors.messages.should == {events: [ATDIS::ErrorMessage["can't be blank", "4.3"]]}
+        expect(a).to_not be_valid
+        expect(a.errors.messages).to eq ({events: [ATDIS::ErrorMessage["can't be blank", "4.3"]]})
       end
     end
 
     describe "documents" do
       it "can be an empty array" do
         a.documents = []
-        a.should be_valid
+        expect(a).to be_valid
       end
     end
   end

@@ -8,23 +8,23 @@ describe ATDIS::Models::Reference do
   describe ".more_info_url" do
     it do
       a.more_info_url = nil
-      a.should_not be_valid
-      a.errors.messages.should == {more_info_url: [ATDIS::ErrorMessage["can't be blank", "4.3.2"]]}
+      expect(a).to_not be_valid
+      expect(a.errors.messages).to eq ({more_info_url: [ATDIS::ErrorMessage["can't be blank", "4.3.2"]]})
     end
     it do
       a.more_info_url = "This is not a valid url"
-      a.should_not be_valid
-      a.errors.messages.should == {more_info_url: [ATDIS::ErrorMessage["is not a valid URL", "4.3.2"]]}
+      expect(a).to_not be_valid
+      expect(a.errors.messages).to eq ({more_info_url: [ATDIS::ErrorMessage["is not a valid URL", "4.3.2"]]})
     end
     it do
       a.more_info_url = "foo.com"
-      a.should_not be_valid
-      a.errors.messages.should == {more_info_url: [ATDIS::ErrorMessage["is not a valid URL", "4.3.2"]]}
+      expect(a).to_not be_valid
+      expect(a.errors.messages).to eq ({more_info_url: [ATDIS::ErrorMessage["is not a valid URL", "4.3.2"]]})
     end
     it do
       a.more_info_url = "httpss://foo.com"
-      a.should_not be_valid
-      a.errors.messages.should == {more_info_url: [ATDIS::ErrorMessage["is not a valid URL", "4.3.2"]]}
+      expect(a).to_not be_valid
+      expect(a.errors.messages).to eq ({more_info_url: [ATDIS::ErrorMessage["is not a valid URL", "4.3.2"]]})
     end
   end
 
@@ -32,12 +32,12 @@ describe ATDIS::Models::Reference do
     let(:a) { ATDIS::Models::Reference.new }
     it "should do no type casting when it's already a URI" do
       a.more_info_url = URI.parse("http://foo.com/bar")
-      a.more_info_url.should == URI.parse("http://foo.com/bar")
+      expect(a.more_info_url).to eq URI.parse("http://foo.com/bar")
     end
 
     it "should cast a string to a URI when it's a valid url" do
       a.more_info_url = "http://foo.com/bar"
-      a.more_info_url.should == URI.parse("http://foo.com/bar")
+      expect(a.more_info_url).to eq URI.parse("http://foo.com/bar")
     end
 
     context "not a valid url" do
@@ -45,10 +45,10 @@ describe ATDIS::Models::Reference do
         a.more_info_url = "This is not a url"
       end
       it "should be nil" do
-        a.more_info_url.should be_nil
+        expect(a.more_info_url).to be_nil
       end
       it "should keep the original string" do
-        a.more_info_url_before_type_cast.should == "This is not a url"
+        expect(a.more_info_url_before_type_cast).to eq "This is not a url"
       end
     end
   end

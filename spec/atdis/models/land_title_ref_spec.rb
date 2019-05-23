@@ -8,19 +8,19 @@ describe ATDIS::Models::LandTitleRef do
       expect(m).to receive(:valid?).and_return(true)
     }
     let(:l) { ATDIS::Models::LandTitleRef.new(torrens: {lot: "10"}) }
-    it { l.should be_valid }
+    it { expect(l).to be_valid }
   end
 
   context "other" do
     let(:l) { ATDIS::Models::LandTitleRef.new(other: {some: "foo", random: "stuff"})}
-    it { l.should be_valid }
+    it { expect(l).to be_valid }
   end
 
   context "no torrens or other" do
     let(:l) { ATDIS::Models::LandTitleRef.new }
     it {
-      l.should_not be_valid
-      l.errors.messages.should == {torrens: [ATDIS::ErrorMessage.new("or other needs be present", "4.3.3")]}
+      expect(l).to_not be_valid
+      expect(l.errors.messages).to eq ({torrens: [ATDIS::ErrorMessage.new("or other needs be present", "4.3.3")]})
     }
   end
 
@@ -32,8 +32,8 @@ describe ATDIS::Models::LandTitleRef do
     }
     let(:l) { ATDIS::Models::LandTitleRef.new(torrens: {lot: "10"}, other: {some: "foo", random: "stuff"})}
     it {
-      l.should_not be_valid
-      l.errors.messages.should == {torrens: [ATDIS::ErrorMessage.new("and other can't both be present", "4.3.3")]}
+      expect(l).to_not be_valid
+      expect(l.errors.messages).to eq ({torrens: [ATDIS::ErrorMessage.new("and other can't both be present", "4.3.3")]})
     }
   end
 end

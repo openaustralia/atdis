@@ -9,13 +9,13 @@ describe ATDIS::Models::Address do
       state: "NSW"
     )}
 
-    it { a.should be_valid }
+    it { expect(a).to be_valid }
 
     context "postcode that is too short" do
       before(:each) { a.postcode = "278" }
       it {
-        a.should_not be_valid
-        a.errors.messages.should == {postcode: [ATDIS::ErrorMessage.new("is not a valid postcode", "4.3.3")]}
+        expect(a).to_not be_valid
+        expect(a.errors.messages).to eq ({postcode: [ATDIS::ErrorMessage.new("is not a valid postcode", "4.3.3")]})
       }
     end
   end

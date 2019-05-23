@@ -2,18 +2,18 @@ require "spec_helper"
 
 describe ATDIS::Models::Person do
   it ".attribute_names" do
-    ATDIS::Models::Person.attribute_names.should == ["name", "role", "contact"]
+    expect(ATDIS::Models::Person.attribute_names).to eq ["name", "role", "contact"]
   end
 
   it ".name" do
-    ATDIS::Models::Person.interpret(name: "Tuttle").name.should == "Tuttle"
+    expect(ATDIS::Models::Person.interpret(name: "Tuttle").name).to eq "Tuttle"
   end
 
   it ".role" do
-    ATDIS::Models::Person.interpret(role: "Heating Engineer").role.should == "Heating Engineer"
+    expect(ATDIS::Models::Person.interpret(role: "Heating Engineer").role).to eq "Heating Engineer"
   end
 
   it ".contact" do
-    ATDIS::Models::Person.interpret(contact: "94-FLUSH").contact.should == "94-FLUSH"
+    expect(ATDIS::Models::Person.interpret(contact: "94-FLUSH").contact).to eq "94-FLUSH"
   end
 end
