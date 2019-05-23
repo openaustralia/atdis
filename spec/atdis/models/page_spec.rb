@@ -148,12 +148,9 @@ describe ATDIS::Models::Page do
         page.should_not be_valid
         page.errors.messages.has_key?(:json).should be_truthy
         page.errors.messages.count.should == 1
-        # The error messages returned by the library are different for different Ruby versions
-        ruby19_message = ATDIS::ErrorMessage["Invalid JSON: 784: unexpected token at '{\n  \"response\": [\n    {\n      \"application\": {\n        \"description\": \"application2\"\n      }\n    }\n  ],\n}\n'", nil]
-        ruby20_message = ATDIS::ErrorMessage["Invalid JSON: 795: unexpected token at '{\n  \"response\": [\n    {\n      \"application\": {\n        \"description\": \"application2\"\n      }\n    }\n  ],\n}\n'", nil]
         page.errors.messages[:json].count.should == 1
         message = page.errors.messages[:json].first
-        (message == ruby19_message || message == ruby20_message).should be_truthy
+        expect(message.message).to match(/Invalid JSON: .*: unexpected token at '{/)
       end
     end
 
