@@ -12,10 +12,16 @@ describe ATDIS::Models::Document do
   end
 
   it ".title" do
-    expect(ATDIS::Models::Document.interpret(title: "Authorisation for Repairs").title).to eq "Authorisation for Repairs"
+    expect(ATDIS::Models::Document.interpret(title: "Authorisation for Repairs").title).to eq(
+      "Authorisation for Repairs"
+    )
   end
 
   it ".document_url" do
-    expect(ATDIS::Models::Document.interpret(document_url: "http://foo.com/bar").document_url).to eq URI.parse("http://foo.com/bar")
+    expect(
+      ATDIS::Models::Document.interpret(document_url: "http://foo.com/bar").document_url
+    ).to eq(
+      URI.parse("http://foo.com/bar")
+    )
   end
 end

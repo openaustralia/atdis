@@ -19,7 +19,9 @@ describe ATDIS::Models::Address do
       before(:each) { a.postcode = "278" }
       it {
         expect(a).to_not be_valid
-        expect(a.errors.messages).to eq(postcode: [ATDIS::ErrorMessage.new("is not a valid postcode", "4.3.3")])
+        expect(a.errors.messages).to eq(
+          postcode: [ATDIS::ErrorMessage.new("is not a valid postcode", "4.3.3")]
+        )
       }
     end
   end

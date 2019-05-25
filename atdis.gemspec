@@ -9,7 +9,8 @@ Gem::Specification.new do |spec|
   spec.version       = Atdis::VERSION
   spec.authors       = ["Matthew Landauer"]
   spec.email         = ["matthew@openaustraliafoundation.org.au"]
-  spec.description   = "A ruby interface to the application tracking data interchange specification (ATDIS) API"
+  spec.description   =
+    "A ruby interface to the application tracking data interchange specification (ATDIS) API"
   spec.summary       = spec.description
   spec.homepage      = "http://github.com/openaustralia/atdis"
   spec.license       = "MIT"

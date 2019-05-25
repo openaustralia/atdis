@@ -13,22 +13,30 @@ describe ATDIS::Models::Reference do
     it do
       a.more_info_url = nil
       expect(a).to_not be_valid
-      expect(a.errors.messages).to eq(more_info_url: [ATDIS::ErrorMessage["can't be blank", "4.3.2"]])
+      expect(a.errors.messages).to eq(
+        more_info_url: [ATDIS::ErrorMessage["can't be blank", "4.3.2"]]
+      )
     end
     it do
       a.more_info_url = "This is not a valid url"
       expect(a).to_not be_valid
-      expect(a.errors.messages).to eq(more_info_url: [ATDIS::ErrorMessage["is not a valid URL", "4.3.2"]])
+      expect(a.errors.messages).to eq(
+        more_info_url: [ATDIS::ErrorMessage["is not a valid URL", "4.3.2"]]
+      )
     end
     it do
       a.more_info_url = "foo.com"
       expect(a).to_not be_valid
-      expect(a.errors.messages).to eq(more_info_url: [ATDIS::ErrorMessage["is not a valid URL", "4.3.2"]])
+      expect(a.errors.messages).to eq(
+        more_info_url: [ATDIS::ErrorMessage["is not a valid URL", "4.3.2"]]
+      )
     end
     it do
       a.more_info_url = "httpss://foo.com"
       expect(a).to_not be_valid
-      expect(a.errors.messages).to eq(more_info_url: [ATDIS::ErrorMessage["is not a valid URL", "4.3.2"]])
+      expect(a.errors.messages).to eq(
+        more_info_url: [ATDIS::ErrorMessage["is not a valid URL", "4.3.2"]]
+      )
     end
   end
 

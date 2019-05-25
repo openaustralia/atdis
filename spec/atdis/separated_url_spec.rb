@@ -13,7 +13,11 @@ describe ATDIS::SeparatedURL do
     end
 
     it "should encode spaces for example" do
-      expect(ATDIS::SeparatedURL.merge("http://foo.com/bar?foo=twenty&bar=12", bar: "hello sir")).to eq "http://foo.com/bar?bar=hello+sir&foo=twenty"
+      expect(
+        ATDIS::SeparatedURL.merge("http://foo.com/bar?foo=twenty&bar=12", bar: "hello sir")
+      ).to eq(
+        "http://foo.com/bar?bar=hello+sir&foo=twenty"
+      )
     end
 
     it "should be fine if there are no parameters" do

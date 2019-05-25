@@ -22,7 +22,9 @@ describe ATDIS::Models::LandTitleRef do
     let(:l) { ATDIS::Models::LandTitleRef.new }
     it {
       expect(l).to_not be_valid
-      expect(l.errors.messages).to eq(torrens: [ATDIS::ErrorMessage.new("or other needs be present", "4.3.3")])
+      expect(l.errors.messages).to eq(
+        torrens: [ATDIS::ErrorMessage.new("or other needs be present", "4.3.3")]
+      )
     }
   end
 
@@ -32,10 +34,16 @@ describe ATDIS::Models::LandTitleRef do
       expect(ATDIS::Models::TorrensTitle).to receive(:interpret).with(lot: "10").and_return(m)
       expect(m).to receive(:valid?).and_return(true)
     end
-    let(:l) { ATDIS::Models::LandTitleRef.new(torrens: { lot: "10" }, other: { some: "foo", random: "stuff" }) }
+    let(:l) do
+      ATDIS::Models::LandTitleRef.new(
+        torrens: { lot: "10" }, other: { some: "foo", random: "stuff" }
+      )
+    end
     it {
       expect(l).to_not be_valid
-      expect(l.errors.messages).to eq(torrens: [ATDIS::ErrorMessage.new("and other can't both be present", "4.3.3")])
+      expect(l.errors.messages).to eq(
+        torrens: [ATDIS::ErrorMessage.new("and other can't both be present", "4.3.3")]
+      )
     }
   end
 end

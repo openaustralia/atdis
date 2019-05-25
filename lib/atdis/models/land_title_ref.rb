@@ -16,10 +16,18 @@ module ATDIS
       validate :check_title_presence
 
       def check_title_presence
-        errors.add(:torrens, ATDIS::ErrorMessage.new("or other needs be present", "4.3.3")) if torrens.nil? && other.nil?
+        if torrens.nil? && other.nil?
+          errors.add(
+            :torrens,
+            ATDIS::ErrorMessage.new("or other needs be present", "4.3.3")
+          )
+        end
         return unless torrens && other
 
-        errors.add(:torrens, ATDIS::ErrorMessage.new("and other can't both be present", "4.3.3"))
+        errors.add(
+          :torrens,
+          ATDIS::ErrorMessage.new("and other can't both be present", "4.3.3")
+        )
       end
     end
   end

@@ -33,7 +33,10 @@ module ATDIS
       validates :application_type,
                 inclusion: {
                   in: %w[DA CDC S96 Review Appeal Other],
-                  message: ATDIS::ErrorMessage.new("does not have one of the allowed types", "4.3.1")
+                  message: ATDIS::ErrorMessage.new(
+                    "does not have one of the allowed types",
+                    "4.3.1"
+                  )
                 }
       validates :last_modified_date, :lodgement_date, :determination_date,
                 :notification_start_date, :notification_end_date,
@@ -45,7 +48,10 @@ module ATDIS
                     "Pending", "Refused by Council", "Refused under delegation", "Withdrawn",
                     "Approved by Council", "Approved under delegation", "Rejected"
                   ],
-                  message: ATDIS::ErrorMessage.new("does not have one of the allowed types", "4.3.1")
+                  message: ATDIS::ErrorMessage.new(
+                    "does not have one of the allowed types",
+                    "4.3.1"
+                  )
                 }
       validate :notification_dates_consistent!
       validates :related_apps, array: { spec_section: "4.3.1" }
@@ -74,17 +80,36 @@ module ATDIS
       end
 
       def related_apps_url_format
-        return unless related_apps.respond_to?(:all?) && !related_apps.all? { |url| url.to_s =~ %r{atdis\/1.0\/[^\/]+\.json} }
+        return unless related_apps.respond_to?(:all?) &&
+                      !related_apps.all? { |url| url.to_s =~ %r{atdis\/1.0\/[^\/]+\.json} }
 
-        errors.add(:related_apps, ErrorMessage.new("contains url(s) not in the expected format", "4.3.1"))
+        errors.add(
+          :related_apps,
+          ErrorMessage.new("contains url(s) not in the expected format", "4.3.1")
+        )
       end
 
       def notification_dates_consistent!
-        errors.add(:notification_end_date, ErrorMessage["can not be blank if notification_start_date is set", "4.3.1"]) if notification_start_date_before_type_cast && notification_end_date_before_type_cast.blank?
-        errors.add(:notification_start_date, ErrorMessage["can not be blank if notification_end_date is set", "4.3.1"]) if notification_start_date_before_type_cast.blank? && notification_end_date_before_type_cast
-        return unless notification_start_date && notification_end_date && notification_start_date > notification_end_date
+        if notification_start_date_before_type_cast && notification_end_date_before_type_cast.blank?
+          errors.add(
+            :notification_end_date,
+            ErrorMessage["can not be blank if notification_start_date is set", "4.3.1"]
+          )
+        end
+        if notification_start_date_before_type_cast.blank? && notification_end_date_before_type_cast
+          errors.add(
+            :notification_start_date,
+            ErrorMessage["can not be blank if notification_end_date is set", "4.3.1"]
+          )
+        end
+        return unless notification_start_date &&
+                      notification_end_date &&
+                      notification_start_date > notification_end_date
 
-        errors.add(:notification_end_date, ErrorMessage["can not be earlier than notification_start_date", "4.3.1"])
+        errors.add(
+          :notification_end_date,
+          ErrorMessage["can not be earlier than notification_start_date", "4.3.1"]
+        )
       end
     end
   end

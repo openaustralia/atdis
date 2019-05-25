@@ -1,20 +1,6 @@
-AllCops:
-  Exclude:
-    - bin/*
-
 # Bumping max line length to something a little more reasonable
-# TODO: Disable temporarily
 Metrics/LineLength:
-  Enabled: false
   Max: 100
-
-# TODO: Disable temporarily
-Lint/UnifiedInteger:
-  Enabled: false
-
-# TODO: Disable temporarily
-Layout/IndentHeredoc:
-  Enabled: false
 
 # Not so worried about top-level class documentation. So...
 Style/Documentation:

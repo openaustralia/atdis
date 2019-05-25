@@ -8,13 +8,14 @@ module ATDIS
     class Page < Model
       field_mappings(
         response: Response,
-        count: Fixnum,
+        count: Integer,
         pagination: Pagination
       )
 
       # Mandatory parameters
       validates :response, presence_before_type_cast: { spec_section: "4.3" }
-      # section 6.5 is not explicitly about this but it does contain an example which should be helpful
+      # section 6.5 is not explicitly about this but it does contain an example
+      # which should be helpful
       validates :response, array: { spec_section: "6.4" }
       validate :count_is_consistent, :all_pagination_is_present
 
@@ -33,11 +34,21 @@ module ATDIS
         return if count.nil?
 
         if response.respond_to?(:count)
-          errors.add(:count, ErrorMessage["is not the same as the number of applications returned", "6.4"]) if count != response.count
+          if count != response.count
+            errors.add(
+              :count,
+              ErrorMessage["is not the same as the number of applications returned", "6.4"]
+            )
+          end
         end
         return unless pagination.respond_to?(:per_page) && pagination.per_page
 
-        errors.add(:count, ErrorMessage["should not be larger than the number of results per page", "6.4"]) if count > pagination.per_page
+        return unless count > pagination.per_page
+
+        errors.add(
+          :count,
+          ErrorMessage["should not be larger than the number of results per page", "6.4"]
+        )
       end
 
       def previous_url

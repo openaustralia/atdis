@@ -6,7 +6,8 @@ module ATDIS
   class Feed
     attr_reader :base_url
 
-    VALID_OPTIONS = %i[page street suburb postcode lodgement_date_start lodgement_date_end last_modified_date_start last_modified_date_end].freeze
+    VALID_OPTIONS = %i[page street suburb postcode lodgement_date_start
+                       lodgement_date_end last_modified_date_start last_modified_date_end].freeze
 
     # base_url - the base url from which the urls for all atdis urls are made
     # It should be of the form:
@@ -47,7 +48,8 @@ module ATDIS
     def self.options_from_url(url)
       u = URI.parse(url)
       options = query_to_options(u.query)
-      %i[lodgement_date_start lodgement_date_end last_modified_date_start last_modified_date_end].each do |k|
+      %i[lodgement_date_start lodgement_date_end last_modified_date_start
+         last_modified_date_end].each do |k|
         options[k] = Date.parse(options[k]) if options[k]
       end
       options[:page] = options[:page].to_i if options[:page]
@@ -87,7 +89,9 @@ module ATDIS
       if options.empty?
         nil
       else
-        options.sort { |a, b| a.first.to_s <=> b.first.to_s }.map { |k, v| "#{k}=#{escape(v)}" }.join("&")
+        options.sort { |a, b| a.first.to_s <=> b.first.to_s }
+               .map { |k, v| "#{k}=#{escape(v)}" }
+               .join("&")
       end
     end
   end

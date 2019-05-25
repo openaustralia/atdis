@@ -53,7 +53,9 @@ describe ATDIS::Models::Location do
 
   describe ".interpret" do
     it "should gracefully handle the land_title_ref block being missing" do
-      l = ATDIS::Models::Location.interpret(address: { street: "123 Fourfivesix Street", suburb: "Neutral Bay", postcode: "2089" })
+      l = ATDIS::Models::Location.interpret(
+        address: { street: "123 Fourfivesix Street", suburb: "Neutral Bay", postcode: "2089" }
+      )
       expect(l.land_title_ref).to be_nil
     end
 

@@ -42,8 +42,12 @@ describe ATDIS::Model do
     it "should include the errors from child objects" do
       a = ModelA.interpret(hello: { bar: "Kat" })
       a.hello.errors.add(:bar, ATDIS::ErrorMessage["can't be a name", "2.3"])
-      expect(a.hello.json_errors).to eq [[{ bar: "Kat" }, [ATDIS::ErrorMessage["bar can't be a name", "2.3"]]]]
-      expect(a.json_errors).to eq [[{ hello: { bar: "Kat" } }, [ATDIS::ErrorMessage["bar can't be a name", "2.3"]]]]
+      expect(a.hello.json_errors).to eq(
+        [[{ bar: "Kat" }, [ATDIS::ErrorMessage["bar can't be a name", "2.3"]]]]
+      )
+      expect(a.json_errors).to eq(
+        [[{ hello: { bar: "Kat" } }, [ATDIS::ErrorMessage["bar can't be a name", "2.3"]]]]
+      )
     end
 
     it "should include the errors from only the first child object in an array" do
@@ -53,48 +57,86 @@ describe ATDIS::Model do
       expect(a.json_errors).to eq []
       a.hello[0].errors.add(:bar, ATDIS::ErrorMessage["can't be a name", "1.2"])
       a.hello[1].errors.add(:bar, ATDIS::ErrorMessage["can't be a name", "1.2"])
-      expect(a.json_errors).to eq [[{ hello: [{ bar: "Kat" }] }, [ATDIS::ErrorMessage["bar can't be a name", "1.2"]]]]
+      expect(a.json_errors).to eq(
+        [[{ hello: [{ bar: "Kat" }] }, [ATDIS::ErrorMessage["bar can't be a name", "1.2"]]]]
+      )
     end
 
     it "should show json parsing errors" do
       a = ModelA.interpret(invalid: { parameter: "foo" })
       expect(a).to_not be_valid
-      expect(a.json_errors).to eq [[nil, [ATDIS::ErrorMessage['Unexpected parameters in json data: {"invalid":{"parameter":"foo"}}', "4"]]]]
+      expect(a.json_errors).to eq(
+        [[
+          nil,
+          [
+            ATDIS::ErrorMessage[
+              'Unexpected parameters in json data: {"invalid":{"parameter":"foo"}}',
+              "4"
+            ]
+          ]
+        ]]
+      )
     end
 
     it "should json errors even if value is nil" do
       b = ModelB.new
       b.errors.add(:bar, ATDIS::ErrorMessage.new("can't be nil", "1.2"))
-      expect(b.json_errors).to eq [[{ bar: nil }, [ATDIS::ErrorMessage.new("bar can't be nil", "1.2")]]]
+      expect(b.json_errors).to eq(
+        [[{ bar: nil }, [ATDIS::ErrorMessage.new("bar can't be nil", "1.2")]]]
+      )
     end
   end
 
   describe ".cast" do
-    it { expect(ATDIS::Model.cast("2013-04-20T02:01:07Z", DateTime)).to eq DateTime.new(2013, 4, 20, 2, 1, 7) }
-    it { expect(ATDIS::Model.cast("2013-04-20", DateTime)).to eq DateTime.new(2013, 4, 20) }
-    it { expect(ATDIS::Model.cast("2013-04-20T02:01:07+05:00", DateTime)).to eq DateTime.new(2013, 4, 20, 2, 1, 7, "+5") }
-    it { expect(ATDIS::Model.cast("2013-04-20T02:01:07-05:00", DateTime)).to eq DateTime.new(2013, 4, 20, 2, 1, 7, "-5") }
-    it { expect(ATDIS::Model.cast("2013-04", DateTime)).to be_nil }
-    it { expect(ATDIS::Model.cast("18 September 2013", DateTime)).to be_nil }
-    it { expect(ATDIS::Model.cast(DateTime.new(2013, 4, 20, 2, 1, 7), DateTime)).to eq DateTime.new(2013, 4, 20, 2, 1, 7) }
+    it do
+      expect(ATDIS::Model.cast("2013-04-20T02:01:07Z", DateTime)).to eq(
+        DateTime.new(2013, 4, 20, 2, 1, 7)
+      )
+    end
+    it do
+      expect(ATDIS::Model.cast("2013-04-20", DateTime)).to eq(
+        DateTime.new(2013, 4, 20)
+      )
+    end
+    it do
+      expect(ATDIS::Model.cast("2013-04-20T02:01:07+05:00", DateTime)).to eq(
+        DateTime.new(2013, 4, 20, 2, 1, 7, "+5")
+      )
+    end
+    it do
+      expect(ATDIS::Model.cast("2013-04-20T02:01:07-05:00", DateTime)).to eq(
+        DateTime.new(2013, 4, 20, 2, 1, 7, "-5")
+      )
+    end
+    it do
+      expect(ATDIS::Model.cast("2013-04", DateTime)).to be_nil
+    end
+    it do
+      expect(ATDIS::Model.cast("18 September 2013", DateTime)).to be_nil
+    end
+    it do
+      expect(ATDIS::Model.cast(DateTime.new(2013, 4, 20, 2, 1, 7), DateTime)).to eq(
+        DateTime.new(2013, 4, 20, 2, 1, 7)
+      )
+    end
 
     it "should cast arrays by casting each member" do
       expect(ATDIS::Model.cast([1, 2, 3], String)).to eq %w[1 2 3]
     end
 
     # This casting allows nil values
-    describe "casting Fixnum" do
-      it { expect(ATDIS::Model.cast("3", Fixnum)).to eq 3 }
-      it { expect(ATDIS::Model.cast("4.0", Fixnum)).to eq 4 }
-      it { expect(ATDIS::Model.cast(5, Fixnum)).to eq 5 }
-      it { expect(ATDIS::Model.cast(0, Fixnum)).to eq 0 }
-      it { expect(ATDIS::Model.cast(nil, Fixnum)).to be_nil }
+    describe "casting Integer" do
+      it { expect(ATDIS::Model.cast("3", Integer)).to eq 3 }
+      it { expect(ATDIS::Model.cast("4.0", Integer)).to eq 4 }
+      it { expect(ATDIS::Model.cast(5, Integer)).to eq 5 }
+      it { expect(ATDIS::Model.cast(0, Integer)).to eq 0 }
+      it { expect(ATDIS::Model.cast(nil, Integer)).to be_nil }
     end
   end
 
   describe ".attribute_keys" do
     it do
-      ATDIS::Model.attribute_types = { foo: String, a: Fixnum, info: String }
+      ATDIS::Model.attribute_types = { foo: String, a: Integer, info: String }
       expect(ATDIS::Model.attribute_keys).to eq %i[foo a info]
     end
   end

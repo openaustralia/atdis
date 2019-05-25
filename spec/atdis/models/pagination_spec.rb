@@ -22,7 +22,9 @@ describe ATDIS::Models::Pagination do
     end
     it do
       expect(pagination).to_not be_valid
-      expect(pagination.errors.messages).to eq(current: [ATDIS::ErrorMessage["should be present if pagination is being used", "6.4"]])
+      expect(pagination.errors.messages).to eq(
+        current: [ATDIS::ErrorMessage["should be present if pagination is being used", "6.4"]]
+      )
     end
   end
 
@@ -34,7 +36,9 @@ describe ATDIS::Models::Pagination do
     end
     it do
       expect(pagination).to_not be_valid
-      expect(pagination.errors.messages).to eq(per_page: [ATDIS::ErrorMessage["should be present if pagination is being used", "6.4"]])
+      expect(pagination.errors.messages).to eq(
+        per_page: [ATDIS::ErrorMessage["should be present if pagination is being used", "6.4"]]
+      )
     end
   end
 
@@ -46,7 +50,9 @@ describe ATDIS::Models::Pagination do
     end
     it do
       expect(pagination).to_not be_valid
-      expect(pagination.errors.messages).to eq(count: [ATDIS::ErrorMessage["should be present if pagination is being used", "6.4"]])
+      expect(pagination.errors.messages).to eq(
+        count: [ATDIS::ErrorMessage["should be present if pagination is being used", "6.4"]]
+      )
     end
   end
 
@@ -58,7 +64,9 @@ describe ATDIS::Models::Pagination do
     end
     it do
       expect(pagination).to_not be_valid
-      expect(pagination.errors.messages).to eq(pages: [ATDIS::ErrorMessage["should be present if pagination is being used", "6.4"]])
+      expect(pagination.errors.messages).to eq(
+        pages: [ATDIS::ErrorMessage["should be present if pagination is being used", "6.4"]]
+      )
     end
   end
 
@@ -70,12 +78,18 @@ describe ATDIS::Models::Pagination do
     end
     it do
       expect(pagination).to_not be_valid
-      expect(pagination.errors.messages).to eq(count: [ATDIS::ErrorMessage["could fit into a smaller number of pages", "6.4"]])
+      expect(pagination.errors.messages).to eq(
+        count: [ATDIS::ErrorMessage["could fit into a smaller number of pages", "6.4"]]
+      )
     end
   end
 
   context "zero results returned" do
-    let(:pagination) { ATDIS::Models::Pagination.new(previous: nil, current: 1, next: nil, per_page: 25, pages: 1, count: 0) }
+    let(:pagination) do
+      ATDIS::Models::Pagination.new(
+        previous: nil, current: 1, next: nil, per_page: 25, pages: 1, count: 0
+      )
+    end
     it do
       expect(pagination).to be_valid
     end
@@ -89,7 +103,9 @@ describe ATDIS::Models::Pagination do
     end
     it do
       expect(pagination).to_not be_valid
-      expect(pagination.errors.messages).to eq(count: [ATDIS::ErrorMessage["is larger than can be retrieved through paging", "6.4"]])
+      expect(pagination.errors.messages).to eq(
+        count: [ATDIS::ErrorMessage["is larger than can be retrieved through paging", "6.4"]]
+      )
     end
   end
 
@@ -101,7 +117,9 @@ describe ATDIS::Models::Pagination do
     end
     it do
       expect(pagination).to_not be_valid
-      expect(pagination.errors.messages).to eq(current: [ATDIS::ErrorMessage["can not be less than 1", "6.4"]])
+      expect(pagination.errors.messages).to eq(
+        current: [ATDIS::ErrorMessage["can not be less than 1", "6.4"]]
+      )
     end
   end
 
@@ -113,7 +131,9 @@ describe ATDIS::Models::Pagination do
     end
     it do
       expect(pagination).to_not be_valid
-      expect(pagination.errors.messages).to eq(current: [ATDIS::ErrorMessage["is larger than the number of pages", "6.4"]])
+      expect(pagination.errors.messages).to eq(
+        current: [ATDIS::ErrorMessage["is larger than the number of pages", "6.4"]]
+      )
     end
   end
 
@@ -125,7 +145,9 @@ describe ATDIS::Models::Pagination do
     end
     it do
       expect(pagination).to_not be_valid
-      expect(pagination.errors.messages).to eq(next: [ATDIS::ErrorMessage["should be null if on the last page", "6.4"]])
+      expect(pagination.errors.messages).to eq(
+        next: [ATDIS::ErrorMessage["should be null if on the last page", "6.4"]]
+      )
     end
   end
 
@@ -137,7 +159,9 @@ describe ATDIS::Models::Pagination do
     end
     it do
       expect(pagination).to_not be_valid
-      expect(pagination.errors.messages).to eq(next: [ATDIS::ErrorMessage["can't be null if not on the last page", "6.4"]])
+      expect(pagination.errors.messages).to eq(
+        next: [ATDIS::ErrorMessage["can't be null if not on the last page", "6.4"]]
+      )
     end
   end
 
@@ -149,7 +173,14 @@ describe ATDIS::Models::Pagination do
     end
     it do
       expect(pagination).to_not be_valid
-      expect(pagination.errors.messages).to eq(next: [ATDIS::ErrorMessage["should be one greater than current page number or null if last page", "6.4"]])
+      expect(pagination.errors.messages).to eq(
+        next: [
+          ATDIS::ErrorMessage[
+            "should be one greater than current page number or null if last page",
+            "6.4"
+          ]
+        ]
+      )
     end
   end
 
@@ -161,7 +192,9 @@ describe ATDIS::Models::Pagination do
     end
     it do
       expect(pagination).to_not be_valid
-      expect(pagination.errors.messages).to eq(previous: [ATDIS::ErrorMessage["should be null if on the first page", "6.4"]])
+      expect(pagination.errors.messages).to eq(
+        previous: [ATDIS::ErrorMessage["should be null if on the first page", "6.4"]]
+      )
     end
   end
 
@@ -173,7 +206,9 @@ describe ATDIS::Models::Pagination do
     end
     it do
       expect(pagination).to_not be_valid
-      expect(pagination.errors.messages).to eq(previous: [ATDIS::ErrorMessage["can't be null if not on the first page", "6.4"]])
+      expect(pagination.errors.messages).to eq(
+        previous: [ATDIS::ErrorMessage["can't be null if not on the first page", "6.4"]]
+      )
     end
   end
 
@@ -185,8 +220,25 @@ describe ATDIS::Models::Pagination do
     end
     it do
       expect(pagination).to_not be_valid
-      expect(pagination.errors.messages).to eq(previous: [ATDIS::ErrorMessage["should be one less than current page number or null if first page", "6.4"]])
-      expect(pagination.json_errors).to eq [[{ previous: 5 }, [ATDIS::ErrorMessage["previous should be one less than current page number or null if first page", "6.4"]]]]
+      expect(pagination.errors.messages).to eq(
+        previous: [
+          ATDIS::ErrorMessage[
+            "should be one less than current page number or null if first page",
+            "6.4"
+          ]
+        ]
+      )
+      expect(pagination.json_errors).to eq(
+        [[
+          { previous: 5 },
+          [
+            ATDIS::ErrorMessage[
+              "previous should be one less than current page number or null if first page",
+              "6.4"
+            ]
+          ]
+        ]]
+      )
     end
   end
 end

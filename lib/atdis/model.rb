@@ -13,7 +13,7 @@ module ATDIS
     end
 
     module ClassMethods
-      # of the form {section: Fixnum, address: String}
+      # of the form {section: Integer, address: String}
       def field_mappings(params)
         define_attribute_methods(params.keys.map(&:to_s))
         # Convert all values to arrays. Doing this for the sake of tidier notation
@@ -104,10 +104,15 @@ module ATDIS
       errors.keys.each do |attribute|
         r << [nil, errors[:json]] unless errors[:json].empty?
         # The :json attribute is special
-        if attribute != :json
-          e = errors[attribute]
-          r << [{ attribute => attributes_before_type_cast[attribute.to_s] }, e.map { |m| ErrorMessage["#{attribute} #{m}", m.spec_section] }] unless e.empty?
-        end
+        next if attribute == :json
+
+        e = errors[attribute]
+        next if e.empty?
+
+        r << [
+          { attribute => attributes_before_type_cast[attribute.to_s] },
+          e.map { |m| ErrorMessage["#{attribute} #{m}", m.spec_section] }
+        ]
       end
       r
     end
@@ -139,7 +144,10 @@ module ATDIS
       return unless json_left_overs && !json_left_overs.empty?
 
       # We have extra parameters that shouldn't be there
-      errors.add(:json, ErrorMessage["Unexpected parameters in json data: #{MultiJson.dump(json_left_overs)}", "4"])
+      errors.add(
+        :json,
+        ErrorMessage["Unexpected parameters in json data: #{MultiJson.dump(json_left_overs)}", "4"]
+      )
     end
 
     def initialize(params = {})
@@ -165,7 +173,8 @@ module ATDIS
       # If it's already the correct type (or nil) then we don't need to do anything
       if value.nil? || value.is_a?(type)
         value
-      # Special handling for arrays. When we typecast arrays we actually typecast each member of the array
+      # Special handling for arrays. When we typecast arrays we actually
+      # typecast each member of the array
       elsif value.is_a?(Array)
         value.map { |v| cast(v, type) }
       elsif type == DateTime
@@ -174,8 +183,8 @@ module ATDIS
         cast_uri(value)
       elsif type == String
         cast_string(value)
-      elsif type == Fixnum
-        cast_fixnum(value)
+      elsif type == Integer
+        cast_integer(value)
       elsif type == RGeo::GeoJSON
         cast_geojson(value)
       # Otherwise try to use Type.interpret to do the typecasting
@@ -187,14 +196,16 @@ module ATDIS
     end
 
     def self.cast_datetime(value)
-      # This would be much easier if we knew we only had to support Ruby 1.9 or greater because it has
+      # This would be much easier if we knew we only had to support Ruby 1.9 or
+      # greater because it has
       # an implementation built in. Because for the time being we need to support Ruby 1.8 as well
       # we'll build an implementation of parsing by hand. Ugh.
       # Referencing http://www.w3.org/TR/NOTE-datetime
       # In section 4.3.1 of ATDIS 1.0.4 it shows two variants of iso 8601, either the full date
       # or the full date with hours, seconds, minutes and timezone. We'll assume that these
       # are the two variants that are allowed.
-      return unless value.respond_to?(:match) && value.match(/^\d\d\d\d-\d\d-\d\d(T\d\d:\d\d:\d\d(Z|(\+|-)\d\d:\d\d))?$/)
+      return unless value.respond_to?(:match) &&
+                    value.match(/^\d\d\d\d-\d\d-\d\d(T\d\d:\d\d:\d\d(Z|(\+|-)\d\d:\d\d))?$/)
 
       begin
         DateTime.parse(value)
@@ -214,7 +225,7 @@ module ATDIS
     end
 
     # This casting allows nil values
-    def self.cast_fixnum(value)
+    def self.cast_integer(value)
       value&.to_i
     end
 
