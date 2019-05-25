@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 require "atdis/models/application"
 
 module ATDIS

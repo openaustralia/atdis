@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 module ATDIS
   module Models
     class Address < Model

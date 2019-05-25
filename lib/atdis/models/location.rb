@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 require "atdis/models/address"
 require "atdis/models/land_title_ref"
 require "rgeo/geo_json"
@@ -6,9 +8,9 @@ module ATDIS
   module Models
     class Location < Model
       field_mappings(
-        address:        Address,
+        address: Address,
         land_title_ref: LandTitleRef,
-        geometry:       RGeo::GeoJSON
+        geometry: RGeo::GeoJSON
       )
 
       # Mandatory parameters

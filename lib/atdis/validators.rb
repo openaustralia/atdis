@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 require "active_model"
 
 module ATDIS
@@ -63,7 +65,7 @@ module ATDIS
           message = ErrorMessage[message, options[:spec_section]] if options[:spec_section]
           record.errors.add(attribute, message)
         end
-        return unless value && value.is_a?(Array) && value.empty?
+        return unless value&.is_a?(Array) && value&.empty?
 
         message = "should not be an empty array"
         message = ErrorMessage[message, options[:spec_section]] if options[:spec_section]

@@ -1,24 +1,26 @@
+# frozen_string_literal: true
+
 require "atdis/models/authority"
 
 module ATDIS
   module Models
     class Info < Model
       field_mappings(
-        dat_id:                  String,
-        development_type:        String,
-        application_type:        String,
-        last_modified_date:      DateTime,
-        description:             String,
-        authority:               Authority,
-        lodgement_date:          DateTime,
-        determination_date:      DateTime,
-        determination_type:      String,
-        status:                  String,
+        dat_id: String,
+        development_type: String,
+        application_type: String,
+        last_modified_date: DateTime,
+        description: String,
+        authority: Authority,
+        lodgement_date: DateTime,
+        determination_date: DateTime,
+        determination_type: String,
+        status: String,
         notification_start_date: DateTime,
-        notification_end_date:   DateTime,
-        officer:                 String,
-        estimated_cost:          String,
-        related_apps:            URI
+        notification_end_date: DateTime,
+        officer: String,
+        estimated_cost: String,
+        related_apps: URI
       )
 
       # Mandatory parameters
@@ -62,9 +64,9 @@ module ATDIS
         errors.add(:dat_id, ErrorMessage.new("should be url encoded", "4.3.1"))
       end
 
-      def self.url_encoded?(s)
+      def self.url_encoded?(str)
         url_encoded = true
-        s.each_char do |c|
+        str.each_char do |c|
           # These characters are the valid ones in a url encoded string
           url_encoded = false unless c =~ /[a-zA-Z0-9\-_.~%+]/
         end
@@ -78,12 +80,8 @@ module ATDIS
       end
 
       def notification_dates_consistent!
-        if notification_start_date_before_type_cast && notification_end_date_before_type_cast.blank?
-          errors.add(:notification_end_date, ErrorMessage["can not be blank if notification_start_date is set", "4.3.1"])
-        end
-        if notification_start_date_before_type_cast.blank? && notification_end_date_before_type_cast
-          errors.add(:notification_start_date, ErrorMessage["can not be blank if notification_end_date is set", "4.3.1"])
-        end
+        errors.add(:notification_end_date, ErrorMessage["can not be blank if notification_start_date is set", "4.3.1"]) if notification_start_date_before_type_cast && notification_end_date_before_type_cast.blank?
+        errors.add(:notification_start_date, ErrorMessage["can not be blank if notification_end_date is set", "4.3.1"]) if notification_start_date_before_type_cast.blank? && notification_end_date_before_type_cast
         return unless notification_start_date && notification_end_date && notification_start_date > notification_end_date
 
         errors.add(:notification_end_date, ErrorMessage["can not be earlier than notification_start_date", "4.3.1"])

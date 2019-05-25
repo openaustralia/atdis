@@ -1,8 +1,10 @@
+# frozen_string_literal: true
+
 module ATDIS
   module Models
     class TorrensTitle < Model
       field_mappings(
-        lot:     String,
+        lot: String,
         section: String,
         dpsp_id: String
       )

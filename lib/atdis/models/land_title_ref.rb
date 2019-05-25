@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 require "atdis/models/torrens_title"
 
 module ATDIS
@@ -5,7 +7,7 @@ module ATDIS
     class LandTitleRef < Model
       field_mappings(
         torrens: TorrensTitle,
-        other:   Hash
+        other: Hash
       )
 
       # This model is only valid if the children are valid
@@ -14,9 +16,7 @@ module ATDIS
       validate :check_title_presence
 
       def check_title_presence
-        if torrens.nil? && other.nil?
-          errors.add(:torrens, ATDIS::ErrorMessage.new("or other needs be present", "4.3.3"))
-        end
+        errors.add(:torrens, ATDIS::ErrorMessage.new("or other needs be present", "4.3.3")) if torrens.nil? && other.nil?
         return unless torrens && other
 
         errors.add(:torrens, ATDIS::ErrorMessage.new("and other can't both be present", "4.3.3"))

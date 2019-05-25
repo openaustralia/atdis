@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 require "rest-client"
 
 module ATDIS
@@ -15,9 +17,9 @@ module ATDIS
 
     def applications_url(options = {})
       invalid_options = options.keys - VALID_OPTIONS
-      unless invalid_options.empty?
-        raise "Unexpected options used: #{invalid_options.join(',')}"
-      end
+
+      raise "Unexpected options used: #{invalid_options.join(',')}" unless invalid_options.empty?
+
       options[:street] = options[:street].join(",") if options[:street].respond_to?(:join)
       options[:suburb] = options[:suburb].join(",") if options[:suburb].respond_to?(:join)
       options[:postcode] = options[:postcode].join(",") if options[:postcode].respond_to?(:join)
@@ -67,18 +69,16 @@ module ATDIS
     # Turn a query string of the form "foo=bar&hello=sir" to {foo: "bar", hello: sir"}
     def self.query_to_options(query)
       options = {}
-      if query
-        query.split("&").each do |t|
-          key, value = t.split("=")
-          options[key.to_sym] = (CGI.unescape(value) if value)
-        end
+      (query || "").split("&").each do |t|
+        key, value = t.split("=")
+        options[key.to_sym] = (CGI.unescape(value) if value)
       end
       options
     end
 
     # Escape but leave commas unchanged (which are valid in query strings)
-    def self.escape(v)
-      CGI.escape(v.to_s).gsub("%2C", ",")
+    def self.escape(value)
+      CGI.escape(value.to_s).gsub("%2C", ",")
     end
 
     # Turn an options hash of the form {foo: "bar", hello: "sir"} into a query

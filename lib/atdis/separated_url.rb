@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 module ATDIS
   class SeparatedURL
     def self.merge(full_url, params)

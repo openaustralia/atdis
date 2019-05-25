@@ -1,4 +1,6 @@
-lib = File.expand_path("../lib", __FILE__)
+# frozen_string_literal: true
+
+lib = File.expand_path("lib", __dir__)
 $LOAD_PATH.unshift(lib) unless $LOAD_PATH.include?(lib)
 require "atdis/version"
 
@@ -22,8 +24,8 @@ Gem::Specification.new do |spec|
   spec.add_development_dependency "rake"
   spec.add_development_dependency "rubocop"
 
+  spec.add_dependency "activemodel"
   spec.add_dependency "multi_json", "~> 1.7"
   spec.add_dependency "rest-client"
   spec.add_dependency "rgeo-geojson"
-  spec.add_dependency "activemodel"
 end

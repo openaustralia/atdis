@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 require "spec_helper"
 
 describe ATDIS::Models::Info do
@@ -9,7 +11,7 @@ describe ATDIS::Models::Info do
       last_modified_date: DateTime.new(2013, 4, 20, 2, 1, 7),
       description: "New pool plus deck",
       authority: {
-        ref:  "http://www.council.nsw.gov.au/atdis/1.0",
+        ref: "http://www.council.nsw.gov.au/atdis/1.0",
         name: "Example Council Shire Council"
       },
       lodgement_date: DateTime.new(2013, 4, 20, 2, 1, 7),

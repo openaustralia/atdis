@@ -1,9 +1,11 @@
+# frozen_string_literal: true
+
 module ATDIS
   module Models
     class Document < Model
       field_mappings(
-        ref:          String,
-        title:        String,
+        ref: String,
+        title: String,
         document_url: URI
       )
 

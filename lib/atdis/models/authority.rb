@@ -1,8 +1,10 @@
+# frozen_string_literal: true
+
 module ATDIS
   module Models
     class Authority < Model
       field_mappings(
-        ref:  URI,
+        ref: URI,
         name: String
       )
 

@@ -1,9 +1,11 @@
+# frozen_string_literal: true
+
 module ATDIS
   module Models
     class Person < Model
       field_mappings(
-        name:    String,
-        role:    String,
+        name: String,
+        role: String,
         contact: String
       )
 

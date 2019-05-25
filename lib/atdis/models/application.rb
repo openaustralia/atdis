@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 require "atdis/models/info"
 require "atdis/models/reference"
 require "atdis/models/location"
@@ -9,13 +11,13 @@ module ATDIS
   module Models
     class Application < Model
       field_mappings(
-        info:      Info,
+        info: Info,
         reference: Reference,
         locations: Location,
-        events:    Event,
+        events: Event,
         documents: Document,
-        people:    Person,
-        extended:  Object
+        people: Person,
+        extended: Object
       )
 
       # Mandatory attributes

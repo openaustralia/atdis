@@ -1,13 +1,15 @@
+# frozen_string_literal: true
+
 module ATDIS
   module Models
     class Pagination < Model
       field_mappings(
         previous: Fixnum,
-        next:     Fixnum,
-        current:  Fixnum,
+        next: Fixnum,
+        current: Fixnum,
         per_page: Fixnum,
-        count:    Fixnum,
-        pages:    Fixnum
+        count: Fixnum,
+        pages: Fixnum
       )
 
       validate :all_pagination_is_present, :previous_is_consistent,
@@ -23,43 +25,31 @@ module ATDIS
       end
 
       def previous_is_consistent
-        if previous && current && previous != current - 1
-          errors.add(:previous, ErrorMessage["should be one less than current page number or null if first page", "6.4"])
-        end
-        if previous && current && current == 1
-          errors.add(:previous, ErrorMessage["should be null if on the first page", "6.4"])
-        end
+        errors.add(:previous, ErrorMessage["should be one less than current page number or null if first page", "6.4"]) if previous && current && previous != current - 1
+        errors.add(:previous, ErrorMessage["should be null if on the first page", "6.4"]) if previous && current && current == 1
         return unless previous.nil? && current && current > 1
 
         errors.add(:previous, ErrorMessage["can't be null if not on the first page", "6.4"])
       end
 
       def next_is_consistent
-        if self.next && current && self.next != current + 1
-          errors.add(:next, ErrorMessage["should be one greater than current page number or null if last page", "6.4"])
-        end
-        if self.next.nil? && current != pages
-          errors.add(:next, ErrorMessage["can't be null if not on the last page", "6.4"])
-        end
+        errors.add(:next, ErrorMessage["should be one greater than current page number or null if last page", "6.4"]) if self.next && current && self.next != current + 1
+        errors.add(:next, ErrorMessage["can't be null if not on the last page", "6.4"]) if self.next.nil? && current != pages
         return unless self.next && current == pages
 
         errors.add(:next, ErrorMessage["should be null if on the last page", "6.4"])
       end
 
       def current_is_consistent
-        if current && pages && current > pages
-          errors.add(:current, ErrorMessage["is larger than the number of pages", "6.4"])
-        end
+        errors.add(:current, ErrorMessage["is larger than the number of pages", "6.4"]) if current && pages && current > pages
         return unless current && current < 1
 
         errors.add(:current, ErrorMessage["can not be less than 1", "6.4"])
       end
 
       def count_is_consistent
-        if pages && per_page && count && count > pages * per_page
-          errors.add(:count, ErrorMessage["is larger than can be retrieved through paging", "6.4"])
-        end
-        return unless pages && per_page && count && count > 0 && count <= (pages - 1) * per_page
+        errors.add(:count, ErrorMessage["is larger than can be retrieved through paging", "6.4"]) if pages && per_page && count && count > pages * per_page
+        return unless pages && per_page && count && count.positive? && count <= (pages - 1) * per_page
 
         errors.add(:count, ErrorMessage["could fit into a smaller number of pages", "6.4"])
       end

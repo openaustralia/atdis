@@ -1,12 +1,14 @@
+# frozen_string_literal: true
+
 module ATDIS
   module Models
     class Event < Model
       field_mappings(
-        id:          String,
-        timestamp:   DateTime,
+        id: String,
+        timestamp: DateTime,
         description: String,
-        event_type:  String,
-        status:      String
+        event_type: String,
+        status: String
       )
 
       # Mandatory parameters

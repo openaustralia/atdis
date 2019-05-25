@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 require "multi_json"
 require "active_model"
 require "date"
@@ -12,11 +14,11 @@ module ATDIS
 
     module ClassMethods
       # of the form {section: Fixnum, address: String}
-      def field_mappings(p)
-        define_attribute_methods(p.keys.map(&:to_s))
+      def field_mappings(params)
+        define_attribute_methods(params.keys.map(&:to_s))
         # Convert all values to arrays. Doing this for the sake of tidier notation
         self.attribute_types = {}
-        p.each do |k, v|
+        params.each do |k, v|
           v = [v] unless v.is_a?(Array)
           attribute_types[k] = v
         end
@@ -99,9 +101,7 @@ module ATDIS
     def json_errors_local
       r = []
       # First show special json error
-      # rubocop:disable Performance/HashEachMethods
       errors.keys.each do |attribute|
-        # rubocop:enable Performance/HashEachMethods
         r << [nil, errors[:json]] unless errors[:json].empty?
         # The :json attribute is special
         if attribute != :json
@@ -131,8 +131,8 @@ module ATDIS
     end
 
     # Have we tried to use this attribute?
-    def used_attribute?(a)
-      !attributes_before_type_cast[a].nil?
+    def used_attribute?(attribute)
+      !attributes_before_type_cast[attribute].nil?
     end
 
     def json_left_overs_is_empty
@@ -215,7 +215,7 @@ module ATDIS
 
     # This casting allows nil values
     def self.cast_fixnum(value)
-      value.to_i if value
+      value&.to_i
     end
 
     def self.cast_geojson(value)
