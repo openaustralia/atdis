@@ -88,36 +88,48 @@ describe ATDIS::Model do
   end
 
   describe ".cast" do
-    it do
-      expect(ATDIS::Model.cast("2013-04-20T02:01:07Z", DateTime)).to eq(
-        DateTime.new(2013, 4, 20, 2, 1, 7)
-      )
-    end
-    it do
-      expect(ATDIS::Model.cast("2013-04-20", DateTime)).to eq(
-        DateTime.new(2013, 4, 20)
-      )
-    end
-    it do
-      expect(ATDIS::Model.cast("2013-04-20T02:01:07+05:00", DateTime)).to eq(
-        DateTime.new(2013, 4, 20, 2, 1, 7, "+5")
-      )
-    end
-    it do
-      expect(ATDIS::Model.cast("2013-04-20T02:01:07-05:00", DateTime)).to eq(
-        DateTime.new(2013, 4, 20, 2, 1, 7, "-5")
-      )
-    end
-    it do
-      expect(ATDIS::Model.cast("2013-04", DateTime)).to be_nil
-    end
-    it do
-      expect(ATDIS::Model.cast("18 September 2013", DateTime)).to be_nil
-    end
-    it do
-      expect(ATDIS::Model.cast(DateTime.new(2013, 4, 20, 2, 1, 7), DateTime)).to eq(
-        DateTime.new(2013, 4, 20, 2, 1, 7)
-      )
+    describe "DateTime" do
+      describe "timezone given in string" do
+        it do
+          expect(
+            ATDIS::Model.cast("2013-04-20T02:01:07Z", DateTime)
+          ).to eq(DateTime.new(2013, 4, 20, 2, 1, 7, 0))
+        end
+
+        it do
+          expect(
+            ATDIS::Model.cast("2013-04-20T02:01:07+05:00", DateTime)
+          ).to eq(DateTime.new(2013, 4, 20, 2, 1, 7, "+5"))
+        end
+
+        it do
+          expect(
+            ATDIS::Model.cast("2013-04-20T02:01:07-05:00", DateTime)
+          ).to eq(DateTime.new(2013, 4, 20, 2, 1, 7, "-5"))
+        end
+      end
+
+      describe "timezone not given in string" do
+        it do
+          expect(
+            ATDIS::Model.cast("2013-04-20", DateTime)
+          ).to eq(DateTime.new(2013, 4, 20, 0, 0, 0, 0))
+        end
+      end
+
+      it do
+        expect(ATDIS::Model.cast("2013-04", DateTime)).to be_nil
+      end
+
+      it do
+        expect(ATDIS::Model.cast("18 September 2013", DateTime)).to be_nil
+      end
+
+      it do
+        expect(
+          ATDIS::Model.cast(DateTime.new(2013, 4, 20, 2, 1, 7, 0), DateTime)
+        ).to eq(DateTime.new(2013, 4, 20, 2, 1, 7, 0))
+      end
     end
 
     it "should cast arrays by casting each member" do
