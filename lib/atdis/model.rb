@@ -195,6 +195,10 @@ module ATDIS
       end
     end
 
+    # If timezone is given in the string then the datetime is read in using
+    # the timezone in the string and then converted to the timezone "zone"
+    # If the timezone isn't given in the string then the datetime is read
+    # in using the timezone in "zone"
     def self.cast_datetime(value, zone)
       zone.iso8601(value).to_datetime
     rescue ArgumentError, KeyError
