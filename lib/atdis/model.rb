@@ -87,8 +87,8 @@ module ATDIS
       a
     end
 
-    def self.interpret(*params)
-      used, unused = partition_by_used(*params)
+    def self.interpret(data)
+      used, unused = partition_by_used(data)
       new(used.merge(json_left_overs: unused))
     end
 
