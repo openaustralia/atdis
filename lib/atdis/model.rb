@@ -169,7 +169,7 @@ module ATDIS
       attribute_types.keys.map(&:to_s)
     end
 
-    def self.cast(value, type)
+    def self.cast(value, type, zone: ActiveSupport::TimeZone.new("UTC"))
       # If it's already the correct type (or nil) then we don't need to do anything
       if value.nil? || value.is_a?(type)
         value
@@ -178,7 +178,7 @@ module ATDIS
       elsif value.is_a?(Array)
         value.map { |v| cast(v, type) }
       elsif type == DateTime
-        cast_datetime(value)
+        cast_datetime(value, zone)
       elsif type == URI
         cast_uri(value)
       elsif type == String
@@ -195,8 +195,7 @@ module ATDIS
       end
     end
 
-    def self.cast_datetime(value)
-      zone = ActiveSupport::TimeZone.new("UTC")
+    def self.cast_datetime(value, zone)
       zone.iso8601(value).to_datetime
     rescue ArgumentError, KeyError
       nil

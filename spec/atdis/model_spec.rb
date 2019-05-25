@@ -90,10 +90,22 @@ describe ATDIS::Model do
   describe ".cast" do
     describe "DateTime" do
       describe "timezone given in string" do
-        it do
-          expect(
-            ATDIS::Model.cast("2013-04-20T02:01:07Z", DateTime)
-          ).to eq(DateTime.new(2013, 4, 20, 2, 1, 7, 0))
+        context "in default timezone" do
+          let(:value) { ATDIS::Model.cast("2013-04-20T02:01:07Z", DateTime) }
+          it { expect(value).to eq(DateTime.new(2013, 4, 20, 2, 1, 7, 0)) }
+          it { expect(value.zone).to eq "+00:00" }
+        end
+
+        context "in Sydney timezone" do
+          let(:value) do
+            ATDIS::Model.cast(
+              "2013-04-20T02:01:07Z",
+              DateTime,
+              zone: ActiveSupport::TimeZone.new("Sydney")
+            )
+          end
+          it { expect(value).to eq(DateTime.new(2013, 4, 20, 2, 1, 7, 0)) }
+          it { expect(value.zone).to eq "+10:00" }
         end
 
         it do
@@ -110,10 +122,18 @@ describe ATDIS::Model do
       end
 
       describe "timezone not given in string" do
-        it do
-          expect(
-            ATDIS::Model.cast("2013-04-20", DateTime)
-          ).to eq(DateTime.new(2013, 4, 20, 0, 0, 0, 0))
+        context "in default timezone" do
+          let(:value) { ATDIS::Model.cast("2013-04-20", DateTime) }
+          it { expect(value).to eq(DateTime.new(2013, 4, 20, 0, 0, 0, 0)) }
+          it { expect(value.zone).to eq "+00:00" }
+        end
+
+        context "in Sydney timezone" do
+          let(:value) do
+            ATDIS::Model.cast("2013-04-20", DateTime, zone: ActiveSupport::TimeZone.new("Sydney"))
+          end
+          it { expect(value).to eq(DateTime.new(2013, 4, 20, 0, 0, 0, "+10")) }
+          it { expect(value.zone).to eq "+10:00" }
         end
       end
 
