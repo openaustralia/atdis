@@ -2,7 +2,7 @@ require "spec_helper"
 
 describe ATDIS::Models::Person do
   it ".attribute_names" do
-    expect(ATDIS::Models::Person.attribute_names).to eq ["name", "role", "contact"]
+    expect(ATDIS::Models::Person.attribute_names).to eq %w[name role contact]
   end
 
   it ".name" do

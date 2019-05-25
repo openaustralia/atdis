@@ -2,7 +2,7 @@ require "spec_helper"
 
 describe ATDIS::Models::Document do
   it ".attribute_names" do
-    expect(ATDIS::Models::Document.attribute_names).to eq ["ref", "title", "document_url"]
+    expect(ATDIS::Models::Document.attribute_names).to eq %w[ref title document_url]
   end
 
   it ".ref" do

@@ -2,13 +2,13 @@ require "spec_helper"
 
 describe ATDIS::Models::Page do
   it ".attribute_names" do
-    expect(ATDIS::Models::Page.attribute_names).to eq ["response", "count", "pagination"]
+    expect(ATDIS::Models::Page.attribute_names).to eq %w[response count pagination]
   end
 
   it "should error if response is null" do
-    page = ATDIS::Models::Page.new(response: nil, count: 0, pagination: {pages: 1, per_page: 20, count: 0, current: 1})
+    page = ATDIS::Models::Page.new(response: nil, count: 0, pagination: { pages: 1, per_page: 20, count: 0, current: 1 })
     expect(page).to_not be_valid
-    expect(page.errors.messages).to eq ({:response => [ATDIS::ErrorMessage["can't be blank", "4.3"]]})
+    expect(page.errors.messages).to eq(response: [ATDIS::ErrorMessage["can't be blank", "4.3"]])
   end
 
   describe "validations" do
@@ -16,11 +16,11 @@ describe ATDIS::Models::Page do
       before :each do
         expect(ATDIS::Models::Response).to receive(:interpret).with(description: "application1").and_return(double(valid?: true))
       end
-      let(:page) { ATDIS::Models::Page.new(response: {description: "application1"}) }
+      let(:page) { ATDIS::Models::Page.new(response: { description: "application1" }) }
 
       it do
         expect(page).to_not be_valid
-        expect(page.errors.messages).to eq ({response: [ATDIS::ErrorMessage["should be an array", "6.4"]]})
+        expect(page.errors.messages).to eq(response: [ATDIS::ErrorMessage["should be an array", "6.4"]])
       end
     end
 
@@ -29,9 +29,9 @@ describe ATDIS::Models::Page do
         expect(ATDIS::Models::Response).to receive(:interpret).with(description: "application1").and_return(double(valid?: true))
         expect(ATDIS::Models::Response).to receive(:interpret).with(description: "application2").and_return(double(valid?: true))
       end
-      let(:page) { ATDIS::Models::Page.new(response: [{description: "application1"}, {description: "application2"}]) }
+      let(:page) { ATDIS::Models::Page.new(response: [{ description: "application1" }, { description: "application2" }]) }
 
-      it {expect(page).to be_valid}
+      it { expect(page).to be_valid }
 
       # It's not super clear in the spec whether this should be allowed but it seems sensible to
       # allow it.
@@ -55,7 +55,7 @@ describe ATDIS::Models::Page do
           end
           it do
             expect(page).to_not be_valid
-            expect(page.errors.messages).to eq ({count: [ATDIS::ErrorMessage["is not the same as the number of applications returned", "6.4"]]})
+            expect(page.errors.messages).to eq(count: [ATDIS::ErrorMessage["is not the same as the number of applications returned", "6.4"]])
           end
         end
 
@@ -66,7 +66,7 @@ describe ATDIS::Models::Page do
           end
           it do
             expect(page).to_not be_valid
-            expect(page.errors.messages).to eq ({count: [ATDIS::ErrorMessage["should not be larger than the number of results per page", "6.4"]]})
+            expect(page.errors.messages).to eq(count: [ATDIS::ErrorMessage["should not be larger than the number of results per page", "6.4"]])
           end
         end
 
@@ -77,7 +77,7 @@ describe ATDIS::Models::Page do
 
           it do
             expect(page).to_not be_valid
-            expect(page.errors.messages).to eq ({count: [ATDIS::ErrorMessage["should be present if pagination is being used", "6.4"]]})
+            expect(page.errors.messages).to eq(count: [ATDIS::ErrorMessage["should be present if pagination is being used", "6.4"]])
           end
         end
 
@@ -88,7 +88,7 @@ describe ATDIS::Models::Page do
 
           it do
             expect(page).to_not be_valid
-            expect(page.errors.messages).to eq ({pagination: [ATDIS::ErrorMessage["is not valid (see further errors for details)", nil]]})
+            expect(page.errors.messages).to eq(pagination: [ATDIS::ErrorMessage["is not valid (see further errors for details)", nil]])
           end
         end
       end
@@ -99,39 +99,39 @@ describe ATDIS::Models::Page do
         expect(ATDIS::Models::Response).to receive(:interpret).with(description: "application1").and_return(double(valid?: true))
         expect(ATDIS::Models::Response).to receive(:interpret).with(description: "application2").and_return(double(valid?: false))
       end
-      let(:page) { ATDIS::Models::Page.new(response: [{description: "application1"}, {description: "application2"}]) }
+      let(:page) { ATDIS::Models::Page.new(response: [{ description: "application1" }, { description: "application2" }]) }
 
       it do
         expect(page).to_not be_valid
-        expect(page.errors.messages).to eq ({response: [ATDIS::ErrorMessage["is not valid (see further errors for details)", nil]]})
+        expect(page.errors.messages).to eq(response: [ATDIS::ErrorMessage["is not valid (see further errors for details)", nil]])
       end
     end
 
     context "two invalid applications no paging" do
-      let(:a1) { double(valid?: false, json_errors: [[{dat_id: "null"}, ["can not be empty"]]]) }
+      let(:a1) { double(valid?: false, json_errors: [[{ dat_id: "null" }, ["can not be empty"]]]) }
       let(:a2) { double(valid?: false) }
       before :each do
         expect(ATDIS::Models::Response).to receive(:interpret).with(description: "application1").and_return(a1)
         expect(ATDIS::Models::Response).to receive(:interpret).with(description: "application2").and_return(a2)
       end
-      let(:page) { ATDIS::Models::Page.new(response: [{description: "application1"}, {description: "application2"}]) }
+      let(:page) { ATDIS::Models::Page.new(response: [{ description: "application1" }, { description: "application2" }]) }
 
       it do
         expect(page).to_not be_valid
-        expect(page.errors.messages).to eq ({response: [ATDIS::ErrorMessage["is not valid (see further errors for details)", nil]]})
+        expect(page.errors.messages).to eq(response: [ATDIS::ErrorMessage["is not valid (see further errors for details)", nil]])
       end
 
       it "the errors from the first errored application should be here" do
         expect(page).to_not be_valid
-        expect(page.json_errors).to eq [[{response: [{description: "application1"}, {description: "application2"}]}, [ATDIS::ErrorMessage["response is not valid (see further errors for details)"]]], [{response: [{dat_id: "null"}]} , ["can not be empty"]]]
+        expect(page.json_errors).to eq [[{ response: [{ description: "application1" }, { description: "application2" }] }, [ATDIS::ErrorMessage["response is not valid (see further errors for details)"]]], [{ response: [{ dat_id: "null" }] }, ["can not be empty"]]]
       end
-
     end
   end
 
   context "paging supported by vendor" do
     context "read a from an invalid json string" do
-      let(:page) { ATDIS::Models::Page.read_json(<<-EOF
+      let(:page) do
+        json = <<-JSON
 {
   "response": [
     {
@@ -141,12 +141,13 @@ describe ATDIS::Models::Page do
     }
   ],
 }
-       EOF
-        )}
+        JSON
+        ATDIS::Models::Page.read_json(json)
+      end
 
       it do
         expect(page).to_not be_valid
-        expect(page.errors.messages.has_key?(:json)).to be_truthy
+        expect(page.errors.messages.key?(:json)).to be_truthy
         expect(page.errors.messages.count).to eq 1
         expect(page.errors.messages[:json].count).to eq 1
         message = page.errors.messages[:json].first
@@ -155,7 +156,8 @@ describe ATDIS::Models::Page do
     end
 
     context "read from a json string" do
-      let(:page) { ATDIS::Models::Page.read_json(<<-EOF
+      let(:page) do
+        json = <<-JSON
 {
   "response": [
     {
@@ -179,13 +181,14 @@ describe ATDIS::Models::Page do
     "pages": 25
   }
 }
-       EOF
-        )}
+        JSON
+        ATDIS::Models::Page.read_json(json)
+      end
       it ".results" do
         application1 = double("Application")
         application2 = double("Application")
-        expect(ATDIS::Models::Response).to receive(:interpret).with(application: {description: "application1"}).and_return(application1)
-        expect(ATDIS::Models::Response).to receive(:interpret).with(application: {description: "application2"}).and_return(application2)
+        expect(ATDIS::Models::Response).to receive(:interpret).with(application: { description: "application1" }).and_return(application1)
+        expect(ATDIS::Models::Response).to receive(:interpret).with(application: { description: "application2" }).and_return(application2)
 
         expect(page.response).to eq [application1, application2]
       end
@@ -198,7 +201,7 @@ describe ATDIS::Models::Page do
     context "read from a url" do
       before :each do
         # Mock network response
-        expect(RestClient).to receive(:get).with("http://www.council.nsw.gov.au/atdis/1.0/applications.json").and_return(double(to_str: <<-EOF
+        json = <<-JSON
   {
     "response": [
       {
@@ -213,8 +216,8 @@ describe ATDIS::Models::Page do
       }
     ]
   }
-        EOF
-        ))
+        JSON
+        expect(RestClient).to receive(:get).with("http://www.council.nsw.gov.au/atdis/1.0/applications.json").and_return(double(to_str: json))
       end
 
       let(:applications_results) { ATDIS::Models::Page.read_url("http://www.council.nsw.gov.au/atdis/1.0/applications.json") }
@@ -222,8 +225,8 @@ describe ATDIS::Models::Page do
       it ".response" do
         application1 = double("Application")
         application2 = double("Application")
-        expect(ATDIS::Models::Response).to receive(:interpret).with(application: {description: "application1"}).and_return(application1)
-        expect(ATDIS::Models::Response).to receive(:interpret).with(application: {description: "application2"}).and_return(application2)
+        expect(ATDIS::Models::Response).to receive(:interpret).with(application: { description: "application1" }).and_return(application1)
+        expect(ATDIS::Models::Response).to receive(:interpret).with(application: { description: "application2" }).and_return(application2)
 
         expect(applications_results.response).to eq [application1, application2]
       end
@@ -235,12 +238,12 @@ describe ATDIS::Models::Page do
       it ".pagination" do
         expect(applications_results.pagination).to be_nil
       end
-      end
+    end
   end
 
   context "paging supported by vendor" do
     before :each do
-      expect(RestClient).to receive(:get).with("http://www.council.nsw.gov.au/atdis/1.0/applications.json?page=2").and_return(double(to_str: <<-EOF
+      json = <<-JSON
 {
   "response": [
     {
@@ -264,8 +267,8 @@ describe ATDIS::Models::Page do
     "pages": 25
   }
 }
-      EOF
-      ))
+      JSON
+      expect(RestClient).to receive(:get).with("http://www.council.nsw.gov.au/atdis/1.0/applications.json?page=2").and_return(double(to_str: json))
     end
 
     let(:applications_results) { ATDIS::Models::Page.read_url("http://www.council.nsw.gov.au/atdis/1.0/applications.json?page=2") }

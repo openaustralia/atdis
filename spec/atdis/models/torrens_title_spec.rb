@@ -1,17 +1,19 @@
 require "spec_helper"
 
 describe ATDIS::Models::TorrensTitle do
-  let(:l) { ATDIS::Models::TorrensTitle.new(
-    lot: "10",
-    section: "ABC",
-    dpsp_id: "DP2013-0381"
-  )}
+  let(:l) do
+    ATDIS::Models::TorrensTitle.new(
+      lot: "10",
+      section: "ABC",
+      dpsp_id: "DP2013-0381"
+    )
+  end
 
   describe "dpsp_id" do
     it "can not be blank" do
       l.dpsp_id = ""
       expect(l).to_not be_valid
-      expect(l.errors.messages).to eq ({dpsp_id: [ATDIS::ErrorMessage["can't be blank", "4.3.3"]]})
+      expect(l.errors.messages).to eq(dpsp_id: [ATDIS::ErrorMessage["can't be blank", "4.3.3"]])
     end
 
     it "can be none but is not interpreted in any special way" do
@@ -25,7 +27,7 @@ describe ATDIS::Models::TorrensTitle do
     it "can not be blank" do
       l.section = ""
       expect(l).to_not be_valid
-      expect(l.errors.messages).to eq ({section: [ATDIS::ErrorMessage["can't be blank", "4.3.3"]]})
+      expect(l.errors.messages).to eq(section: [ATDIS::ErrorMessage["can't be blank", "4.3.3"]])
     end
 
     it "can be null" do
@@ -39,7 +41,7 @@ describe ATDIS::Models::TorrensTitle do
     it "can not be blank" do
       l.lot = ""
       expect(l).to_not be_valid
-      expect(l.errors.messages).to eq ({lot: [ATDIS::ErrorMessage["can't be blank", "4.3.3"]]})
+      expect(l.errors.messages).to eq(lot: [ATDIS::ErrorMessage["can't be blank", "4.3.3"]])
     end
 
     it "can be none but is not interpreted in any special way" do
@@ -48,5 +50,4 @@ describe ATDIS::Models::TorrensTitle do
       expect(l).to be_valid
     end
   end
-
 end

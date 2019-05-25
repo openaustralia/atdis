@@ -1,4 +1,4 @@
-require File.expand_path(File.dirname(__FILE__) + '/../spec_helper')
+require File.expand_path(File.dirname(__FILE__) + "/../spec_helper")
 
 describe ATDIS::SeparatedURL do
   describe "#merge" do
@@ -29,5 +29,5 @@ describe ATDIS::SeparatedURL do
     it "should be able to handle https" do
       expect(ATDIS::SeparatedURL.merge("https://foo.com/bar", {})).to eq "https://foo.com/bar"
     end
-   end
+  end
 end

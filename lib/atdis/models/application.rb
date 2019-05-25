@@ -8,21 +8,21 @@ require "atdis/models/person"
 module ATDIS
   module Models
     class Application < Model
-      set_field_mappings ({
+      field_mappings(
         info:      Info,
         reference: Reference,
         locations: Location,
         events:    Event,
         documents: Document,
         people:    Person,
-        extended:  Object,
-      })
+        extended:  Object
+      )
 
       # Mandatory attributes
-      validates :info, :reference, :locations, :events, :documents, presence_before_type_cast: {spec_section: "4.3"}
+      validates :info, :reference, :locations, :events, :documents, presence_before_type_cast: { spec_section: "4.3" }
 
-      validates :people, array: {spec_section: "4.3"}
-      validates :locations, :events, filled_array: {spec_section: "4.3"}
+      validates :people, array: { spec_section: "4.3" }
+      validates :locations, :events, filled_array: { spec_section: "4.3" }
 
       # This model is only valid if the children are valid
       validates :info, :reference, :locations, :events, :documents, :people, valid: true

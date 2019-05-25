@@ -4,7 +4,7 @@ module ATDIS
   class Feed
     attr_reader :base_url
 
-    VALID_OPTIONS = [:page, :street, :suburb, :postcode, :lodgement_date_start, :lodgement_date_end, :last_modified_date_start, :last_modified_date_end]
+    VALID_OPTIONS = %i[page street suburb postcode lodgement_date_start lodgement_date_end last_modified_date_start last_modified_date_end].freeze
 
     # base_url - the base url from which the urls for all atdis urls are made
     # It should be of the form:
@@ -15,7 +15,7 @@ module ATDIS
 
     def applications_url(options = {})
       invalid_options = options.keys - VALID_OPTIONS
-      if !invalid_options.empty?
+      unless invalid_options.empty?
         raise "Unexpected options used: #{invalid_options.join(',')}"
       end
       options[:street] = options[:street].join(",") if options[:street].respond_to?(:join)
@@ -27,7 +27,7 @@ module ATDIS
     end
 
     def application_url(id)
-      "#{base_url}/#{CGI::escape(id)}.json"
+      "#{base_url}/#{CGI.escape(id)}.json"
     end
 
     def self.base_url_from_url(url)
@@ -45,15 +45,13 @@ module ATDIS
     def self.options_from_url(url)
       u = URI.parse(url)
       options = query_to_options(u.query)
-      [:lodgement_date_start, :lodgement_date_end, :last_modified_date_start, :last_modified_date_end].each do |k|
+      %i[lodgement_date_start lodgement_date_end last_modified_date_start last_modified_date_end].each do |k|
         options[k] = Date.parse(options[k]) if options[k]
       end
       options[:page] = options[:page].to_i if options[:page]
       # Remove invalid options
-      options.keys.each do |key|
-        if !VALID_OPTIONS.include?(key)
-          options.delete(key)
-        end
+      options.each_key do |key|
+        options.delete(key) unless VALID_OPTIONS.include?(key)
       end
       options
     end
@@ -66,15 +64,13 @@ module ATDIS
       Models::Application.read_url(application_url(id))
     end
 
-    private
-
     # Turn a query string of the form "foo=bar&hello=sir" to {foo: "bar", hello: sir"}
     def self.query_to_options(query)
       options = {}
       if query
         query.split("&").each do |t|
           key, value = t.split("=")
-          options[key.to_sym] = (CGI::unescape(value) if value)
+          options[key.to_sym] = (CGI.unescape(value) if value)
         end
       end
       options
@@ -82,7 +78,7 @@ module ATDIS
 
     # Escape but leave commas unchanged (which are valid in query strings)
     def self.escape(v)
-      CGI::escape(v.to_s).gsub('%2C',',')
+      CGI.escape(v.to_s).gsub("%2C", ",")
     end
 
     # Turn an options hash of the form {foo: "bar", hello: "sir"} into a query
@@ -91,7 +87,7 @@ module ATDIS
       if options.empty?
         nil
       else
-        options.sort{|a,b| a.first.to_s <=> b.first.to_s}.map{|k,v| "#{k}=#{escape(v)}"}.join("&")
+        options.sort { |a, b| a.first.to_s <=> b.first.to_s }.map { |k, v| "#{k}=#{escape(v)}" }.join("&")
       end
     end
   end

@@ -2,7 +2,7 @@ require "spec_helper"
 
 describe ATDIS::Models::Event do
   it ".attribute_names" do
-    expect(ATDIS::Models::Event.attribute_names).to eq ["id", "timestamp", "description", "event_type", "status"]
+    expect(ATDIS::Models::Event.attribute_names).to eq %w[id timestamp description event_type status]
   end
 
   it ".id" do
@@ -11,14 +11,14 @@ describe ATDIS::Models::Event do
 
   describe ".date" do
     it do
-      expect(ATDIS::Models::Event.interpret(timestamp: "2013-06-18").timestamp).to eq DateTime.new(2013,6,18)
+      expect(ATDIS::Models::Event.interpret(timestamp: "2013-06-18").timestamp).to eq DateTime.new(2013, 6, 18)
     end
 
     it do
       e = ATDIS::Models::Event.new(description: "Something", id: "27B/6")
       e.timestamp = "18 January 2013"
       expect(e).to_not be_valid
-      expect(e.errors.messages).to eq ({timestamp: [ATDIS::ErrorMessage["is not a valid date", "4.3.8"]]})
+      expect(e.errors.messages).to eq(timestamp: [ATDIS::ErrorMessage["is not a valid date", "4.3.8"]])
     end
   end
 
@@ -27,12 +27,12 @@ describe ATDIS::Models::Event do
   end
 
   it ".event_type" do
-    # TODO Is event_type always a string? ATDIS-1.0.3 doesn't say
+    # TODO: Is event_type always a string? ATDIS-1.0.3 doesn't say
     expect(ATDIS::Models::Event.interpret(event_type: "approval").event_type).to eq "approval"
   end
 
   it ".status" do
-    # TODO Is status always a string? ATDIS-1.0.3 doesn't say
+    # TODO: Is status always a string? ATDIS-1.0.3 doesn't say
     expect(ATDIS::Models::Event.interpret(status: "approved").status).to eq "approved"
   end
 end

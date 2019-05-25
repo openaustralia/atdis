@@ -1,6 +1,6 @@
-require 'multi_json'
-require 'active_model'
-require 'date'
+require "multi_json"
+require "active_model"
+require "date"
 
 module ATDIS
   module TypeCastAttributes
@@ -12,13 +12,13 @@ module ATDIS
 
     module ClassMethods
       # of the form {section: Fixnum, address: String}
-      def set_field_mappings(p)
-        define_attribute_methods(p.keys.map{|k| k.to_s})
+      def field_mappings(p)
+        define_attribute_methods(p.keys.map(&:to_s))
         # Convert all values to arrays. Doing this for the sake of tidier notation
         self.attribute_types = {}
-        p.each do |k,v|
-          v = [v] unless v.kind_of?(Array)
-          self.attribute_types[k] = v
+        p.each do |k, v|
+          v = [v] unless v.is_a?(Array)
+          attribute_types[k] = v
         end
       end
     end
@@ -40,8 +40,8 @@ module ATDIS
     include Validators
     include ActiveModel::AttributeMethods
     include TypeCastAttributes
-    attribute_method_suffix '_before_type_cast'
-    attribute_method_suffix '='
+    attribute_method_suffix "_before_type_cast"
+    attribute_method_suffix "="
 
     attr_reader :attributes, :attributes_before_type_cast
     # Stores any part of the json that could not be interpreted. Usually
@@ -54,7 +54,8 @@ module ATDIS
 
     # Partition the data into used and unused by returning [used, unused]
     def self.partition_by_used(data)
-      used, unused = {}, {}
+      used = {}
+      unused = {}
       if data.respond_to?(:each)
         data.each do |key, value|
           if attribute_keys.include?(key)
@@ -76,14 +77,12 @@ module ATDIS
     end
 
     def self.read_json(text)
-      begin
-        data = MultiJson.load(text, symbolize_keys: true)
-        interpret(data)
-      rescue MultiJson::LoadError => e
-        a = interpret({response: []})
-        a.json_load_error = e.to_s
-        a
-      end
+      data = MultiJson.load(text, symbolize_keys: true)
+      interpret(data)
+    rescue MultiJson::LoadError => e
+      a = interpret(response: [])
+      a.json_load_error = e.to_s
+      a
     end
 
     def self.interpret(*params)
@@ -92,22 +91,22 @@ module ATDIS
     end
 
     def json_loaded_correctly!
-      if json_load_error
-        errors.add(:json, ErrorMessage["Invalid JSON: #{json_load_error}", nil])
-      end
+      return unless json_load_error
+
+      errors.add(:json, ErrorMessage["Invalid JSON: #{json_load_error}", nil])
     end
 
     def json_errors_local
       r = []
       # First show special json error
-      if !errors[:json].empty?
-        r << [nil, errors[:json]]
-      end
+      # rubocop:disable Performance/HashEachMethods
       errors.keys.each do |attribute|
+        # rubocop:enable Performance/HashEachMethods
+        r << [nil, errors[:json]] unless errors[:json].empty?
         # The :json attribute is special
         if attribute != :json
           e = errors[attribute]
-          r << [{attribute => attributes_before_type_cast[attribute.to_s]}, e.map{|m| ErrorMessage["#{attribute} #{m}", m.spec_section]}] unless e.empty?
+          r << [{ attribute => attributes_before_type_cast[attribute.to_s] }, e.map { |m| ErrorMessage["#{attribute} #{m}", m.spec_section] }] unless e.empty?
         end
       end
       r
@@ -117,12 +116,11 @@ module ATDIS
       r = []
       attributes.each do |attribute_as_string, value|
         attribute = attribute_as_string.to_sym
-        e = errors[attribute]
         if value.respond_to?(:json_errors)
-           r += value.json_errors.map{|a, b| [{attribute => a}, b]}
-        elsif value.kind_of?(Array)
-          f = value.find{|v| v.respond_to?(:json_errors) && !v.json_errors.empty?}
-          r += f.json_errors.map{|a, b| [{attribute => [a]}, b]} if f
+          r += value.json_errors.map { |a, b| [{ attribute => a }, b] }
+        elsif value.is_a?(Array)
+          f = value.find { |v| v.respond_to?(:json_errors) && !v.json_errors.empty? }
+          r += f.json_errors.map { |a, b| [{ attribute => [a] }, b] } if f
         end
       end
       r
@@ -138,17 +136,20 @@ module ATDIS
     end
 
     def json_left_overs_is_empty
-      if json_left_overs && !json_left_overs.empty?
-        # We have extra parameters that shouldn't be there
-        errors.add(:json, ErrorMessage["Unexpected parameters in json data: #{MultiJson.dump(json_left_overs)}", "4"])
-      end
+      return unless json_left_overs && !json_left_overs.empty?
+
+      # We have extra parameters that shouldn't be there
+      errors.add(:json, ErrorMessage["Unexpected parameters in json data: #{MultiJson.dump(json_left_overs)}", "4"])
     end
 
-    def initialize(params={})
-      @attributes, @attributes_before_type_cast = {}, {}
+    def initialize(params = {})
+      @attributes = {}
+      @attributes_before_type_cast = {}
+      return unless params
+
       params.each do |attr, value|
-        self.send("#{attr}=", value)
-      end if params
+        send("#{attr}=", value)
+      end
     end
 
     def self.attribute_keys
@@ -157,16 +158,16 @@ module ATDIS
 
     # Does what the equivalent on Activerecord does
     def self.attribute_names
-      attribute_types.keys.map{|k| k.to_s}
+      attribute_types.keys.map(&:to_s)
     end
 
     def self.cast(value, type)
       # If it's already the correct type (or nil) then we don't need to do anything
-      if value.nil? || value.kind_of?(type)
+      if value.nil? || value.is_a?(type)
         value
       # Special handling for arrays. When we typecast arrays we actually typecast each member of the array
-      elsif value.kind_of?(Array)
-        value.map {|v| cast(v, type)}
+      elsif value.is_a?(Array)
+        value.map { |v| cast(v, type) }
       elsif type == DateTime
         cast_datetime(value)
       elsif type == URI
@@ -185,21 +186,6 @@ module ATDIS
       end
     end
 
-    private
-
-    def attribute(attr)
-      @attributes[attr]
-    end
-
-    def attribute_before_type_cast(attr)
-      @attributes_before_type_cast[attr]
-    end
-
-    def attribute=(attr, value)
-      @attributes_before_type_cast[attr] = value
-      @attributes[attr] = Model.cast(value, attribute_types[attr.to_sym][0])
-    end
-
     def self.cast_datetime(value)
       # This would be much easier if we knew we only had to support Ruby 1.9 or greater because it has
       # an implementation built in. Because for the time being we need to support Ruby 1.8 as well
@@ -208,21 +194,19 @@ module ATDIS
       # In section 4.3.1 of ATDIS 1.0.4 it shows two variants of iso 8601, either the full date
       # or the full date with hours, seconds, minutes and timezone. We'll assume that these
       # are the two variants that are allowed.
-      if value.respond_to?(:match) && value.match(/^\d\d\d\d-\d\d-\d\d(T\d\d:\d\d:\d\d(Z|(\+|-)\d\d:\d\d))?$/)
-        begin
-          DateTime.parse(value)
-        rescue ArgumentError
-          nil
-        end
+      return unless value.respond_to?(:match) && value.match(/^\d\d\d\d-\d\d-\d\d(T\d\d:\d\d:\d\d(Z|(\+|-)\d\d:\d\d))?$/)
+
+      begin
+        DateTime.parse(value)
+      rescue ArgumentError
+        nil
       end
     end
 
     def self.cast_uri(value)
-      begin
-        URI.parse(value)
-      rescue URI::InvalidURIError
-        nil
-      end
+      URI.parse(value)
+    rescue URI::InvalidURIError
+      nil
     end
 
     def self.cast_string(value)
@@ -249,6 +233,21 @@ module ATDIS
       else
         hash
       end
+    end
+
+    private
+
+    def attribute(attr)
+      @attributes[attr]
+    end
+
+    def attribute_before_type_cast(attr)
+      @attributes_before_type_cast[attr]
+    end
+
+    def attribute=(attr, value)
+      @attributes_before_type_cast[attr] = value
+      @attributes[attr] = Model.cast(value, attribute_types[attr.to_sym][0])
     end
   end
 end

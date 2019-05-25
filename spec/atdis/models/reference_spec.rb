@@ -1,30 +1,32 @@
 require "spec_helper"
 
 describe ATDIS::Models::Reference do
-  let(:a) { ATDIS::Models::Reference.new(
-    more_info_url: URI.parse("http://foo.com/bar"),
-  )}
+  let(:a) do
+    ATDIS::Models::Reference.new(
+      more_info_url: URI.parse("http://foo.com/bar")
+    )
+  end
 
   describe ".more_info_url" do
     it do
       a.more_info_url = nil
       expect(a).to_not be_valid
-      expect(a.errors.messages).to eq ({more_info_url: [ATDIS::ErrorMessage["can't be blank", "4.3.2"]]})
+      expect(a.errors.messages).to eq(more_info_url: [ATDIS::ErrorMessage["can't be blank", "4.3.2"]])
     end
     it do
       a.more_info_url = "This is not a valid url"
       expect(a).to_not be_valid
-      expect(a.errors.messages).to eq ({more_info_url: [ATDIS::ErrorMessage["is not a valid URL", "4.3.2"]]})
+      expect(a.errors.messages).to eq(more_info_url: [ATDIS::ErrorMessage["is not a valid URL", "4.3.2"]])
     end
     it do
       a.more_info_url = "foo.com"
       expect(a).to_not be_valid
-      expect(a.errors.messages).to eq ({more_info_url: [ATDIS::ErrorMessage["is not a valid URL", "4.3.2"]]})
+      expect(a.errors.messages).to eq(more_info_url: [ATDIS::ErrorMessage["is not a valid URL", "4.3.2"]])
     end
     it do
       a.more_info_url = "httpss://foo.com"
       expect(a).to_not be_valid
-      expect(a.errors.messages).to eq ({more_info_url: [ATDIS::ErrorMessage["is not a valid URL", "4.3.2"]]})
+      expect(a.errors.messages).to eq(more_info_url: [ATDIS::ErrorMessage["is not a valid URL", "4.3.2"]])
     end
   end
 
