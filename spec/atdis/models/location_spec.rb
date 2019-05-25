@@ -15,23 +15,26 @@ describe ATDIS::Models::Location do
     context "valid location" do
       let(:l) do
         ATDIS::Models::Location.new(
-          address: {
-            street: "123 Fourfivesix Street",
-            suburb: "Neutral Bay",
-            postcode: "2089",
-            state: "NSW"
-          },
-          land_title_ref: {
-            torrens: {
-              lot: "10",
-              section: "ABC",
-              dpsp_id: "DP2013-0381"
+          {
+            address: {
+              street: "123 Fourfivesix Street",
+              suburb: "Neutral Bay",
+              postcode: "2089",
+              state: "NSW"
+            },
+            land_title_ref: {
+              torrens: {
+                lot: "10",
+                section: "ABC",
+                dpsp_id: "DP2013-0381"
+              }
+            },
+            geometry: {
+              type: "Point",
+              coordinates: [100.0, 0.0]
             }
           },
-          geometry: {
-            type: "Point",
-            coordinates: [100.0, 0.0]
-          }
+          "UTC"
         )
       end
 
@@ -54,7 +57,8 @@ describe ATDIS::Models::Location do
   describe ".interpret" do
     it "should gracefully handle the land_title_ref block being missing" do
       l = ATDIS::Models::Location.interpret(
-        address: { street: "123 Fourfivesix Street", suburb: "Neutral Bay", postcode: "2089" }
+        { address: { street: "123 Fourfivesix Street", suburb: "Neutral Bay", postcode: "2089" } },
+        "UTC"
       )
       expect(l.land_title_ref).to be_nil
     end
@@ -62,10 +66,13 @@ describe ATDIS::Models::Location do
     it "should pass on the responsibility for parsing the geometry section" do
       # TODO: Not 100% clear from section 4.3.3 of ATDIS-1.0.3 if this is the correct indentation
       l = ATDIS::Models::Location.interpret(
-        geometry: {
-          type: "Point",
-          coordinates: [100.0, 0.0]
-        }
+        {
+          geometry: {
+            type: "Point",
+            coordinates: [100.0, 0.0]
+          }
+        },
+        "UTC"
       )
       # TODO: Check that the returned geometry is a point
       expect(l.geometry.x).to eq 100
@@ -75,12 +82,15 @@ describe ATDIS::Models::Location do
     it "should interpret a polygon in the geometry section" do
       # TODO: Not 100% clear from section 4.3.3 of ATDIS-1.0.3 if this is the correct indentation
       l = ATDIS::Models::Location.interpret(
-        geometry: {
-          type: "Polygon",
-          coordinates: [
-            [[100.0, 0.0], [101.0, 0.0], [101.0, 1.0], [100.0, 1.0], [100.0, 0.0]]
-          ]
-        }
+        {
+          geometry: {
+            type: "Polygon",
+            coordinates: [
+              [[100.0, 0.0], [101.0, 0.0], [101.0, 1.0], [100.0, 1.0], [100.0, 0.0]]
+            ]
+          }
+        },
+        "UTC"
       )
       # TODO: Check that the returned geometry is a polygon
       expect(l.geometry.interior_rings).to be_empty

@@ -6,10 +6,13 @@ describe ATDIS::Models::Address do
   context "valid address" do
     let(:a) do
       ATDIS::Models::Address.new(
-        street: "123 Fourfivesix Street",
-        suburb: "Neutral Bay",
-        postcode: "2780",
-        state: "NSW"
+        {
+          street: "123 Fourfivesix Street",
+          suburb: "Neutral Bay",
+          postcode: "2780",
+          state: "NSW"
+        },
+        "UTC"
       )
     end
 

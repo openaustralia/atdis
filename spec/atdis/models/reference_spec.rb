@@ -5,7 +5,8 @@ require "spec_helper"
 describe ATDIS::Models::Reference do
   let(:a) do
     ATDIS::Models::Reference.new(
-      more_info_url: URI.parse("http://foo.com/bar")
+      { more_info_url: URI.parse("http://foo.com/bar") },
+      "UTC"
     )
   end
 
@@ -41,7 +42,7 @@ describe ATDIS::Models::Reference do
   end
 
   describe "#more_info_url=" do
-    let(:a) { ATDIS::Models::Reference.new }
+    let(:a) { ATDIS::Models::Reference.new({}, "UTC") }
     it "should do no type casting when it's already a URI" do
       a.more_info_url = URI.parse("http://foo.com/bar")
       expect(a.more_info_url).to eq URI.parse("http://foo.com/bar")

@@ -5,9 +5,12 @@ require "spec_helper"
 describe ATDIS::Models::TorrensTitle do
   let(:l) do
     ATDIS::Models::TorrensTitle.new(
-      lot: "10",
-      section: "ABC",
-      dpsp_id: "DP2013-0381"
+      {
+        lot: "10",
+        section: "ABC",
+        dpsp_id: "DP2013-0381"
+      },
+      "UTC"
     )
   end
 

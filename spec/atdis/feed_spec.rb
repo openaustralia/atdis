@@ -3,12 +3,13 @@
 require File.expand_path(File.dirname(__FILE__) + "/../spec_helper")
 
 describe ATDIS::Feed do
-  let(:feed) { ATDIS::Feed.new("http://www.council.nsw.gov.au/atdis/1.0") }
+  let(:feed) { ATDIS::Feed.new("http://www.council.nsw.gov.au/atdis/1.0", "UTC") }
   let(:page) { double }
 
   it "should return all the applications" do
     expect(ATDIS::Models::Page).to receive(:read_url).with(
-      "http://www.council.nsw.gov.au/atdis/1.0/applications.json"
+      "http://www.council.nsw.gov.au/atdis/1.0/applications.json",
+      "UTC"
     ).and_return(page)
     expect(feed.applications).to eq page
   end
@@ -192,7 +193,8 @@ describe ATDIS::Feed do
     it {
       application = double
       expect(ATDIS::Models::Application).to receive(:read_url).with(
-        "http://www.council.nsw.gov.au/atdis/1.0/27B%2F6.json"
+        "http://www.council.nsw.gov.au/atdis/1.0/27B%2F6.json",
+        "UTC"
       ).and_return(application)
       expect(feed.application("27B/6")).to eq application
     }

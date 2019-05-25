@@ -5,19 +5,22 @@ require "spec_helper"
 describe ATDIS::Models::Info do
   let(:a) do
     ATDIS::Models::Info.new(
-      dat_id: "DA2013-0381",
-      development_type: "residential",
-      application_type: "DA",
-      last_modified_date: DateTime.new(2013, 4, 20, 2, 1, 7),
-      description: "New pool plus deck",
-      authority: {
-        ref: "http://www.council.nsw.gov.au/atdis/1.0",
-        name: "Example Council Shire Council"
+      {
+        dat_id: "DA2013-0381",
+        development_type: "residential",
+        application_type: "DA",
+        last_modified_date: DateTime.new(2013, 4, 20, 2, 1, 7),
+        description: "New pool plus deck",
+        authority: {
+          ref: "http://www.council.nsw.gov.au/atdis/1.0",
+          name: "Example Council Shire Council"
+        },
+        lodgement_date: DateTime.new(2013, 4, 20, 2, 1, 7),
+        determination_date: DateTime.new(2013, 6, 20),
+        determination_type: "Pending",
+        status: "OPEN"
       },
-      lodgement_date: DateTime.new(2013, 4, 20, 2, 1, 7),
-      determination_date: DateTime.new(2013, 6, 20),
-      determination_type: "Pending",
-      status: "OPEN"
+      "UTC"
     )
   end
 
@@ -255,7 +258,7 @@ describe ATDIS::Models::Info do
   end
 
   describe "#description=" do
-    let(:a) { ATDIS::Models::Info.new }
+    let(:a) { ATDIS::Models::Info.new({}, "UTC") }
     it "should do not type casting when it's already a String" do
       a.description = "foo"
       expect(a.description).to eq "foo"
@@ -274,7 +277,7 @@ describe ATDIS::Models::Info do
   end
 
   describe "#lodgement_date=" do
-    let(:a) { ATDIS::Models::Info.new }
+    let(:a) { ATDIS::Models::Info.new({}, "UTC") }
     it "should do no type casting when it's already a date" do
       a.lodgement_date = DateTime.new(2013, 1, 1)
       expect(a.lodgement_date).to eq DateTime.new(2013, 1, 1)
@@ -299,7 +302,7 @@ describe ATDIS::Models::Info do
   end
 
   describe "#last_modified_date=" do
-    let(:a) { ATDIS::Models::Info.new }
+    let(:a) { ATDIS::Models::Info.new({}, "UTC") }
     it "should do no type casting when it's already a date" do
       a.last_modified_date = DateTime.new(2013, 1, 1)
       expect(a.last_modified_date).to eq DateTime.new(2013, 1, 1)

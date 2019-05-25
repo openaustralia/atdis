@@ -8,14 +8,16 @@ describe ATDIS::Models::Person do
   end
 
   it ".name" do
-    expect(ATDIS::Models::Person.interpret(name: "Tuttle").name).to eq "Tuttle"
+    expect(ATDIS::Models::Person.interpret({ name: "Tuttle" }, "UTC").name).to eq "Tuttle"
   end
 
   it ".role" do
-    expect(ATDIS::Models::Person.interpret(role: "Heating Engineer").role).to eq "Heating Engineer"
+    expect(
+      ATDIS::Models::Person.interpret({ role: "Heating Engineer" }, "UTC").role
+    ).to eq "Heating Engineer"
   end
 
   it ".contact" do
-    expect(ATDIS::Models::Person.interpret(contact: "94-FLUSH").contact).to eq "94-FLUSH"
+    expect(ATDIS::Models::Person.interpret({ contact: "94-FLUSH" }, "UTC").contact).to eq "94-FLUSH"
   end
 end

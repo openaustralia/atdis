@@ -8,20 +8,18 @@ describe ATDIS::Models::Document do
   end
 
   it ".ref" do
-    expect(ATDIS::Models::Document.interpret(ref: "27B/6").ref).to eq "27B/6"
+    expect(ATDIS::Models::Document.interpret({ ref: "27B/6" }, "UTC").ref).to eq "27B/6"
   end
 
   it ".title" do
-    expect(ATDIS::Models::Document.interpret(title: "Authorisation for Repairs").title).to eq(
-      "Authorisation for Repairs"
-    )
+    expect(
+      ATDIS::Models::Document.interpret({ title: "Authorisation for Repairs" }, "UTC").title
+    ).to eq "Authorisation for Repairs"
   end
 
   it ".document_url" do
     expect(
-      ATDIS::Models::Document.interpret(document_url: "http://foo.com/bar").document_url
-    ).to eq(
-      URI.parse("http://foo.com/bar")
-    )
+      ATDIS::Models::Document.interpret({ document_url: "http://foo.com/bar" }, "UTC").document_url
+    ).to eq URI.parse("http://foo.com/bar")
   end
 end

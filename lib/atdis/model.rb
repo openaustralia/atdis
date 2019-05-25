@@ -45,7 +45,7 @@ module ATDIS
     attribute_method_suffix "_before_type_cast"
     attribute_method_suffix "="
 
-    attr_reader :attributes, :attributes_before_type_cast
+    attr_reader :attributes, :attributes_before_type_cast, :timezone
     # Stores any part of the json that could not be interpreted. Usually
     # signals an error if it isn't empty.
     attr_accessor :json_left_overs, :json_load_error
@@ -72,24 +72,24 @@ module ATDIS
       [used, unused]
     end
 
-    def self.read_url(url)
-      r = read_json(RestClient.get(url.to_s).to_str)
+    def self.read_url(url, timezone)
+      r = read_json(RestClient.get(url.to_s).to_str, timezone)
       r.url = url.to_s
       r
     end
 
-    def self.read_json(text)
+    def self.read_json(text, timezone)
       data = MultiJson.load(text, symbolize_keys: true)
-      interpret(data)
+      interpret(data, timezone)
     rescue MultiJson::LoadError => e
-      a = interpret(response: [])
+      a = interpret({ response: [] }, timezone)
       a.json_load_error = e.to_s
       a
     end
 
-    def self.interpret(data)
+    def self.interpret(data, timezone)
       used, unused = partition_by_used(data)
-      new(used.merge(json_left_overs: unused))
+      new(used.merge(json_left_overs: unused), timezone)
     end
 
     def json_loaded_correctly!
@@ -150,7 +150,8 @@ module ATDIS
       )
     end
 
-    def initialize(params = {})
+    def initialize(params, timezone)
+      @timezone = timezone
       @attributes = {}
       @attributes_before_type_cast = {}
       return unless params
@@ -169,16 +170,16 @@ module ATDIS
       attribute_types.keys.map(&:to_s)
     end
 
-    def self.cast(value, type, zone: ActiveSupport::TimeZone.new("UTC"))
+    def self.cast(value, type, timezone)
       # If it's already the correct type (or nil) then we don't need to do anything
       if value.nil? || value.is_a?(type)
         value
       # Special handling for arrays. When we typecast arrays we actually
       # typecast each member of the array
       elsif value.is_a?(Array)
-        value.map { |v| cast(v, type) }
+        value.map { |v| cast(v, type, timezone) }
       elsif type == DateTime
-        cast_datetime(value, zone)
+        cast_datetime(value, timezone)
       elsif type == URI
         cast_uri(value)
       elsif type == String
@@ -189,7 +190,7 @@ module ATDIS
         cast_geojson(value)
       # Otherwise try to use Type.interpret to do the typecasting
       elsif type.respond_to?(:interpret)
-        type.interpret(value) if value
+        type.interpret(value, timezone) if value
       else
         raise
       end
@@ -199,8 +200,8 @@ module ATDIS
     # the timezone in the string and then converted to the timezone "zone"
     # If the timezone isn't given in the string then the datetime is read
     # in using the timezone in "zone"
-    def self.cast_datetime(value, zone)
-      zone.iso8601(value).to_datetime
+    def self.cast_datetime(value, timezone)
+      ActiveSupport::TimeZone.new(timezone).iso8601(value).to_datetime
     rescue ArgumentError, KeyError
       nil
     end
@@ -249,7 +250,7 @@ module ATDIS
 
     def attribute=(attr, value)
       @attributes_before_type_cast[attr] = value
-      @attributes[attr] = Model.cast(value, attribute_types[attr.to_sym][0])
+      @attributes[attr] = Model.cast(value, attribute_types[attr.to_sym][0], timezone)
     end
   end
 end

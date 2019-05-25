@@ -4,7 +4,7 @@ require "rest-client"
 
 module ATDIS
   class Feed
-    attr_reader :base_url
+    attr_reader :base_url, :timezone
 
     VALID_OPTIONS = %i[page street suburb postcode lodgement_date_start
                        lodgement_date_end last_modified_date_start last_modified_date_end].freeze
@@ -12,8 +12,15 @@ module ATDIS
     # base_url - the base url from which the urls for all atdis urls are made
     # It should be of the form:
     # http://www.council.nsw.gov.au/atdis/1.0
-    def initialize(base_url)
+    # timezone - a string (e.g. "Sydney") for the timezone in which times are returned
+    # (Note: times in the feeds that have timezones specified get converted to the
+    # timezone given while times in the feed which don't have a timezone specified
+    # get interpreted in the given timezone)
+    # See https://api.rubyonrails.org/classes/ActiveSupport/TimeZone.html for the
+    # list of possible timezone strings
+    def initialize(base_url, timezone)
       @base_url = base_url
+      @timezone = timezone
     end
 
     def applications_url(options = {})
@@ -61,11 +68,11 @@ module ATDIS
     end
 
     def applications(options = {})
-      Models::Page.read_url(applications_url(options))
+      Models::Page.read_url(applications_url(options), timezone)
     end
 
     def application(id)
-      Models::Application.read_url(application_url(id))
+      Models::Application.read_url(application_url(id), timezone)
     end
 
     # Turn a query string of the form "foo=bar&hello=sir" to {foo: "bar", hello: sir"}

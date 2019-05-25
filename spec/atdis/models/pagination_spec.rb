@@ -6,7 +6,8 @@ describe ATDIS::Models::Pagination do
   context "valid pagination" do
     let(:pagination) do
       ATDIS::Models::Pagination.new(
-        previous: nil, current: 1, next: 2, per_page: 25, pages: 4, count: 90
+        { previous: nil, current: 1, next: 2, per_page: 25, pages: 4, count: 90 },
+        "UTC"
       )
     end
     it do
@@ -17,7 +18,8 @@ describe ATDIS::Models::Pagination do
   context "current is not set" do
     let(:pagination) do
       ATDIS::Models::Pagination.new(
-        previous: nil, current: nil, next: 2, per_page: 25, pages: 4, count: 90
+        { previous: nil, current: nil, next: 2, per_page: 25, pages: 4, count: 90 },
+        "UTC"
       )
     end
     it do
@@ -31,7 +33,8 @@ describe ATDIS::Models::Pagination do
   context "per_page is not set" do
     let(:pagination) do
       ATDIS::Models::Pagination.new(
-        previous: nil, current: 1, next: 2, per_page: nil, pages: 4, count: 90
+        { previous: nil, current: 1, next: 2, per_page: nil, pages: 4, count: 90 },
+        "UTC"
       )
     end
     it do
@@ -45,7 +48,8 @@ describe ATDIS::Models::Pagination do
   context "total_not_results is not set" do
     let(:pagination) do
       ATDIS::Models::Pagination.new(
-        previous: nil, current: 1, next: 2, per_page: 25, pages: 4, count: nil
+        { previous: nil, current: 1, next: 2, per_page: 25, pages: 4, count: nil },
+        "UTC"
       )
     end
     it do
@@ -59,7 +63,8 @@ describe ATDIS::Models::Pagination do
   context "pages is not set" do
     let(:pagination) do
       ATDIS::Models::Pagination.new(
-        previous: nil, current: 1, next: 2, per_page: 25, pages: nil, count: 90
+        { previous: nil, current: 1, next: 2, per_page: 25, pages: nil, count: 90 },
+        "UTC"
       )
     end
     it do
@@ -73,7 +78,8 @@ describe ATDIS::Models::Pagination do
   context "total no_results is less than would be expected" do
     let(:pagination) do
       ATDIS::Models::Pagination.new(
-        previous: nil, current: 1, next: 2, per_page: 25, pages: 4, count: 75
+        { previous: nil, current: 1, next: 2, per_page: 25, pages: 4, count: 75 },
+        "UTC"
       )
     end
     it do
@@ -87,7 +93,8 @@ describe ATDIS::Models::Pagination do
   context "zero results returned" do
     let(:pagination) do
       ATDIS::Models::Pagination.new(
-        previous: nil, current: 1, next: nil, per_page: 25, pages: 1, count: 0
+        { previous: nil, current: 1, next: nil, per_page: 25, pages: 1, count: 0 },
+        "UTC"
       )
     end
     it do
@@ -98,7 +105,8 @@ describe ATDIS::Models::Pagination do
   context "count is larger than would be expected" do
     let(:pagination) do
       ATDIS::Models::Pagination.new(
-        previous: nil, current: 1, next: 2, per_page: 25, pages: 4, count: 101
+        { previous: nil, current: 1, next: 2, per_page: 25, pages: 4, count: 101 },
+        "UTC"
       )
     end
     it do
@@ -112,7 +120,8 @@ describe ATDIS::Models::Pagination do
   context "current page is zero" do
     let(:pagination) do
       ATDIS::Models::Pagination.new(
-        previous: nil, current: 0, next: 1, pages: 1, per_page: 25, count: 2
+        { previous: nil, current: 0, next: 1, pages: 1, per_page: 25, count: 2 },
+        "UTC"
       )
     end
     it do
@@ -126,7 +135,8 @@ describe ATDIS::Models::Pagination do
   context "current page is larger than the number of pages" do
     let(:pagination) do
       ATDIS::Models::Pagination.new(
-        previous: 1, current: 2, next: 3, pages: 1, per_page: 25, count: 2
+        { previous: 1, current: 2, next: 3, pages: 1, per_page: 25, count: 2 },
+        "UTC"
       )
     end
     it do
@@ -140,7 +150,8 @@ describe ATDIS::Models::Pagination do
   context "next page number is not nil but on last page" do
     let(:pagination) do
       ATDIS::Models::Pagination.new(
-        previous: 3, current: 4, next: 5, pages: 4, per_page: 25, count: 100
+        { previous: 3, current: 4, next: 5, pages: 4, per_page: 25, count: 100 },
+        "UTC"
       )
     end
     it do
@@ -154,7 +165,8 @@ describe ATDIS::Models::Pagination do
   context "next page number is nil but not on last page" do
     let(:pagination) do
       ATDIS::Models::Pagination.new(
-        previous: 3, current: 4, next: nil, pages: 6, per_page: 25, count: 140
+        { previous: 3, current: 4, next: nil, pages: 6, per_page: 25, count: 140 },
+        "UTC"
       )
     end
     it do
@@ -168,7 +180,8 @@ describe ATDIS::Models::Pagination do
   context "next page number is pointing to a weird page number" do
     let(:pagination) do
       ATDIS::Models::Pagination.new(
-        previous: nil, current: 1, next: 5, pages: 2, per_page: 25, count: 50
+        { previous: nil, current: 1, next: 5, pages: 2, per_page: 25, count: 50 },
+        "UTC"
       )
     end
     it do
@@ -187,7 +200,8 @@ describe ATDIS::Models::Pagination do
   context "previous page number not nil but on first page" do
     let(:pagination) do
       ATDIS::Models::Pagination.new(
-        previous: 0, current: 1, next: 2, pages: 10, per_page: 25, count: 240
+        { previous: 0, current: 1, next: 2, pages: 10, per_page: 25, count: 240 },
+        "UTC"
       )
     end
     it do
@@ -201,7 +215,8 @@ describe ATDIS::Models::Pagination do
   context "previous page number if nil but not on first page" do
     let(:pagination) do
       ATDIS::Models::Pagination.new(
-        previous: nil, current: 4, next: 5, pages: 10, per_page: 25, count: 240
+        { previous: nil, current: 4, next: 5, pages: 10, per_page: 25, count: 240 },
+        "UTC"
       )
     end
     it do
@@ -215,7 +230,8 @@ describe ATDIS::Models::Pagination do
   context "previous page number is pointing to a weird page number" do
     let(:pagination) do
       ATDIS::Models::Pagination.new(
-        previous: 5, current: 2, next: nil, pages: 2, per_page: 25, count: 50
+        { previous: 5, current: 2, next: nil, pages: 2, per_page: 25, count: 50 },
+        "UTC"
       )
     end
     it do

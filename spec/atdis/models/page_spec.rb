@@ -9,7 +9,8 @@ describe ATDIS::Models::Page do
 
   it "should error if response is null" do
     page = ATDIS::Models::Page.new(
-      response: nil, count: 0, pagination: { pages: 1, per_page: 20, count: 0, current: 1 }
+      { response: nil, count: 0, pagination: { pages: 1, per_page: 20, count: 0, current: 1 } },
+      "UTC"
     )
     expect(page).to_not be_valid
     expect(page.errors.messages).to eq(response: [ATDIS::ErrorMessage["can't be blank", "4.3"]])
@@ -19,10 +20,11 @@ describe ATDIS::Models::Page do
     context "results block that is a hash" do
       before :each do
         expect(ATDIS::Models::Response).to receive(:interpret).with(
-          description: "application1"
+          { description: "application1" },
+          "UTC"
         ).and_return(double(valid?: true))
       end
-      let(:page) { ATDIS::Models::Page.new(response: { description: "application1" }) }
+      let(:page) { ATDIS::Models::Page.new({ response: { description: "application1" } }, "UTC") }
 
       it do
         expect(page).to_not be_valid
@@ -35,15 +37,18 @@ describe ATDIS::Models::Page do
     context "two valid applications no paging" do
       before :each do
         expect(ATDIS::Models::Response).to receive(:interpret).with(
-          description: "application1"
+          { description: "application1" },
+          "UTC"
         ).and_return(double(valid?: true))
         expect(ATDIS::Models::Response).to receive(:interpret).with(
-          description: "application2"
+          { description: "application2" },
+          "UTC"
         ).and_return(double(valid?: true))
       end
       let(:page) do
         ATDIS::Models::Page.new(
-          response: [{ description: "application1" }, { description: "application2" }]
+          { response: [{ description: "application1" }, { description: "application2" }] },
+          "UTC"
         )
       end
 
@@ -62,7 +67,8 @@ describe ATDIS::Models::Page do
         before :each do
           page.count = 2
           page.pagination = ATDIS::Models::Pagination.new(
-            per_page: 25, current: 1, count: 2, pages: 1
+            { per_page: 25, current: 1, count: 2, pages: 1 },
+            "UTC"
           )
         end
         it { expect(page).to be_valid }
@@ -132,15 +138,18 @@ describe ATDIS::Models::Page do
     context "one valid application out of two no paging" do
       before :each do
         expect(ATDIS::Models::Response).to receive(:interpret).with(
-          description: "application1"
+          { description: "application1" },
+          "UTC"
         ).and_return(double(valid?: true))
         expect(ATDIS::Models::Response).to receive(:interpret).with(
-          description: "application2"
+          { description: "application2" },
+          "UTC"
         ).and_return(double(valid?: false))
       end
       let(:page) do
         ATDIS::Models::Page.new(
-          response: [{ description: "application1" }, { description: "application2" }]
+          { response: [{ description: "application1" }, { description: "application2" }] },
+          "UTC"
         )
       end
 
@@ -157,15 +166,18 @@ describe ATDIS::Models::Page do
       let(:a2) { double(valid?: false) }
       before :each do
         expect(ATDIS::Models::Response).to receive(:interpret).with(
-          description: "application1"
+          { description: "application1" },
+          "UTC"
         ).and_return(a1)
         expect(ATDIS::Models::Response).to receive(:interpret).with(
-          description: "application2"
+          { description: "application2" },
+          "UTC"
         ).and_return(a2)
       end
       let(:page) do
         ATDIS::Models::Page.new(
-          response: [{ description: "application1" }, { description: "application2" }]
+          { response: [{ description: "application1" }, { description: "application2" }] },
+          "UTC"
         )
       end
 
@@ -208,7 +220,7 @@ describe ATDIS::Models::Page do
             ],
           }
         JSON
-        ATDIS::Models::Page.read_json(json)
+        ATDIS::Models::Page.read_json(json, "UTC")
       end
 
       it do
@@ -248,16 +260,18 @@ describe ATDIS::Models::Page do
             }
           }
         JSON
-        ATDIS::Models::Page.read_json(json)
+        ATDIS::Models::Page.read_json(json, "UTC")
       end
       it ".results" do
         application1 = double("Application")
         application2 = double("Application")
         expect(ATDIS::Models::Response).to receive(:interpret).with(
-          application: { description: "application1" }
+          { application: { description: "application1" } },
+          "UTC"
         ).and_return(application1)
         expect(ATDIS::Models::Response).to receive(:interpret).with(
-          application: { description: "application2" }
+          { application: { description: "application2" } },
+          "UTC"
         ).and_return(application2)
 
         expect(page.response).to eq [application1, application2]
@@ -293,17 +307,22 @@ describe ATDIS::Models::Page do
       end
 
       let(:applications_results) do
-        ATDIS::Models::Page.read_url("http://www.council.nsw.gov.au/atdis/1.0/applications.json")
+        ATDIS::Models::Page.read_url(
+          "http://www.council.nsw.gov.au/atdis/1.0/applications.json",
+          "UTC"
+        )
       end
 
       it ".response" do
         application1 = double("Application")
         application2 = double("Application")
         expect(ATDIS::Models::Response).to receive(:interpret).with(
-          application: { description: "application1" }
+          { application: { description: "application1" } },
+          "UTC"
         ).and_return(application1)
         expect(ATDIS::Models::Response).to receive(:interpret).with(
-          application: { description: "application2" }
+          { application: { description: "application2" } },
+          "UTC"
         ).and_return(application2)
 
         expect(applications_results.response).to eq [application1, application2]
@@ -353,7 +372,8 @@ describe ATDIS::Models::Page do
 
     let(:applications_results) do
       ATDIS::Models::Page.read_url(
-        "http://www.council.nsw.gov.au/atdis/1.0/applications.json?page=2"
+        "http://www.council.nsw.gov.au/atdis/1.0/applications.json?page=2",
+        "UTC"
       )
     end
 
