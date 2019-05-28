@@ -64,11 +64,11 @@ module ATDIS
       end
 
       def previous_page
-        Page.read_url(previous_url) if previous_url
+        Page.read_url(previous_url, timezone) if previous_url
       end
 
       def next_page
-        Page.read_url(next_url) if next_url
+        Page.read_url(next_url, timezone) if next_url
       end
     end
   end

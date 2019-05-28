@@ -409,7 +409,8 @@ describe ATDIS::Models::Page do
       n = double("Page")
       applications_results
       expect(ATDIS::Models::Page).to receive(:read_url).with(
-        "http://www.council.nsw.gov.au/atdis/1.0/applications.json?page=3"
+        "http://www.council.nsw.gov.au/atdis/1.0/applications.json?page=3",
+        "UTC"
       ).and_return(n)
       expect(applications_results.next_page).to eq n
     end
