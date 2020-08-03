@@ -72,8 +72,15 @@ module ATDIS
       [used, unused]
     end
 
-    def self.read_url(url, timezone)
-      r = read_json(RestClient.get(url.to_s).to_str, timezone)
+    def self.read_url_raw(url, ignore_ssl_certificate = false)
+      RestClient::Resource.new(
+        url.to_s,
+        verify_ssl: (OpenSSL::SSL::VERIFY_NONE if ignore_ssl_certificate)
+      ).get.to_str
+    end
+
+    def self.read_url(url, timezone, ignore_ssl_certificate = false)
+      r = read_json(read_url_raw(url, ignore_ssl_certificate), timezone)
       r.url = url.to_s
       r
     end

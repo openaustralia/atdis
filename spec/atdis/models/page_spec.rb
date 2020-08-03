@@ -301,9 +301,10 @@ describe ATDIS::Models::Page do
     ]
   }
         JSON
-        expect(RestClient).to receive(:get).with(
-          "http://www.council.nsw.gov.au/atdis/1.0/applications.json"
-        ).and_return(double(to_str: json))
+        expect(ATDIS::Model).to receive(:read_url_raw).with(
+          "http://www.council.nsw.gov.au/atdis/1.0/applications.json",
+          false
+        ).and_return(json)
       end
 
       let(:applications_results) do
@@ -365,9 +366,10 @@ describe ATDIS::Models::Page do
           }
         }
       JSON
-      expect(RestClient).to receive(:get).with(
-        "http://www.council.nsw.gov.au/atdis/1.0/applications.json?page=2"
-      ).and_return(double(to_str: json))
+      expect(ATDIS::Model).to receive(:read_url_raw).with(
+        "http://www.council.nsw.gov.au/atdis/1.0/applications.json?page=2",
+        false
+      ).and_return(json)
     end
 
     let(:applications_results) do
