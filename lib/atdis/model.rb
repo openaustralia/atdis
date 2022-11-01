@@ -108,7 +108,7 @@ module ATDIS
     def json_errors_local
       r = []
       # First show special json error
-      errors.keys.each do |attribute|
+      errors.attribute_names.each do |attribute|
         r << [nil, errors[:json]] unless errors[:json].empty?
         # The :json attribute is special
         next if attribute == :json
