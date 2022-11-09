@@ -49,7 +49,7 @@ module ATDIS
       end
       u.query = options_to_query(options)
       u.fragment = nil
-      u.path = "/" + u.path.split("/")[1..-2].join("/")
+      u.path = "/" + u.path.split("/")[1..-2]&.join("/").to_s
       u.to_s
     end
 

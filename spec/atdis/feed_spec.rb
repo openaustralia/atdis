@@ -107,6 +107,10 @@ describe ATDIS::Feed do
         )
       ).to eq "http://www.foo.nsw.gov.au/prefix/atdis/1.0?foo=bar"
     end
+
+    it "should not get tripped up by a nonsense value" do
+      expect(ATDIS::Feed.base_url_from_url("http://foo.com")).to eq "http://foo.com/"
+    end
   end
 
   describe ".options_from_url" do
