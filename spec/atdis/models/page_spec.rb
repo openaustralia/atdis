@@ -280,6 +280,11 @@ describe ATDIS::Models::Page do
       it ".next_page" do
         expect { page.next_page }.to raise_error "Can't use next_url when loaded with read_json"
       end
+
+      it ".previous_page" do
+        expect { page.previous_page }
+          .to raise_error "Can't use previous_url when loaded with read_json"
+      end
     end
 
     context "read from a url" do
@@ -331,6 +336,10 @@ describe ATDIS::Models::Page do
 
       it ".next_page" do
         expect(applications_results.next_page).to be_nil
+      end
+
+      it ".previous_page" do
+        expect(applications_results.previous_page).to be_nil
       end
 
       it ".pagination" do
@@ -415,6 +424,21 @@ describe ATDIS::Models::Page do
         "UTC"
       ).and_return(n)
       expect(applications_results.next_page).to eq n
+    end
+
+    it ".previous_url" do
+      expect(applications_results.previous_url)
+        .to eq "http://www.council.nsw.gov.au/atdis/1.0/applications.json?page=1"
+    end
+
+    it ".previous_page" do
+      previous = double("Page")
+      applications_results
+      expect(ATDIS::Models::Page).to receive(:read_url).with(
+        "http://www.council.nsw.gov.au/atdis/1.0/applications.json?page=1",
+        "UTC"
+      ).and_return(previous)
+      expect(applications_results.previous_page).to eq previous
     end
   end
 end

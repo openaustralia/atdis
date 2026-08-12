@@ -189,4 +189,74 @@ describe ATDIS::Model do
       ]
     end
   end
+
+  describe ".read_url_raw" do
+    it "should fetch the url with ssl verification enabled by default" do
+      resource = double
+      expect(RestClient::Resource).to receive(:new)
+        .with("http://example.com/foo.json", verify_ssl: nil)
+        .and_return(resource)
+      expect(resource).to receive(:get).and_return(double(to_str: "{}"))
+
+      expect(ATDIS::Model.read_url_raw("http://example.com/foo.json")).to eq "{}"
+    end
+
+    it "should fetch the url with ssl verification disabled when asked to" do
+      resource = double
+      expect(RestClient::Resource).to receive(:new)
+        .with("https://example.com/foo.json", verify_ssl: OpenSSL::SSL::VERIFY_NONE)
+        .and_return(resource)
+      expect(resource).to receive(:get).and_return(double(to_str: "{}"))
+
+      expect(ATDIS::Model.read_url_raw("https://example.com/foo.json", true)).to eq "{}"
+    end
+  end
+
+  describe ".cast" do
+    it "should raise when asked to cast to an unsupported type" do
+      expect { ATDIS::Model.cast("foo", Float, "UTC") }.to raise_error RuntimeError
+    end
+  end
+
+  describe "#initialize" do
+    it "should handle nil params" do
+      expect(ModelA.new(nil, "UTC").attributes).to eq({})
+    end
+  end
+
+  describe "#used_attribute?" do
+    let(:model) { ModelA.interpret({ bar: "hello" }, "UTC") }
+
+    it "should be true for an attribute that was set" do
+      expect(model.used_attribute?("bar")).to be true
+    end
+
+    it "should be false for an attribute that was never set" do
+      expect(model.used_attribute?("hello")).to be false
+    end
+  end
+
+  describe "#json_errors" do
+    it "should include json errors alongside attribute errors" do
+      model = ModelA.interpret({ bar: "hello", unexpected: "param" }, "UTC")
+      expect(model).to_not be_valid
+      expect(model.json_errors).to eq [
+        [nil, [ATDIS::ErrorMessage['Unexpected parameters in json data: {"unexpected":"param"}',
+                                   "4"]]]
+      ]
+    end
+  end
+end
+
+describe ATDIS::ErrorMessage do
+  describe "#empty?" do
+    it { expect(ATDIS::ErrorMessage["", "1.2"]).to be_empty }
+    it { expect(ATDIS::ErrorMessage["is not valid", "1.2"]).to_not be_empty }
+  end
+
+  describe "#to_s" do
+    it "should behave like the message string" do
+      expect(ATDIS::ErrorMessage["is not valid", "1.2"].to_s).to eq "is not valid"
+    end
+  end
 end

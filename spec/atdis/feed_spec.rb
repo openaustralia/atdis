@@ -77,6 +77,12 @@ describe ATDIS::Feed do
     end
   end
 
+  describe "search by street" do
+    it do
+      expect(feed.applications_url(street: ["foo", "bar street"])).to eq "http://www.council.nsw.gov.au/atdis/1.0/applications.json?street=foo,bar+street"
+    end
+  end
+
   it "jump straight to the second page" do
     expect(feed.applications_url(page: 2)).to eq "http://www.council.nsw.gov.au/atdis/1.0/applications.json?page=2"
   end
