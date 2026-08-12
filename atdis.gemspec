@@ -9,11 +9,16 @@ Gem::Specification.new do |spec|
   spec.version       = Atdis::VERSION
   spec.authors       = ["Matthew Landauer"]
   spec.email         = ["matthew@oaf.org.au"]
+  spec.summary       = "A Ruby interface to the ATDIS planning application specification"
   spec.description   =
-    "A ruby interface to the application tracking data interchange specification (ATDIS) API"
-  spec.summary       = spec.description
-  spec.homepage      = "http://github.com/openaustralia/atdis"
+    "A Ruby interface for reading and validating planning application data feeds " \
+    "that follow the Application Tracking Data Interchange Specification (ATDIS)"
+  spec.homepage      = "https://github.com/openaustralia/atdis"
   spec.license       = "MIT"
+
+  spec.metadata["homepage_uri"] = spec.homepage
+  spec.metadata["source_code_uri"] = "https://github.com/openaustralia/atdis"
+  spec.metadata["changelog_uri"] = "https://github.com/openaustralia/atdis/blob/main/CHANGELOG.md"
   spec.metadata["rubygems_mfa_required"] = "true"
 
   spec.files         = `git ls-files`.split("\n")
