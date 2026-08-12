@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-require File.expand_path(File.dirname(__FILE__) + "/../spec_helper")
+require File.expand_path("#{File.dirname(__FILE__)}/../spec_helper")
 
 describe ATDIS::Feed do
   let(:feed) { ATDIS::Feed.new("http://www.council.nsw.gov.au/atdis/1.0", "UTC") }

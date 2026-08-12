@@ -33,13 +33,11 @@ module ATDIS
       def count_is_consistent
         return if count.nil?
 
-        if response.respond_to?(:count)
-          if count != response.count
-            errors.add(
-              :count,
-              ErrorMessage["is not the same as the number of applications returned", "6.4"]
-            )
-          end
+        if response.respond_to?(:count) && (count != response.count)
+          errors.add(
+            :count,
+            ErrorMessage["is not the same as the number of applications returned", "6.4"]
+          )
         end
         return unless pagination.respond_to?(:per_page) && pagination.per_page
 

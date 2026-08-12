@@ -16,7 +16,7 @@ module ATDIS
       if url_params.empty?
         url
       else
-        url + "?" + query
+        "#{url}?#{query}"
       end
     end
 

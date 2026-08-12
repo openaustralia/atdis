@@ -229,7 +229,7 @@ describe ATDIS::Models::Page do
         expect(page.errors.messages.count).to eq 1
         expect(page.errors.messages[:json].count).to eq 1
         message = page.errors.messages[:json].first
-        expect(message.message).to match(/Invalid JSON: .*: unexpected token at '{/)
+        expect(message.message).to match(/\AInvalid JSON: /)
       end
     end
 

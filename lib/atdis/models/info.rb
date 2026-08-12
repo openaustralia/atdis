@@ -81,7 +81,7 @@ module ATDIS
 
       def related_apps_url_format
         return unless related_apps.respond_to?(:all?) &&
-                      !related_apps.all? { |url| url.to_s =~ %r{atdis\/1.0\/[^\/]+\.json} }
+                      !related_apps.all? { |url| url.to_s =~ %r{atdis/1.0/[^/]+\.json} }
 
         errors.add(
           :related_apps,

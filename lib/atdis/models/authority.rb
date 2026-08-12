@@ -16,7 +16,7 @@ module ATDIS
 
       validates :ref, http_url: { spec_section: "4.3.1" }
       validates :ref, format: {
-        with: %r{atdis\/1.0\z},
+        with: %r{atdis/1.0\z},
         message: ATDIS::ErrorMessage.new("is not a valid Unique Authority Identifier", "4.3.1")
       }
     end

@@ -2,6 +2,7 @@
 
 require "multi_json"
 require "active_model"
+require "active_support/time"
 require "date"
 
 module ATDIS
@@ -42,6 +43,7 @@ module ATDIS
     include Validators
     include ActiveModel::AttributeMethods
     include TypeCastAttributes
+
     attribute_method_suffix "_before_type_cast"
     attribute_method_suffix "="
 
