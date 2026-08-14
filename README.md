@@ -1,18 +1,25 @@
-# Atdis
+# ATDIS
 
-[![Build Status](https://travis-ci.com/openaustralia/atdis.png?branch=master)](https://travis-ci.com/openaustralia/atdis) [![Coverage Status](https://coveralls.io/repos/openaustralia/atdis/badge.png?branch=master)](https://coveralls.io/r/openaustralia/atdis?branch=master) [![Code Climate](https://codeclimate.com/github/openaustralia/atdis.png)](https://codeclimate.com/github/openaustralia/atdis) [![Gem Version](https://badge.fury.io/rb/atdis.png)](http://badge.fury.io/rb/atdis)
+[![CI](https://github.com/openaustralia/atdis/actions/workflows/ci.yml/badge.svg)](https://github.com/openaustralia/atdis/actions/workflows/ci.yml) [![Gem Version](https://badge.fury.io/rb/atdis.svg)](https://badge.fury.io/rb/atdis)
 
-A ruby interface to the application tracking data interchange specification (ATDIS) API
+A Ruby interface for reading and validating planning application data feeds that
+follow the Application Tracking Data Interchange Specification (ATDIS).
 
-This has been developed against [ATDIS version 1.0.2](https://github.com/openaustralia/atdis/raw/master/docs/ATDIS-1.0.2%20Application%20Tracking%20Data%20Interchange%20Specification%20(v1.0.2).pdf).
+This has been developed against [ATDIS version 1.0.2](https://github.com/openaustralia/atdis/raw/main/docs/ATDIS-1.0.2%20Application%20Tracking%20Data%20Interchange%20Specification%20(v1.0.2).pdf).
 
 Source code is available on GitHub at https://github.com/openaustralia/atdis
+
+## Requirements
+
+Ruby 3.2 or later.
 
 ## Installation
 
 Add this line to your application's Gemfile:
 
-    gem 'atdis'
+```ruby
+gem "atdis"
+```
 
 And then execute:
 
@@ -26,33 +33,61 @@ Or install it yourself as:
 
 ### Basic usage
 
-    require 'atdis'
-    f = ATDIS::Feed.new("http://www.planningalerts.org.au/atdis/feed/1/atdis/1.0")
+```ruby
+require "atdis"
 
-    # Get the first application in the first page of results for all the applications
-    page = f.applications
-    app = page.response.first
+f = ATDIS::Feed.new("http://www.planningalerts.org.au/atdis/feed/1/atdis/1.0", "Sydney")
 
-    puts "#{app.dat_id}: #{app.description} at #{app.location.address}"
+# Get the first application in the first page of results for all the applications
+page = f.applications
+app = page.response.first
 
-    DA2013-0381: New pool plus deck at 123 Fourfivesix Street Neutral Bay NSW 2089
+puts "#{app.application.info.dat_id}: #{app.application.info.description}"
+```
+
+    DA2013-0381: New pool plus deck
 
 ### Paging
 
-    page.next_page
+```ruby
+page.next_page
+```
 
 and
 
-    page.previous_page
+```ruby
+page.previous_page
+```
 
 ### Validation
 
-    page.valid?
+```ruby
+page.valid?
+```
+
+## Development
+
+After checking out the repo, run `bundle install` to install dependencies.
+Then run the tests with:
+
+    $ bundle exec rspec
+
+There is also RuboCop for linting:
+
+    $ bundle exec rubocop
 
 ## Contributing
 
+Contributions are welcome! This project follows the
+[OpenAustralia Foundation contributing guidelines](https://github.com/openaustralia/.github/blob/main/.github/CONTRIBUTING.md).
+
 1. Fork it
-2. Create your feature branch (`git checkout -b my-new-feature`)
-3. Commit your changes (`git commit -am 'Add some feature'`)
-4. Push to the branch (`git push origin my-new-feature`)
+2. Create your feature branch (`git checkout -b feature/my-new-feature`)
+3. Commit your changes with a sign-off (`git commit -s -am 'Add some feature'`)
+4. Push to the branch (`git push origin feature/my-new-feature`)
 5. Create new Pull Request
+
+## License
+
+The gem is available as open source under the terms of the
+[MIT License](https://github.com/openaustralia/atdis/blob/main/LICENSE.txt).
