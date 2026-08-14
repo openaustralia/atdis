@@ -113,8 +113,7 @@ module ATDIS
         end
         return unless pages &&
                       per_page &&
-                      count &&
-                      count.positive? &&
+                      count&.positive? &&
                       count <= (pages - 1) * per_page
 
         errors.add(

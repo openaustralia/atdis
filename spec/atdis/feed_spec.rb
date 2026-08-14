@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-require File.expand_path(File.dirname(__FILE__) + "/../spec_helper")
+require File.expand_path("#{File.dirname(__FILE__)}/../spec_helper")
 
 describe ATDIS::Feed do
   let(:feed) { ATDIS::Feed.new("http://www.council.nsw.gov.au/atdis/1.0", "UTC") }
@@ -74,6 +74,12 @@ describe ATDIS::Feed do
   describe "search by suburb" do
     it do
       expect(feed.applications_url(suburb: ["willow tree", "foo", "bar"])).to eq "http://www.council.nsw.gov.au/atdis/1.0/applications.json?suburb=willow+tree,foo,bar"
+    end
+  end
+
+  describe "search by street" do
+    it do
+      expect(feed.applications_url(street: ["foo", "bar street"])).to eq "http://www.council.nsw.gov.au/atdis/1.0/applications.json?street=foo,bar+street"
     end
   end
 

@@ -1,9 +1,17 @@
+AllCops:
+  NewCops: enable
+  SuggestExtensions: false
+
 # Bumping max line length to something a little more reasonable
-Metrics/LineLength:
+Layout/LineLength:
   Max: 100
 
 # Not so worried about top-level class documentation. So...
 Style/Documentation:
+  Enabled: false
+
+# Changing these to keyword arguments would break the public API
+Style/OptionalBooleanParameter:
   Enabled: false
 
 # We prefer double quotes here and it we're making liberal use of multi-line
