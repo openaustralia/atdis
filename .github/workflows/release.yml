@@ -1,0 +1,47 @@
+name: Release
+
+on:
+  push:
+    branches: [main]
+    paths: ["lib/atdis/version.rb"]
+  workflow_dispatch:
+
+jobs:
+  release:
+    name: Release to RubyGems
+    runs-on: ubuntu-latest
+    environment: release
+    permissions:
+      # Needed to push the release tag back to the repository
+      contents: write
+      # Needed for RubyGems trusted publishing (OIDC)
+      id-token: write
+    steps:
+      - uses: actions/checkout@v5
+
+      - name: Set up Ruby
+        uses: ruby/setup-ruby@v1
+        with:
+          ruby-version: "3.2"
+          bundler-cache: true
+
+      - name: Check whether this version is already published
+        id: check
+        run: |
+          version=$(bundle exec ruby -e 'require "atdis/version"; puts Atdis::VERSION')
+          echo "version=${version}" >> "$GITHUB_OUTPUT"
+          status=$(curl -s -o /dev/null -w "%{http_code}" "https://rubygems.org/api/v2/rubygems/atdis/versions/${version}.json")
+          if [ "$status" = "200" ]; then
+            echo "atdis ${version} is already on rubygems.org - nothing to release"
+            echo "already_published=true" >> "$GITHUB_OUTPUT"
+          else
+            echo "atdis ${version} is not yet published"
+            echo "already_published=false" >> "$GITHUB_OUTPUT"
+          fi
+
+      # Tags v<version>, pushes the tag and publishes to rubygems.org using
+      # trusted publishing (OIDC) - no long-lived RubyGems API key is stored
+      # in this repository. See "Releasing a new version" in the README.
+      - name: Release gem
+        if: steps.check.outputs.already_published == 'false'
+        uses: rubygems/release-gem@v1
