@@ -63,7 +63,7 @@ or from whichever feed you happen to be looking at.
 
 ## Commands
 
-    bundle exec rspec      # also `rake spec`, and the default rake task
+    bundle exec rspec      # also runs as "rake spec" and the default task
     bundle exec rubocop
 
 Both are separate CI jobs. The test job runs the matrix of Ruby 3.2, 3.3 and
